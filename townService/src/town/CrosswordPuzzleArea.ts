@@ -2,9 +2,9 @@ import { ITiledMapObject } from '@jonbell/tiled-map-type-guard';
 import Player from '../lib/Player';
 import {
   BoundingBox,
-  PuzzleArea as PuzzleAreaModel,
+  CrosswordPuzzleArea as CrosswordPuzzleAreaModel,
   TownEmitter,
-  PuzzleModel,
+  CrosswordPuzzleModel,
 } from '../types/CoveyTownSocket';
 import InteractableArea from './InteractableArea';
 
@@ -12,7 +12,7 @@ export default class PuzzleArea extends InteractableArea {
   /* The name of the group, undefined if no one is in the area */
   public groupName?: string;
 
-  public puzzle?: PuzzleModel;
+  public puzzle?: CrosswordPuzzleModel;
 
   /** The puzzle area is "active" when there are players inside of it  */
   public get isActive(): boolean {
@@ -27,7 +27,7 @@ export default class PuzzleArea extends InteractableArea {
    * @param townEmitter a broadcast emitter that can be used to emit updates to players
    */
   public constructor(
-    { id, groupName, puzzle }: PuzzleAreaModel,
+    { id, groupName, puzzle }: CrosswordPuzzleAreaModel,
     coordinates: BoundingBox,
     townEmitter: TownEmitter,
   ) {
@@ -57,7 +57,7 @@ export default class PuzzleArea extends InteractableArea {
    * Convert this PuzzleArea instance to a simple PuzzleAreaModel suitable for
    * transporting over a socket to a client.
    */
-  public toModel(): PuzzleAreaModel {
+  public toModel(): CrosswordPuzzleAreaModel {
     return {
       id: this.id,
       occupantsByID: this.occupantsByID,

@@ -71,7 +71,7 @@ export interface ViewingArea {
   elapsedTimeSec: number;
 }
 
-export interface PuzzleModel {
+export interface CrosswordPuzzleModel {
   grid: List<List<String>>;
   info: PuzzleInfo;
   clues: PuzzleClues;
@@ -80,18 +80,18 @@ export interface PuzzleModel {
   private: Boolean;
 }
 
-export interface PuzzleInfo {
+export interface CrosswordPuzzleInfo {
   type: string;
   title: string;
   author: string;
   description: string;
 }
 
-export interface PuzzleClues {
+export interface CrosswordPuzzleClues {
   down: List<String>;
   across: List<String>;
 }
-export interface PuzzleArea {
+export interface CrosswordPuzzleArea {
   id: string;
   groupName?: string;
   puzzle?: PuzzleModel;

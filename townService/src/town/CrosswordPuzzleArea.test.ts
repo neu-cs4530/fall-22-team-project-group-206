@@ -2,15 +2,15 @@ import { mock, mockClear } from 'jest-mock-extended';
 import { nanoid } from 'nanoid';
 import Player from '../lib/Player';
 import { getLastEmittedEvent } from '../TestUtils';
-import { TownEmitter, PuzzleModel } from '../types/CoveyTownSocket';
-import PuzzleArea from './PuzzleArea';
+import { TownEmitter, CrosswordPuzzleModel } from '../types/CoveyTownSocket';
+import PuzzleArea from './CrosswordPuzzleArea';
 
 describe('PuzzleArea', () => {
   const testAreaBox = { x: 100, y: 100, width: 100, height: 100 };
   let testArea: PuzzleArea;
   const townEmitter = mock<TownEmitter>();
   const groupName = nanoid();
-  const puzzle: PuzzleModel = {
+  const puzzle: CrosswordPuzzleModel = {
     grid: [],
     info: {
       type: 'Daily Puzzle',
