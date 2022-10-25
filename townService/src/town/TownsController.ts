@@ -193,4 +193,15 @@ export class TownsController extends Controller {
       interactables: town.interactables.map(eachInteractable => eachInteractable.toModel()),
     });
   }
+
+  /**
+   * Testing
+   * @param msg message
+   */
+  @Get('test/{msg}')
+  @Response<InvalidParametersError>(400, 'Invalid values specified')
+  public async test(@Path() msg: string): Promise<string> {
+    console.log(this);
+    return msg;
+  }
 }

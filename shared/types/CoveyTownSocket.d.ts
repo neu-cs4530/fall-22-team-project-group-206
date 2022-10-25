@@ -1,3 +1,5 @@
+import List from "amis/lib/renderers/List";
+
 export type TownJoinResponse = {
   /** Unique ID that represents this player * */
   userID: string;
@@ -67,6 +69,33 @@ export interface ViewingArea {
   video?: string;
   isPlaying: boolean;
   elapsedTimeSec: number;
+}
+
+export interface PuzzleModel {
+  grid: List<List<String>>;
+  info: PuzzleInfo;
+  clues: PuzzleClues;
+  shades: List<>;
+  circles: List<>;
+  private: Boolean;
+}
+
+export interface PuzzleInfo {
+  type: string;
+  title: string;
+  author: string;
+  description: string;
+}
+
+export interface PuzzleClues {
+  down: List<String>;
+  across: List<String>;
+}
+export interface PuzzleArea {
+  id: string;
+  groupName?: string;
+  puzzle?: PuzzleModel;
+  occupantsByID: string[];
 }
 
 export interface ServerToClientEvents {
