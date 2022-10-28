@@ -1,0 +1,62 @@
+import { emit } from "process";
+import { Score } from "./Score";
+
+
+const collection = 'coveyCrosswordLeaderboard'
+
+async function addScore(client, score: Score) : Promise<Score> {
+
+    const currentCollection = await client.db().collection(collection);
+    try {
+        currentCollection.insertOne(score)
+        return score
+    }
+    catch {
+        //maybe emit?
+    }
+    
+}
+
+
+async function removeScore(client, teamName: string) {
+    const currentCollection = await client.db().collection(collection);
+    try {
+        currentCollection.deleteOne({teamName: teamName})
+    }
+    catch {
+        //maybe emit?
+    }
+}
+
+async function findScore(client, teamName: string) {
+    const currentCollection = await client.db().collection(collection);
+    try {
+        currentCollection.findOne({teamName: teamName})
+    }
+    catch {
+        //maybe emit?
+    }
+}
+
+async function updateScore(client, newScore: Score): Promise<Score> {
+    const currentCollection = await client.db().collection(collection);
+    try {
+        await currentCollection.updateOne(newScore);
+        return newScore
+    }
+    catch {
+        //maybe emit?
+    }
+}
+
+async function findScores(client): Promise<Score[]> {
+    const currentCollection = await client.db().collection(collection);
+    var items = [];
+    try {
+        items =  currentCollection.find().toArray()
+    }
+    catch {
+        //maybe emit?
+    }
+    return items;
+}

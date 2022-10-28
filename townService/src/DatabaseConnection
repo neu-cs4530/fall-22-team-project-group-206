@@ -1,0 +1,31 @@
+
+
+const { MongoClient, ServerApiVersion } = require('mongodb');
+
+
+export async function openConnection() {
+    const uri = "mongodb+srv://fisaacson:lVSjBB3DoTwdF9lL@coveycrosswordleaderboa.ojrmge7.mongodb.net/?retryWrites=true&w=majority";
+    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+
+    try {
+        await client.connect()
+        return client
+    }
+    catch {
+        console.log(console.error())
+    }
+}
+
+export async function closeConnection(client) {
+    if (client) {
+        try {
+            await client.close();
+        }
+        catch {
+            console.log('unable to close database connection')
+        }
+    }
+    
+}
+
+
