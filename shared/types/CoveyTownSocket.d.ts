@@ -1,4 +1,3 @@
-import List from "amis/lib/renderers/List";
 
 export type TownJoinResponse = {
   /** Unique ID that represents this player * */
@@ -19,7 +18,7 @@ export type TownJoinResponse = {
   interactables: Interactable[];
 }
 
-export type Interactable = ViewingArea | ConversationArea;
+export type Interactable = ViewingArea | ConversationArea | CrosswordPuzzleArea;
 
 export type TownSettingsUpdate = {
   friendlyName?: string;
@@ -57,6 +56,15 @@ export interface ConversationArea {
   topic?: string;
   occupantsByID: string[];
 };
+
+//CrosswordPuzzleArea model to represent a crosswordPuzzle area
+export interface CrosswordPuzzleArea {
+  id: string;
+  groupName?: string;
+  puzzle?: CrosswordPuzzleModel;
+  occupantsByID: string[];
+}
+
 export interface BoundingBox {
   x: number;
   y: number;
@@ -71,15 +79,16 @@ export interface ViewingArea {
   elapsedTimeSec: number;
 }
 
+//The model to represent crosswordPuzzle response get from external api
 export interface CrosswordPuzzleModel {
-  grid: List<List<String>>;
-  info: PuzzleInfo;
-  clues: PuzzleClues;
-  shades: List<>;
-  circles: List<>;
-  private: Boolean;
+  grid: string[][];
+  info: CrosswordPuzzleInfo;
+  clues: CrosswordPuzzleClues;
+  shades: number[];
+  circles: number[];
 }
 
+//Info type in CrosswordPuzzleModel
 export interface CrosswordPuzzleInfo {
   type: string;
   title: string;
@@ -87,16 +96,12 @@ export interface CrosswordPuzzleInfo {
   description: string;
 }
 
+//clue type in CrosswordPuzzleModel
 export interface CrosswordPuzzleClues {
-  down: List<String>;
-  across: List<String>;
+  down: string[];
+  across: string[];
 }
-export interface CrosswordPuzzleArea {
-  id: string;
-  groupName?: string;
-  puzzle?: PuzzleModel;
-  occupantsByID: string[];
-}
+
 
 export interface ServerToClientEvents {
   playerMoved: (movedPlayer: Player) => void;
