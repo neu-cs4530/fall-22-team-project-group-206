@@ -1,0 +1,24 @@
+.clues-list {
+  display: inline-block;
+  padding: 10px;
+  color: azure;
+  font-weight: 400;
+}
+
+.clues-list span {
+  display: inline-block;
+  font-weight: 800;
+  padding: 15px 0;
+}
+
+.clues-list ul {
+  height: 400px;
+  overflow: scroll;
+  margin: 0;
+  padding: 0;
+}
+
+.clues-list li {
+  list-style-type: none;
+  list-style-position: outside;
+}
