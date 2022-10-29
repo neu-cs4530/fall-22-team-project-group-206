@@ -8,7 +8,7 @@ import {
 } from '../types/CoveyTownSocket';
 import InteractableArea from './InteractableArea';
 
-export default class PuzzleArea extends InteractableArea {
+export default class CrosswordPuzzleArea extends InteractableArea {
   /* The name of the group, undefined if no one is in the area */
   public groupName?: string;
 
@@ -39,7 +39,7 @@ export default class PuzzleArea extends InteractableArea {
   /**
    * Removes a player from this puzzle area.
    *
-   * Extends the base behavior of InteractableArea to set the topic of this PuzzleArea to undefined and
+   * Extends the base behavior of InteractableArea to set the puzzle of this PuzzleArea to undefined and
    * emit an update to other players in the town when the last player leaves.
    *
    * @param player
@@ -75,12 +75,12 @@ export default class PuzzleArea extends InteractableArea {
   public static fromMapObject(
     mapObject: ITiledMapObject,
     broadcastEmitter: TownEmitter,
-  ): PuzzleArea {
+  ): CrosswordPuzzleArea {
     const { name, width, height } = mapObject;
     if (!width || !height) {
       throw new Error(`Malformed viewing area ${name}`);
     }
     const rect: BoundingBox = { x: mapObject.x, y: mapObject.y, width, height };
-    return new PuzzleArea({ id: name, occupantsByID: [] }, rect, broadcastEmitter);
+    return new CrosswordPuzzleArea({ id: name, occupantsByID: [] }, rect, broadcastEmitter);
   }
 }

@@ -20,6 +20,7 @@ import CoveyTownsStore from '../lib/TownsStore';
 import {
   ConversationArea,
   CoveyTownSocket,
+  CrosswordPuzzleArea,
   TownSettingsUpdate,
   ViewingArea,
 } from '../types/CoveyTownSocket';
@@ -195,13 +196,25 @@ export class TownsController extends Controller {
   }
 
   /**
-   * Testing
-   * @param msg message
+   * Creates a conversation area in a given town
+   * @param townID ID of the town in which to create the new conversation area
+   * @param sessionToken session token of the player making the request, must match the session token returned when the player joined the town
+   * @param requestBody The new conversation area to create
    */
-  @Get('test/{msg}')
+  @Post('{townID}/crosswordPuzzleArea')
   @Response<InvalidParametersError>(400, 'Invalid values specified')
-  public async test(@Path() msg: string): Promise<string> {
-    console.log(this);
-    return msg;
+  public async createCrosswordPuzzleArea(
+    @Path() townID: string,
+    @Header('X-Session-Token') sessionToken: string,
+    @Body() requestBody: CrosswordPuzzleArea,
+  ): Promise<void> {
+    const town = this._townsStore.getTownByID(townID);
+    if (!town?.getPlayerBySessionToken(sessionToken)) {
+      throw new InvalidParametersError('Invalid values specified');
+    }
+    const success = town.addCrosswordPuzzleArea(requestBody);
+    if (!success) {
+      throw new InvalidParametersError('Invalid values specified');
+    }
   }
 }

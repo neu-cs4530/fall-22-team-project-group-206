@@ -13,12 +13,14 @@ import {
 } from '../TestUtils';
 import {
   ChatMessage,
+  CrosswordPuzzleModel,
   Interactable,
   PlayerLocation,
   TownEmitter,
   ViewingArea as ViewingAreaModel,
 } from '../types/CoveyTownSocket';
 import ConversationArea from './ConversationArea';
+import CrosswordPuzzleArea from './CrosswordPuzzleArea';
 import Town from './Town';
 
 const mockTwilioVideo = mockDeep<TwilioVideo>();
@@ -342,6 +344,86 @@ const testingMaps: TestMapDict = {
       },
     ],
   },
+  twoConvTwoCrosswordPuzzle: {
+    tiledversion: '1.9.0',
+    tileheight: 32,
+    tilesets: [],
+    tilewidth: 32,
+    type: 'map',
+    layers: [
+      {
+        id: 4,
+        name: 'Objects',
+        objects: [
+          {
+            type: 'ConversationArea',
+            height: 237,
+            id: 39,
+            name: 'Name1',
+            rotation: 0,
+            visible: true,
+            width: 326,
+            x: 155,
+            y: 566,
+          },
+          {
+            type: 'ConversationArea',
+            height: 266,
+            id: 43,
+            name: 'Name2',
+            rotation: 0,
+            visible: true,
+            width: 467,
+            x: 612,
+            y: 120,
+          },
+          {
+            type: 'CrosswordPuzzleArea',
+            height: 237,
+            id: 99,
+            name: 'Pz1',
+            rotation: 0,
+            visible: true,
+            width: 326,
+            x: 40,
+            y: 120,
+          },
+          {
+            type: 'CrosswordPuzzleArea',
+            height: 237,
+            id: 55,
+            name: 'Pz2',
+            rotation: 0,
+            visible: true,
+            width: 326,
+            x: 600,
+            y: 1200,
+          },
+        ],
+        opacity: 1,
+        type: 'objectgroup',
+        visible: true,
+        x: 0,
+        y: 0,
+      },
+    ],
+  },
+};
+
+const defaultPuzzle: CrosswordPuzzleModel = {
+  grid: [[]],
+  info: {
+    type: '123',
+    title: '123',
+    author: '123',
+    description: '123',
+  },
+  clues: {
+    down: [],
+    across: [],
+  },
+  shades: [],
+  circles: [],
 };
 
 describe('Town', () => {
@@ -627,6 +709,68 @@ describe('Town', () => {
         expect(lastEmittedUpdate).toEqual({
           id: 'Name1',
           topic: newTopic,
+          occupantsByID: [player.id],
+        });
+      });
+    });
+  });
+  describe('addCrosswordPuzzleArea', () => {
+    beforeEach(async () => {
+      town.initializeFromMap(testingMaps.twoConvTwoCrosswordPuzzle);
+    });
+    it('Should return false if no area exists with that ID', () => {
+      expect(
+        town.addCrosswordPuzzleArea({ id: nanoid(), puzzle: defaultPuzzle, occupantsByID: [] }),
+      ).toEqual(false);
+    });
+    it('Should return false if the requested puzzle is undefined', () => {
+      expect(
+        town.addCrosswordPuzzleArea({ id: 'Pz1', puzzle: undefined, occupantsByID: [] }),
+      ).toEqual(false);
+    });
+    it('Should return false if the area already has a puzzle', () => {
+      expect(
+        town.addCrosswordPuzzleArea({ id: 'Pz1', puzzle: defaultPuzzle, occupantsByID: [] }),
+      ).toEqual(true);
+      expect(
+        town.addCrosswordPuzzleArea({ id: 'Pz1', puzzle: defaultPuzzle, occupantsByID: [] }),
+      ).toEqual(false);
+    });
+    describe('When successful', () => {
+      const newPuzzle: CrosswordPuzzleModel = {
+        grid: [[]],
+        info: {
+          type: 'dawdwa',
+          title: 'wda3',
+          author: '123',
+          description: '123',
+        },
+        clues: {
+          down: [],
+          across: [],
+        },
+        shades: [],
+        circles: [],
+      };
+      beforeEach(() => {
+        playerTestData.moveTo(45, 122); // Inside of "Name1" area
+        expect(
+          town.addCrosswordPuzzleArea({ id: 'Pz1', puzzle: newPuzzle, occupantsByID: [] }),
+        ).toEqual(true);
+      });
+      it('Should update the local model for that area', () => {
+        const pzArea = town.getInteractable('Pz1') as CrosswordPuzzleArea;
+        expect(pzArea.puzzle).toEqual(newPuzzle);
+      });
+      it('Should include any players in that area as occupants', () => {
+        const pzArea = town.getInteractable('Pz1') as CrosswordPuzzleArea;
+        expect(pzArea.occupantsByID).toEqual([player.id]);
+      });
+      it('Should emit an interactableUpdate message', () => {
+        const lastEmittedUpdate = getLastEmittedEvent(townEmitter, 'interactableUpdate');
+        expect(lastEmittedUpdate).toEqual({
+          id: 'Pz1',
+          puzzle: newPuzzle,
           occupantsByID: [player.id],
         });
       });

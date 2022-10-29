@@ -24,7 +24,6 @@ describe('PuzzleArea', () => {
     },
     shades: [],
     circles: [],
-    private: false,
   };
   const id = nanoid();
   let newPlayer: Player;
