@@ -22,7 +22,7 @@ export default class CrosswordPuzzleArea extends InteractableArea {
   /**
    * Creates a new PuzzleArea
    *
-   * @param PuzzleModel model containing this area's current group name and its ID
+   * @param CrosswordPuzzleModel model containing this area's current group name and its ID
    * @param coordinates  the bounding box that defines this conversation area
    * @param townEmitter a broadcast emitter that can be used to emit updates to players
    */
