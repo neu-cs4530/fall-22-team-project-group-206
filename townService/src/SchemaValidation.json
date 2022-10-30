@@ -1,0 +1,41 @@
+{
+    "validator": {
+        "$jsonSchema": {
+            "bsonType": "object",
+            "title": "Score Object validation",
+            "required": [
+                "teamName",
+                "date",
+                "score",
+                "teamMembers"
+            ],
+            "properties": {
+                "teamName": {
+                    "bsonType": "string",
+                    "description": "'teamName' must be a string and is required"
+                },
+                "date": {
+                    "bsonType": "Date",
+                    "description": "'date' must be a Date and is required"
+                },
+                "teamMembers": {
+                    "bsonType": "array",
+                    "items": {
+                        "bsonType": "string"
+                    },
+                    "description": "'teamMembers' must be an array of string and is required"
+                },
+                "usedHint": {
+                    "bsonType": "Boolean",
+                    "description": "'usedHint' must be a Boolean",
+                    "default": false
+                },
+                "completed": {
+                    "bsonType": "Boolean",
+                    "description": "'completed' must be a Boolean",
+                    "default": false
+                }
+            }
+        }
+    }
+}
