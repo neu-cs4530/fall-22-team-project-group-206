@@ -2,9 +2,8 @@
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
 
-
 export async function openConnection() {
-    const uri = "mongodb+srv://fisaacson:lVSjBB3DoTwdF9lL@coveycrosswordleaderboa.ojrmge7.mongodb.net/?retryWrites=true&w=majority";
+    const uri = "mongodb+srv://"+ process.env.MONGODB_USERNAME + ":" + process.env.MONGODB_PASSWORD + "@coveycrosswordleaderboa.ojrmge7.mongodb.net/?retryWrites=true&w=majority";
     const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
     try {
