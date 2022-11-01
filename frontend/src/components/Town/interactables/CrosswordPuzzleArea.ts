@@ -54,6 +54,7 @@ export default class CrosswordPuzzleArea extends Interactable {
   interact(): void {
     this._labelText?.setVisible(false);
     this._isInteracting = true;
+    // TODO: add link to Modal
   }
 
   getType(): KnownInteractableTypes {
