@@ -1,60 +1,66 @@
-import { MongoClient } from 'mongodb';
-import mongoose, { model } from 'mongoose';
 import Score from './ScoreModel';
 import { IScore } from './IScore';
+import { scoreCreateResponse, scoreDeleteResponse } from '../types';
 
-const collection = 'coveyCrosswordLeaderboard';
-
-export async function addScore(newScore: mongoose.Model<IScore>): Promise<Boolean> {
-      new Score(newScore).save((err: any, ) => {
-        if (err) {
-          console.log(err);
-          return false;
-        } else {
-          console.log(newScore);
-          return true;
-        }
-      });
-    return false;
-  }
-
-export async function removeScore(teamName:String): Promise<Boolean> {
-    Score.deleteOne({ _id: teamName }, (err: any) => {
-      if (err) {
-        console.log(err);
-        return false;
-      }
-      else {
-        return true;
-      }
-    });
-    return true;
-  }
-
-export async function findScore(teamName: String): Promise<any> {
-    Score.findById({id: score.teamName}, (err: any, score: any) => {
-      if(err) {
-        console.log(err);
-      }
-      else {
-        console.log(score)
-        return score
-      }
-    });
-
-  }
-
-export async function updateScore(newScore: IScore): Promise<Boolean> {
-    Score.findByIdAndUpdate(newScore.teamName, newScore, (err: any, score: any) => {
-      if (err) {
-        console.log(err);
-        return score;
-      } else {
-        console.log("Successfully updated score!");
-        return score;
-      }
+export async function addScore(newScore: IScore): Promise<scoreCreateResponse> {
+  var resp: scoreCreateResponse = { success: false };
+  try {
+    var creation = await Score.create(newScore);
+    resp = { success: true, score: creation };
+  } catch (e) {
+    if (e instanceof Error) {
+      resp = { success: false, error: e };
     }
-  );
-  return {};
+  }
+  return resp;
 }
+
+export async function removeScore(teamName: String): Promise<scoreDeleteResponse> {
+  
+  try {
+    await Score.deleteOne({ _id: teamName });
+    return {success: true}
+  } catch (e) {
+    if (e instanceof Error) {
+      return { success: false, error: e };
+    }
+  }
+  return {success: false};
+}
+
+export async function findScore(teamName: String): Promise<scoreCreateResponse> {
+  try {
+    var creation = await Score.findById({ id: teamName });
+    if (creation) {
+      return {success:true, score: creation}
+    }
+    else {
+      return {success: false, error: new Error('Score not found')}
+    }
+  }
+  catch (e) {
+    if (e instanceof Error) {
+      return {success: false, error: e}
+    }
+  }
+  return {success: false}
+  
+}
+
+export async function updateScore(newScore: IScore): Promise<scoreCreateResponse> {
+  try {
+  var creation = await Score.findByIdAndUpdate(newScore.teamName, newScore);
+  if (creation) {
+    return {success: true, score: creation}
+  }
+  else {
+    return {success: false, error: new Error('Score not found')}
+  }
+  }
+  catch (e) {
+    if (e instanceof Error) {
+      return {success: false, error: e}
+    }
+  }
+  return {success: false}
 }

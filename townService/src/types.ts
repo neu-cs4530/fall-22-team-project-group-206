@@ -1,7 +1,13 @@
+import { IScore } from "./db/IScore"
 
 
 export interface scoreCreateResponse {
-    teamName: String,
-    dateCreated: Date,
-    score: number
+    success: boolean,
+    score?: IScore,
+    error?: Error
+}
+
+export interface scoreDeleteResponse {
+    success: boolean,
+    error?: Error
 }
