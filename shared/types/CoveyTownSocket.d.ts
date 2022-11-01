@@ -1,3 +1,4 @@
+import internal from "stream";
 
 export type TownJoinResponse = {
   /** Unique ID that represents this player * */
@@ -102,6 +103,15 @@ export interface CrosswordPuzzleClues {
   across: string[];
 }
 
+export interface ScoreBoardService {
+  teamName: string;
+  date: string;
+  score: number;
+  users: string[];
+  usedHint:boolean;
+  completePercentage:number;
+
+}
 
 export interface ServerToClientEvents {
   playerMoved: (movedPlayer: Player) => void;

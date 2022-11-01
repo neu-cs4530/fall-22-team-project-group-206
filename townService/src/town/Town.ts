@@ -272,15 +272,15 @@ export default class Town {
    * crossword puzzle area with the specified ID or if there is already an active crossword puzzle crossword puzzle area
    * with the specified ID
    */
-  public addCrosswordPuzzleArea(crosswordpuzzleArea: CrosswordPuzzleAreaModel): boolean {
+  public addCrosswordPuzzleArea(crosswordPuzzleArea: CrosswordPuzzleAreaModel): boolean {
     const area = this._interactables.find(
-      eachArea => eachArea.id === crosswordpuzzleArea.id,
+      eachArea => eachArea.id === crosswordPuzzleArea.id,
     ) as CrosswordPuzzleArea;
 
-    if (!area || !crosswordpuzzleArea.puzzle || area.puzzle) {
+    if (!area || !crosswordPuzzleArea.puzzle || area.puzzle) {
       return false;
     }
-    area.puzzle = crosswordpuzzleArea.puzzle;
+    area.puzzle = crosswordPuzzleArea.puzzle;
     area.addPlayersWithinBounds(this._players);
     this._broadcastEmitter.emit('interactableUpdate', area.toModel());
     return true;

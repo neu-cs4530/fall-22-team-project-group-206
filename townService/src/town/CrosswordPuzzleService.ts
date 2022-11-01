@@ -10,12 +10,37 @@ const CROSSWORDPUZZLE_EXTERNAL_LINK =
  * @returns a response that includes the a crossword puzzle
  */
 const getCrosswordPuzzle = async (_req: Express.Request, res: Express.Response) => {
-  // get some posts
-  const result: AxiosResponse = await axios.get(CROSSWORDPUZZLE_EXTERNAL_LINK);
-  const posts: CrosswordPuzzleModel = result.data.puzzles[0];
-  return res.status(200).json({
-    puzzle: posts,
-  });
+  // get the crossword puzzle
+  try {
+    const result: AxiosResponse = await axios.get(CROSSWORDPUZZLE_EXTERNAL_LINK);
+    const posts: CrosswordPuzzleModel = result.data.puzzles[0];
+    return res.status(200).json({
+      puzzle: posts,
+    });
+  } catch (err) {
+    throw new Error('Error when fetching the puzzle');
+  }
 };
 
-export default { getCrosswordPuzzle };
+const getScoreBoard = async (_req: Express.Request, res: Express.Response) =>
+  res.status(200).json({
+    teamName: 'string',
+    date: 'string',
+    score: 1,
+    users: ['string', 'string'],
+    usedHint: false,
+    completePercentage: 1,
+  });
+
+const updateScoreBoard = async (_req: Express.Request, res: Express.Response) => {
+  // const scoreContent = req.body;
+  try {
+    // TODO
+    return res.status(200);
+  } catch (err) {
+    // TODO
+  }
+  return res.status(404);
+};
+
+export default { getCrosswordPuzzle, getScoreBoard, updateScoreBoard };

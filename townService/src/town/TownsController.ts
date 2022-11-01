@@ -196,10 +196,10 @@ export class TownsController extends Controller {
   }
 
   /**
-   * Creates a conversation area in a given town
-   * @param townID ID of the town in which to create the new conversation area
+   * Creates a crossword puzzle area in a given town
+   * @param townID ID of the town in which to create the new crossword puzzle area
    * @param sessionToken session token of the player making the request, must match the session token returned when the player joined the town
-   * @param requestBody The new conversation area to create
+   * @param requestBody The new crossword puzzle area  to create
    */
   @Post('{townID}/crosswordPuzzleArea')
   @Response<InvalidParametersError>(400, 'Invalid values specified')
