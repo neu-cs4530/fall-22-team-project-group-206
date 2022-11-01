@@ -302,6 +302,7 @@ export default class TownGameScene extends Phaser.Scene {
         classType: interactableTypeForObjectType(obj.type),
       })),
     );
+    
     return gameObjects as Interactable[];
   }
 
