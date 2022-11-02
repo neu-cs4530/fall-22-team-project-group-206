@@ -18,12 +18,14 @@ function CrosswordClues(props: {
   }
 
   function createClueViews(clueList: (string | null)[]): (JSX.Element | null)[] {
-    return clueList.map((clue, clueNumber) => createClueView(clue, clueNumber)).filter(clueView => clueView !== null);
+    return clueList
+      .map((clue, clueNumber) => createClueView(clue, clueNumber))
+      .filter(clueView => clueView !== null);
   }
 
-  const acrossCluesView = createClueViews(props.acrossClues)
-  const downCluesView = createClueViews(props.downClues)
-  
+  const acrossCluesView = createClueViews(props.acrossClues);
+  const downCluesView = createClueViews(props.downClues);
+
   return (
     <>
       <div className='clues-list'>

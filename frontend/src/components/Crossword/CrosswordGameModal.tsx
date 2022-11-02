@@ -192,12 +192,12 @@ function CrosswordGameModal(): JSX.Element {
   }
 
   useEffect(() => {
-    if (isOpen) {
+    if (crosswordPuzzleArea) {
       coveyTownController.pause();
     } else {
       coveyTownController.unPause();
     }
-  }, [coveyTownController]);
+  }, [coveyTownController, crosswordPuzzleArea]);
 
   return (
     <Modal isOpen={isOpen} onClose={() => onClose()} size='6xl' isCentered>

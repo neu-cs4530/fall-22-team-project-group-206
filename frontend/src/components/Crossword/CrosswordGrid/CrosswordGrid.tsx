@@ -2,16 +2,15 @@ import React, { useState } from 'react';
 import CrosswordCell from './CrosswordCell/CrosswordCell';
 
 function CrosswordGrid(props: { xw: string[][] }): JSX.Element {
-  const solution = props.xw;
+  // const solution = props.xw;
   const [grid, setGrid] = useState<string[][]>(
     props.xw.map(row => row.map(val => (val !== '.' ? '' : val))),
   );
   const [selected, setSelected] = useState<{ row: number; col: number }>({ row: 0, col: 0 });
-  
-  // TODO: remove or use when implementing controller
-  const [direction, setDirection] = useState<'across' | 'down'>('across');
 
-  const [isGameOver, updateIsGameOver] = useState<boolean>(false);
+  // TODO: remove or use when implementing controller
+  // const [direction, setDirection] = useState<'across' | 'down'>('across');
+  //const [isGameOver, updateIsGameOver] = useState<boolean>(false);
 
   const isSelected = (row: number, col: number): boolean => {
     return selected.row === row && selected.col === col;
