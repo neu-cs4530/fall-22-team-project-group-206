@@ -17,14 +17,13 @@ function CrosswordClues(props: {
     return clue !== null ? <ClueView clueNumber={clueNumber} clue={clue} /> : null;
   }
 
-  const acrossCluesView = props.acrossClues
-    .map((clue, clueNumber) => createClueView(clue, clueNumber))
-    .filter(clueView => clueView !== null);
+  function createClueViews(clueList: (string | null)[]): (JSX.Element | null)[] {
+    return clueList.map((clue, clueNumber) => createClueView(clue, clueNumber)).filter(clueView => clueView !== null);
+  }
 
-  const downCluesView = props.downClues
-    .map((clue, clueNumber) => createClueView(clue, clueNumber))
-    .filter(clueView => clueView !== null);
-
+  const acrossCluesView = createClueViews(props.acrossClues)
+  const downCluesView = createClueViews(props.downClues)
+  
   return (
     <>
       <div className='clues-list'>
