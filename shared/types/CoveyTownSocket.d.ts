@@ -1,4 +1,3 @@
-import internal from "stream";
 
 export type TownJoinResponse = {
   /** Unique ID that represents this player * */
@@ -81,12 +80,29 @@ export interface ViewingArea {
 }
 
 //The model to represent crosswordPuzzle response get from external api
-export interface CrosswordPuzzleModel {
+export interface CrosswordExternalModel {
   grid: string[][];
   info: CrosswordPuzzleInfo;
   clues: CrosswordPuzzleClues;
-  shades: number[];
-  circles: number[];
+  shades:number[];
+  circle:number[];
+  private:boolean;
+}
+
+//The model used to fit in CrosswordPuzzleArea
+export interface CrosswordPuzzleModel {
+  grid: CrosswordPuzzleCell[][];
+  info: CrosswordPuzzleInfo;
+  clues: CrosswordPuzzleClues;
+
+}
+
+//represent a single cell in the CrosswordPuzzle grid
+export interface CrosswordPuzzleCell {
+  isCircle: boolean; // if the cell is circled
+  isShades: boolean; // if the cell is shaded
+  value: string; // the current input from user
+  solution: string; // the corrent solution for this cell
 }
 
 //Info type in CrosswordPuzzleModel
@@ -101,6 +117,12 @@ export interface CrosswordPuzzleInfo {
 export interface CrosswordPuzzleClues {
   down: string[];
   across: string[];
+}
+
+//crossword Puzzle's position representation
+export interface CrosswordPosition {
+  row: number; //row index
+  col: number; // col index
 }
 
 export interface ScoreBoardService {

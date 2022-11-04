@@ -22,8 +22,6 @@ describe('PuzzleArea', () => {
       down: [],
       across: [],
     },
-    shades: [],
-    circles: [],
   };
   const id = nanoid();
   let newPlayer: Player;
@@ -112,6 +110,46 @@ describe('PuzzleArea', () => {
       expect(val.groupName).toBeUndefined();
       expect(val.puzzle).toBeUndefined();
       expect(val.occupantsByID).toEqual([]);
+    });
+  });
+
+  describe('fromMapObject', () => {
+    it('Throws an error if the width or height are missing', () => {
+      expect(() =>
+        PuzzleArea.fromMapObject({ id: 1, name: nanoid(), visible: true, x: 0, y: 0 }, townEmitter),
+      ).toThrowError();
+    });
+    it('Creates a new puzzle area using the provided boundingBox and id, with an empty occupants list', () => {
+      const x = 30;
+      const y = 20;
+      const width = 10;
+      const height = 20;
+      const name = 'name';
+      const val = PuzzleArea.fromMapObject(
+        { x, y, width, height, name, id: 10, visible: true },
+        townEmitter,
+      );
+      expect(val.boundingBox).toEqual({ x, y, width, height });
+      expect(val.id).toEqual(name);
+      expect(val.groupName).toBeUndefined();
+      expect(val.puzzle).toBeUndefined();
+      expect(val.occupantsByID).toEqual([]);
+    });
+  });
+
+  describe('fromPositionToIndex', () => {
+    // 1 2 3
+    // 4 5 6
+    // 7 8 9
+    const position1 = PuzzleArea.fromPositionToIndex({ row: 1, col: 1 }, 3);
+    const position2 = PuzzleArea.fromPositionToIndex({ row: 0, col: 0 }, 3);
+    const position3 = PuzzleArea.fromPositionToIndex({ row: 0, col: 2 }, 3);
+    const position4 = PuzzleArea.fromPositionToIndex({ row: 2, col: 2 }, 3);
+    it('Should return number position correctly', () => {
+      expect(position1).toEqual(5);
+      expect(position2).toEqual(1);
+      expect(position3).toEqual(3);
+      expect(position4).toEqual(9);
     });
   });
 });

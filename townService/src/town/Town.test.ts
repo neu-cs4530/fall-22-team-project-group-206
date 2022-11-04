@@ -422,8 +422,6 @@ const defaultPuzzle: CrosswordPuzzleModel = {
     down: [],
     across: [],
   },
-  shades: [],
-  circles: [],
 };
 
 describe('Town', () => {
@@ -749,8 +747,6 @@ describe('Town', () => {
           down: [],
           across: [],
         },
-        shades: [],
-        circles: [],
       };
       beforeEach(() => {
         playerTestData.moveTo(45, 122); // Inside of "Name1" area

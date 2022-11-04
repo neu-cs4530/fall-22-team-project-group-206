@@ -1,11 +1,16 @@
 import { ITiledMapObject } from '@jonbell/tiled-map-type-guard';
+import axios from 'axios';
 import Player from '../lib/Player';
 import {
   BoundingBox,
   CrosswordPuzzleArea as CrosswordPuzzleAreaModel,
   TownEmitter,
   CrosswordPuzzleModel,
+  CrosswordPosition,
+  CrosswordPuzzleCell,
+  CrosswordExternalModel,
 } from '../types/CoveyTownSocket';
+import CrosswordPuzzleService from './CrosswordPuzzleService';
 import InteractableArea from './InteractableArea';
 
 export default class CrosswordPuzzleArea extends InteractableArea {
@@ -82,5 +87,68 @@ export default class CrosswordPuzzleArea extends InteractableArea {
     }
     const rect: BoundingBox = { x: mapObject.x, y: mapObject.y, width, height };
     return new CrosswordPuzzleArea({ id: name, occupantsByID: [] }, rect, broadcastEmitter);
+  }
+
+  /**
+   * Method that sets daily puzzle to the CrosswordPuzzleArea
+   *
+   */
+  public async setPuzzleModel(): Promise<void> {
+    try {
+      await axios.get(CrosswordPuzzleService.CROSSWORDPUZZLE_EXTERNAL_LINK).then(response => {
+        const rawPuzzleModel: CrosswordExternalModel = response.data.puzzle[0]
+          .content as CrosswordExternalModel;
+        this.puzzle = {
+          grid: CrosswordPuzzleArea.initializeFromGridToCell(
+            rawPuzzleModel.grid,
+            rawPuzzleModel.shades,
+            rawPuzzleModel.circle,
+          ),
+          info: rawPuzzleModel.info,
+          clues: rawPuzzleModel.clues,
+        };
+      });
+    } catch (err) {
+      throw new Error('Error when fetching the puzzle');
+    }
+  }
+
+  /**
+   * Helper method that convert raw data from thrid party api to gird in CrosswordPuzzleModel
+   * @param gird gird from thrid party api
+   * @param shades tiles that is shaded
+   * @param circle tiles that is circled
+   * @returns 2D list of CrosswordPuzzleCell which is used for constructing CrosswordPuzzleModel
+   */
+  public static initializeFromGridToCell(
+    grid: string[][],
+    shades: number[],
+    circle: number[],
+  ): CrosswordPuzzleCell[][] {
+    const cells: CrosswordPuzzleCell[][] = [];
+    for (let row = 0; row < grid.length; row++) {
+      for (let col = 0; col < grid[0].length; col++) {
+        const currentCell: CrosswordPuzzleCell = {
+          value: '',
+          solution: grid[row][col],
+          isCircle: CrosswordPuzzleArea.fromPositionToIndex({ row, col }, grid[0].length) in circle,
+          isShades: CrosswordPuzzleArea.fromPositionToIndex({ row, col }, grid[0].length) in shades,
+        };
+        cells[row][col] = currentCell;
+      }
+    }
+    return cells;
+  }
+
+  /**
+   * Helper methods that takes in position number and return the index array which is represented by [rowIndex, colIndex]
+   * @param row row index of the tile
+   * @param col column index of the tile
+   * @param rowSize length of the gird namly column size of the grid
+   * @param height height of the grid namly row size of the gird
+   * @returns number converted from a CrosswordPositioon
+   */
+  public static fromPositionToIndex({ row, col }: CrosswordPosition, rowSize: number): number {
+    return row * rowSize + col + 1;
   }
 }
