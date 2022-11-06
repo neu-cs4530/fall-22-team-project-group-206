@@ -2,12 +2,12 @@ import { IScore } from "./db/IScore"
 
 
 export interface scoreCreateResponse {
-    success: boolean,
+    status: number,
     score?: IScore,
     error?: Error
 }
 
 export interface scoreDeleteResponse {
-    success: boolean,
+    status: number,
     error?: Error
 }

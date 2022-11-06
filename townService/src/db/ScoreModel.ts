@@ -14,7 +14,7 @@ export const ScoreSchema = new mongoose.Schema({
   
   });
   
-  const score: mongoose.Model<IScore> = mongoose.model<IScore>('Score', ScoreSchema);
+  const Score: mongoose.Model<IScore> = mongoose.model<IScore>('Score', ScoreSchema);
   
   
-  export default score;
+  export default Score;

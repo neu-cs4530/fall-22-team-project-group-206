@@ -6,12 +6,10 @@ dotenv.config();
 import * as mongoose from 'mongoose';
 
 export function createConnection() {
-  const uri: string = 'mongodb+srv://' +
-process.env.MONGODB_USERNAME +
-':' +
-process.env.MONGODB_PASSWORD +
-'@coveycrosswordleaderboa.ojrmge7.mongodb.net/?retryWrites=true&w=majority';
-
+  var uri: string = ''
+  if (process.env.MONGODB_LOCAL !== undefined) {
+    uri = process.env.MONGODB_LOCAL;
+  }
 
 mongoose.connect(uri, (err: any) => {
   if (err) {
