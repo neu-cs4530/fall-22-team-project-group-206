@@ -2,12 +2,13 @@ import { mock, mockClear } from 'jest-mock-extended';
 import { nanoid } from 'nanoid';
 import Player from '../lib/Player';
 import { getLastEmittedEvent } from '../TestUtils';
-import { TownEmitter, CrosswordPuzzleModel } from '../types/CoveyTownSocket';
-import PuzzleArea from './CrosswordPuzzleArea';
+import { TownEmitter, CrosswordPuzzleModel, CrosswordPuzzleCell } from '../types/CoveyTownSocket';
+import CrosswordPuzzleArea from './CrosswordPuzzleArea';
+import CrosswordPuzzleService from './CrosswordPuzzleService';
 
 describe('PuzzleArea', () => {
   const testAreaBox = { x: 100, y: 100, width: 100, height: 100 };
-  let testArea: PuzzleArea;
+  let testArea: CrosswordPuzzleArea;
   const townEmitter = mock<TownEmitter>();
   const groupName = nanoid();
   const puzzle: CrosswordPuzzleModel = {
@@ -25,10 +26,42 @@ describe('PuzzleArea', () => {
   };
   const id = nanoid();
   let newPlayer: Player;
+  const grid: string[][] = [
+    ['1', '2'],
+    ['3', '4'],
+  ];
+  const cell1: CrosswordPuzzleCell = {
+    value: '',
+    solution: '1',
+    isCircled: true,
+    isShaded: false,
+  };
+  const cell2: CrosswordPuzzleCell = {
+    value: '',
+    solution: '2',
+    isCircled: false,
+    isShaded: true,
+  };
+  const cell3: CrosswordPuzzleCell = {
+    value: '',
+    solution: '3',
+    isCircled: false,
+    isShaded: false,
+  };
+  const cell4: CrosswordPuzzleCell = {
+    value: '',
+    solution: '4',
+    isCircled: false,
+    isShaded: false,
+  };
 
+  const cellGrid: CrosswordPuzzleCell[][] = [
+    [cell1, cell2],
+    [cell3, cell4],
+  ];
   beforeEach(() => {
     mockClear(townEmitter);
-    testArea = new PuzzleArea(
+    testArea = new CrosswordPuzzleArea(
       { groupName, id, occupantsByID: [], puzzle },
       testAreaBox,
       townEmitter,
@@ -92,7 +125,10 @@ describe('PuzzleArea', () => {
   describe('fromMapObject', () => {
     it('Throws an error if the width or height are missing', () => {
       expect(() =>
-        PuzzleArea.fromMapObject({ id: 1, name: nanoid(), visible: true, x: 0, y: 0 }, townEmitter),
+        CrosswordPuzzleArea.fromMapObject(
+          { id: 1, name: nanoid(), visible: true, x: 0, y: 0 },
+          townEmitter,
+        ),
       ).toThrowError();
     });
     it('Creates a new puzzle area using the provided boundingBox and id, with an empty occupants list', () => {
@@ -101,7 +137,7 @@ describe('PuzzleArea', () => {
       const width = 10;
       const height = 20;
       const name = 'name';
-      const val = PuzzleArea.fromMapObject(
+      const val = CrosswordPuzzleArea.fromMapObject(
         { x, y, width, height, name, id: 10, visible: true },
         townEmitter,
       );
@@ -116,7 +152,10 @@ describe('PuzzleArea', () => {
   describe('fromMapObject', () => {
     it('Throws an error if the width or height are missing', () => {
       expect(() =>
-        PuzzleArea.fromMapObject({ id: 1, name: nanoid(), visible: true, x: 0, y: 0 }, townEmitter),
+        CrosswordPuzzleArea.fromMapObject(
+          { id: 1, name: nanoid(), visible: true, x: 0, y: 0 },
+          townEmitter,
+        ),
       ).toThrowError();
     });
     it('Creates a new puzzle area using the provided boundingBox and id, with an empty occupants list', () => {
@@ -125,7 +164,7 @@ describe('PuzzleArea', () => {
       const width = 10;
       const height = 20;
       const name = 'name';
-      const val = PuzzleArea.fromMapObject(
+      const val = CrosswordPuzzleArea.fromMapObject(
         { x, y, width, height, name, id: 10, visible: true },
         townEmitter,
       );
@@ -141,15 +180,33 @@ describe('PuzzleArea', () => {
     // 1 2 3
     // 4 5 6
     // 7 8 9
-    const position1 = PuzzleArea.fromPositionToIndex({ row: 1, col: 1 }, 3);
-    const position2 = PuzzleArea.fromPositionToIndex({ row: 0, col: 0 }, 3);
-    const position3 = PuzzleArea.fromPositionToIndex({ row: 0, col: 2 }, 3);
-    const position4 = PuzzleArea.fromPositionToIndex({ row: 2, col: 2 }, 3);
+    const position1 = CrosswordPuzzleArea.fromPositionToIndex({ row: 1, col: 1 }, 3);
+    const position2 = CrosswordPuzzleArea.fromPositionToIndex({ row: 0, col: 0 }, 3);
+    const position3 = CrosswordPuzzleArea.fromPositionToIndex({ row: 0, col: 2 }, 3);
+    const position4 = CrosswordPuzzleArea.fromPositionToIndex({ row: 2, col: 2 }, 3);
     it('Should return number position correctly', () => {
       expect(position1).toEqual(5);
       expect(position2).toEqual(1);
       expect(position3).toEqual(3);
       expect(position4).toEqual(9);
+    });
+  });
+
+  describe('setPuzzleModel', () => {
+    it('should set the puzzle model for the puzzle model area', async () => {
+      await testArea.setPuzzleModel(CrosswordPuzzleService.CROSSWORDPUZZLE_EXTERNAL_LINK);
+      expect(testArea.puzzle?.grid.length).not.toEqual(0);
+    });
+  });
+
+  describe('initializeFromGridToCell', () => {
+    it('should return a CrosswordPuzzleCell grid from a string grid', () => {
+      const cellGridTest: CrosswordPuzzleCell[][] = CrosswordPuzzleArea.initializeFromGridToCell(
+        grid,
+        [2],
+        [1],
+      );
+      expect(cellGridTest).toEqual(cellGrid);
     });
   });
 });

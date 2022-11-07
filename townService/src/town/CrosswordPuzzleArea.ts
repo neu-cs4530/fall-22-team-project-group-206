@@ -9,8 +9,8 @@ import {
   CrosswordPosition,
   CrosswordPuzzleCell,
   CrosswordExternalModel,
+  LeaderBoard,
 } from '../types/CoveyTownSocket';
-import CrosswordPuzzleService from './CrosswordPuzzleService';
 import InteractableArea from './InteractableArea';
 
 export default class CrosswordPuzzleArea extends InteractableArea {
@@ -91,26 +91,30 @@ export default class CrosswordPuzzleArea extends InteractableArea {
 
   /**
    * Method that sets daily puzzle to the CrosswordPuzzleArea
-   *
+   * @param externalLink the external api that is applied here to fetch puzzle
    */
-  public async setPuzzleModel(): Promise<void> {
-    try {
-      await axios.get(CrosswordPuzzleService.CROSSWORDPUZZLE_EXTERNAL_LINK).then(response => {
-        const rawPuzzleModel: CrosswordExternalModel = response.data.puzzle[0]
+  public async setPuzzleModel(externalLink: string): Promise<void> {
+    await axios.get(externalLink).then(response => {
+      try {
+        if (!response.data.puzzles[0].content) {
+          throw new Error('puzzle not fetched');
+        }
+        const rawPuzzleModel: CrosswordExternalModel = response.data.puzzles[0]
           .content as CrosswordExternalModel;
+        const cellGrid: CrosswordPuzzleCell[][] = CrosswordPuzzleArea.initializeFromGridToCell(
+          rawPuzzleModel.grid,
+          rawPuzzleModel.shades,
+          rawPuzzleModel.circle,
+        );
         this.puzzle = {
-          grid: CrosswordPuzzleArea.initializeFromGridToCell(
-            rawPuzzleModel.grid,
-            rawPuzzleModel.shades,
-            rawPuzzleModel.circle,
-          ),
+          grid: cellGrid,
           info: rawPuzzleModel.info,
           clues: rawPuzzleModel.clues,
         };
-      });
-    } catch (err) {
-      throw new Error('Error when fetching the puzzle');
-    }
+      } catch (err) {
+        throw new Error('There was an error when trying to fetch');
+      }
+    });
   }
 
   /**
@@ -127,14 +131,19 @@ export default class CrosswordPuzzleArea extends InteractableArea {
   ): CrosswordPuzzleCell[][] {
     const cells: CrosswordPuzzleCell[][] = [];
     for (let row = 0; row < grid.length; row++) {
+      cells.push([]);
       for (let col = 0; col < grid[0].length; col++) {
         const currentCell: CrosswordPuzzleCell = {
           value: '',
           solution: grid[row][col],
-          isCircle: CrosswordPuzzleArea.fromPositionToIndex({ row, col }, grid[0].length) in circle,
-          isShades: CrosswordPuzzleArea.fromPositionToIndex({ row, col }, grid[0].length) in shades,
+          isCircled: (circle || []).includes(
+            CrosswordPuzzleArea.fromPositionToIndex({ row, col }, grid[row].length),
+          ),
+          isShaded: (shades || []).includes(
+            CrosswordPuzzleArea.fromPositionToIndex({ row, col }, grid[row].length),
+          ),
         };
-        cells[row][col] = currentCell;
+        cells[row].push(currentCell);
       }
     }
     return cells;

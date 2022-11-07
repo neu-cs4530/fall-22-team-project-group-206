@@ -63,6 +63,7 @@ export interface CrosswordPuzzleArea {
   groupName?: string;
   puzzle?: CrosswordPuzzleModel;
   occupantsByID: string[];
+  leaderBoard?: LeaderBoard;
 }
 
 export interface BoundingBox {
@@ -99,8 +100,8 @@ export interface CrosswordPuzzleModel {
 
 //represent a single cell in the CrosswordPuzzle grid
 export interface CrosswordPuzzleCell {
-  isCircle: boolean; // if the cell is circled
-  isShades: boolean; // if the cell is shaded
+  isCircled: boolean; // if the cell is circled
+  isShaded: boolean; // if the cell is shaded
   value: string; // the current input from user
   solution: string; // the corrent solution for this cell
 }
@@ -125,7 +126,7 @@ export interface CrosswordPosition {
   col: number; // col index
 }
 
-export interface ScoreBoardService {
+export interface LeaderBoard {
   teamName: string;
   date: string;
   score: number;
