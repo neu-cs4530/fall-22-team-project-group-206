@@ -59,10 +59,19 @@ describe('PuzzleArea', () => {
     [cell1, cell2],
     [cell3, cell4],
   ];
+
+  const leaderBoard = {
+    teamName: 'team1',
+    date: '1011',
+    score: 10,
+    users: ['user1', 'user2'],
+    usedHint: true,
+    completePercentage: 90,
+  };
   beforeEach(() => {
     mockClear(townEmitter);
     testArea = new CrosswordPuzzleArea(
-      { groupName, id, occupantsByID: [], puzzle },
+      { groupName, id, occupantsByID: [], puzzle, leaderBoard },
       testAreaBox,
       townEmitter,
     );
@@ -74,7 +83,13 @@ describe('PuzzleArea', () => {
       expect(testArea.occupantsByID).toEqual([newPlayer.id]);
 
       const lastEmittedUpdate = getLastEmittedEvent(townEmitter, 'interactableUpdate');
-      expect(lastEmittedUpdate).toEqual({ groupName, id, occupantsByID: [newPlayer.id], puzzle });
+      expect(lastEmittedUpdate).toEqual({
+        groupName,
+        id,
+        occupantsByID: [newPlayer.id],
+        puzzle,
+        leaderBoard,
+      });
     });
     it("Sets the player's PuzzleLabel and emits an update for their location", () => {
       expect(newPlayer.location.interactableID).toEqual(id);
@@ -92,7 +107,13 @@ describe('PuzzleArea', () => {
 
       expect(testArea.occupantsByID).toEqual([extraPlayer.id]);
       const lastEmittedUpdate = getLastEmittedEvent(townEmitter, 'interactableUpdate');
-      expect(lastEmittedUpdate).toEqual({ groupName, id, occupantsByID: [extraPlayer.id], puzzle });
+      expect(lastEmittedUpdate).toEqual({
+        groupName,
+        id,
+        occupantsByID: [extraPlayer.id],
+        puzzle,
+        leaderBoard,
+      });
     });
     it("Clears the player's puzzleLabel and emits an update for their location", () => {
       testArea.remove(newPlayer);
@@ -103,13 +124,19 @@ describe('PuzzleArea', () => {
     it('Clears the group name of the puzzle area when the last occupant leaves', () => {
       testArea.remove(newPlayer);
       const lastEmittedUpdate = getLastEmittedEvent(townEmitter, 'interactableUpdate');
-      expect(lastEmittedUpdate).toEqual({ groupName: undefined, id, occupantsByID: [] });
+      expect(lastEmittedUpdate).toEqual({
+        groupName: undefined,
+        id,
+        occupantsByID: [],
+        leaderBoard,
+      });
       expect(testArea.groupName).toBeUndefined();
+      expect((testArea.leaderBoard = leaderBoard));
     });
     it('Clears the puzzle of the puzzle area when the last occupant leaves', () => {
       testArea.remove(newPlayer);
       const lastEmittedUpdate = getLastEmittedEvent(townEmitter, 'interactableUpdate');
-      expect(lastEmittedUpdate).toEqual({ puzzle: undefined, id, occupantsByID: [] });
+      expect(lastEmittedUpdate).toEqual({ puzzle: undefined, id, occupantsByID: [], leaderBoard });
       expect(testArea.puzzle).toBeUndefined();
     });
   });
@@ -120,6 +147,7 @@ describe('PuzzleArea', () => {
       groupName,
       puzzle,
       occupantsByID: [newPlayer.id],
+      leaderBoard,
     });
   });
   describe('fromMapObject', () => {
@@ -194,7 +222,7 @@ describe('PuzzleArea', () => {
 
   describe('setPuzzleModel', () => {
     it('should set the puzzle model for the puzzle model area', async () => {
-      await testArea.setPuzzleModel(CrosswordPuzzleService.CROSSWORDPUZZLE_EXTERNAL_LINK);
+      await testArea.setPuzzleModel();
       expect(testArea.puzzle?.grid.length).not.toEqual(0);
     });
   });

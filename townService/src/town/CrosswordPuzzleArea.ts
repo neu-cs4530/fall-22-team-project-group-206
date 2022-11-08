@@ -11,6 +11,7 @@ import {
   CrosswordExternalModel,
   LeaderBoard,
 } from '../types/CoveyTownSocket';
+import CrosswordPuzzleService from './CrosswordPuzzleService';
 import InteractableArea from './InteractableArea';
 
 export default class CrosswordPuzzleArea extends InteractableArea {
@@ -18,6 +19,8 @@ export default class CrosswordPuzzleArea extends InteractableArea {
   public groupName?: string;
 
   public puzzle?: CrosswordPuzzleModel;
+
+  public leaderBoard?: LeaderBoard;
 
   /** The puzzle area is "active" when there are players inside of it  */
   public get isActive(): boolean {
@@ -32,13 +35,14 @@ export default class CrosswordPuzzleArea extends InteractableArea {
    * @param townEmitter a broadcast emitter that can be used to emit updates to players
    */
   public constructor(
-    { id, groupName, puzzle }: CrosswordPuzzleAreaModel,
+    { id, groupName, puzzle, leaderBoard }: CrosswordPuzzleAreaModel,
     coordinates: BoundingBox,
     townEmitter: TownEmitter,
   ) {
     super(id, coordinates, townEmitter);
     this.groupName = groupName;
     this.puzzle = puzzle;
+    this.leaderBoard = leaderBoard;
   }
 
   /**
@@ -68,6 +72,7 @@ export default class CrosswordPuzzleArea extends InteractableArea {
       occupantsByID: this.occupantsByID,
       groupName: this.groupName,
       puzzle: this.puzzle,
+      leaderBoard: this.leaderBoard,
     };
   }
 
@@ -93,8 +98,8 @@ export default class CrosswordPuzzleArea extends InteractableArea {
    * Method that sets daily puzzle to the CrosswordPuzzleArea
    * @param externalLink the external api that is applied here to fetch puzzle
    */
-  public async setPuzzleModel(externalLink: string): Promise<void> {
-    await axios.get(externalLink).then(response => {
+  public async setPuzzleModel(): Promise<void> {
+    await axios.get(CrosswordPuzzleService.CROSSWORDPUZZLE_EXTERNAL_LINK).then(response => {
       try {
         if (!response.data.puzzles[0].content) {
           throw new Error('puzzle not fetched');

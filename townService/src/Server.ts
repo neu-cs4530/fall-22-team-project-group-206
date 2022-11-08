@@ -11,7 +11,6 @@ import TownsStore from './lib/TownsStore';
 import { ClientToServerEvents, ServerToClientEvents } from './types/CoveyTownSocket';
 import { TownsController } from './town/TownsController';
 import { logError } from './Utils';
-import router from './routes/CrosswordPuzzleService';
 
 // Create the server instances
 const app = Express();
@@ -68,7 +67,6 @@ app.use(
   },
 );
 
-app.use('/puzzle', router);
 // Start the configured server, defaulting to port 8081 if $PORT is not set
 server.listen(process.env.PORT || 8081, () => {
   const address = server.address() as AddressInfo;
