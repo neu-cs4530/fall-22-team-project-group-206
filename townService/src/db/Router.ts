@@ -9,7 +9,7 @@ import {
   updateScoreValue,
   getAllScores,
 } from './LeaderboardService';
-import { ScoreCreateResponse, ScoreDeleteResponse, ScoreFindResponse } from '../Types';
+import { ScoreCreateResponse, ScoreDeleteResponse, ScoreFindResponse } from './Types';
 import { ScoreModel } from './ScoreModel';
 
 export default function scoreRoutes(http: Server, app: Express): io.Server {

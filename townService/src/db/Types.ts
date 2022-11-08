@@ -1,4 +1,4 @@
-import { IScore } from './db/IScore';
+import { IScore } from './IScore';
 
 export interface ScoreCreateResponse {
   status: number;
