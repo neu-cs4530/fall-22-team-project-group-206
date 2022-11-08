@@ -13,7 +13,7 @@ import useTownController from '../../hooks/useTownController';
 import CrosswordClues from './CrosswordClues/CrosswordClues';
 import './CrosswordGameModal.css';
 import CrosswordGrid from './CrosswordGrid/CrosswordGrid';
-import { CrosswordPuzzleArea as CrosswordPuzzleAreaInteractable }from '../Town/interactables/CrosswordPuzzleArea';
+import CrosswordPuzzleAreaInteractable from '../Town/interactables/CrosswordPuzzleArea';
 
 // TODO: Delete when connected to backend
 const xwData = {
@@ -175,19 +175,24 @@ const xwData = {
   stats: { numSolves: 150 },
 };
 
-function CrosswordGameModal(
-  crosswordPuzzleArea: CrosswordPuzzleAreaInteractable
-): JSX.Element {
+function CrosswordGameModal(props: {
+  crosswordPuzzleArea: CrosswordPuzzleAreaInteractable;
+}): JSX.Element {
   const coveyTownController = useTownController();
-  const crosswordPuzzleAreaController = useCrosswordAreaPuzzleController(crosswordPuzzleArea?.id)
+  const crosswordPuzzleAreaController = useCrosswordAreaPuzzleController(
+    props.crosswordPuzzleArea?.id,
+  );
 
-  const isOpen = crosswordPuzzleAreaController.puzzle !== undefined;
+  console.log('Render', props.crosswordPuzzleArea);
+  console.log('Rend2', crosswordPuzzleAreaController);
+
+  const isOpen = crosswordPuzzleAreaController.puzzle == undefined;
 
   const closeModal = useCallback(() => {
-    if (crosswordPuzzleArea) {
-      coveyTownController.interactEnd(crosswordPuzzleArea);
+    if (props.crosswordPuzzleArea) {
+      coveyTownController.interactEnd(props.crosswordPuzzleArea);
     }
-  }, [coveyTownController, crosswordPuzzleArea]);
+  }, [coveyTownController, props.crosswordPuzzleArea]);
 
   function onClose() {
     closeModal();
@@ -202,32 +207,39 @@ function CrosswordGameModal(
     }
   }, [coveyTownController, crosswordPuzzleAreaController]);
 
-  return (
-    <Modal isOpen={isOpen} onClose={() => onClose()} size='6xl' isCentered>
-      <ModalOverlay />
-      <ModalContent padding='15px'>
-        <ModalHeader>{crosswordPuzzleAreaController.puzzle?.info.title}</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody>
-          <HStack>
-            <CrosswordGrid xw={crosswordPuzzleAreaController.puzzle?.grid} />
-            <CrosswordClues
-              acrossClues={crosswordPuzzleAreaController.puzzle?.clues.across}
-              downClues={crosswordPuzzleAreaController.puzzle?.clues.down}
-            />
-          </HStack>
-        </ModalBody>
-      </ModalContent>
-    </Modal>
-  );
+  console.log(crosswordPuzzleAreaController.puzzle);
+
+  if (crosswordPuzzleAreaController.puzzle) {
+    return (
+      <Modal isOpen={isOpen} onClose={() => onClose()} size='6xl' isCentered>
+        <ModalOverlay />
+        <ModalContent padding='15px'>
+          <ModalHeader>{crosswordPuzzleAreaController.puzzle?.info.title}</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <HStack>
+              <CrosswordGrid xw={crosswordPuzzleAreaController.puzzle?.grid} />
+              <CrosswordClues
+                acrossClues={crosswordPuzzleAreaController.puzzle?.clues.across}
+                downClues={crosswordPuzzleAreaController.puzzle?.clues.down}
+              />
+            </HStack>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+    );
+  } else {
+    return <></>;
+  }
 }
 
 /**
  * The ViewingAreaWrapper is suitable to be *always* rendered inside of a town, and
  * will activate only if the player begins interacting with a viewing area.
  */
- export default function CrosswordPuzzleAreaWrapper(): JSX.Element {
-  const crosswordPuzzleArea = useInteractable<CrosswordPuzzleAreaInteractable>('viewingArea');
+export default function CrosswordPuzzleAreaWrapper(): JSX.Element {
+  const crosswordPuzzleArea =
+    useInteractable<CrosswordPuzzleAreaInteractable>('crosswordPuzzleArea');
   if (crosswordPuzzleArea) {
     return <CrosswordGameModal crosswordPuzzleArea={crosswordPuzzleArea} />;
   }

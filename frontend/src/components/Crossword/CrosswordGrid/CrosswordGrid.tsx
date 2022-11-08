@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
+import { CrosswordPuzzleCell } from '../../../types/CoveyTownSocket';
 import CrosswordCell from './CrosswordCell/CrosswordCell';
 
 type CellIndex = { row: number; col: number };
 
-function CrosswordGrid(props: { xw: string[][] }): JSX.Element {
+function CrosswordGrid(props: { xw: CrosswordPuzzleCell[][] }): JSX.Element {
   // TODO: these setters will be used in the controller
-  const [grid, setGrid] = useState<string[][]>(
-    props.xw.map(row => row.map(val => (val !== '.' ? '' : val))),
-  );
+  const [grid, setGrid] = useState<CrosswordPuzzleCell[][]>(props.xw);
   const [selected, setSelected] = useState<CellIndex>({ row: 0, col: 0 });
   const isSelected = (cell: CellIndex): boolean => {
     return selected.row === cell.row && selected.col === cell.col;
@@ -20,8 +19,8 @@ function CrosswordGrid(props: { xw: string[][] }): JSX.Element {
           key={i + j}
           cellID={`${i}-${j}`}
           isRebus={false}
-          isSelected={isSelected({ row: i, col: j})}
-          value={cell}
+          isSelected={isSelected({ row: i, col: j })}
+          cellModel={cell}
         />
       );
     });

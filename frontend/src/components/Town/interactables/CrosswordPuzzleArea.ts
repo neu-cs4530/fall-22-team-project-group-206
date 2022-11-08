@@ -2,7 +2,7 @@ import TownController from '../../../classes/TownController';
 import Interactable, { KnownInteractableTypes } from '../Interactable';
 import TownGameScene from '../TownGameScene';
 
-export class CrosswordPuzzleArea extends Interactable {
+export default class CrosswordPuzzleArea extends Interactable {
   private _labelText?: Phaser.GameObjects.Text;
 
   private _isInteracting = false;

@@ -720,12 +720,20 @@ export function useViewingAreaController(viewingAreaID: string): ViewingAreaCont
  *
  * @throws Error if there is no viewing area controller matching the specifeid ID
  */
- export function useCrosswordAreaPuzzleController(crosswordPuzzleAreaID: string): CrosswordPuzzleAreaController {
+export function useCrosswordAreaPuzzleController(
+  crosswordPuzzleAreaID: string,
+): CrosswordPuzzleAreaController {
   const townController = useTownController();
 
-  const crosswordPuzzleArea = townController.crosswordPuzzleAreas.find(eachArea => eachArea.id == crosswordPuzzleAreaID);
+  console.log(
+    townController.crosswordPuzzleAreas.map(area => area.id),
+    crosswordPuzzleAreaID,
+  );
+  const crosswordPuzzleArea = townController.crosswordPuzzleAreas.find(
+    eachArea => eachArea.id == crosswordPuzzleAreaID,
+  );
   if (!crosswordPuzzleArea) {
-    throw new Error(`Requested viewing area ${crosswordPuzzleAreaID} does not exist`);
+    throw new Error(`Requested crossword puzzle area ${crosswordPuzzleAreaID} does not exist`);
   }
   return crosswordPuzzleArea;
 }
