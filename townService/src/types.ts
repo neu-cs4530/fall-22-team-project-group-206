@@ -1,13 +1,18 @@
-import { IScore } from "./db/IScore"
+import { IScore } from './db/IScore';
 
-
-export interface scoreCreateResponse {
-    status: number,
-    score?: IScore,
-    error?: Error
+export interface ScoreCreateResponse {
+  status: number;
+  score?: IScore;
+  error?: Error;
 }
 
-export interface scoreDeleteResponse {
-    status: number,
-    error?: Error
+export interface ScoreDeleteResponse {
+  status: number;
+  error?: Error;
+}
+
+export interface ScoreFindResponse {
+  status: number;
+  scores?: IScore[];
+  error?: Error;
 }

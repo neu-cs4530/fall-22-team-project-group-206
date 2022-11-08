@@ -1,9 +1,9 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 export interface IScore extends mongoose.Document {
   teamName: string;
 
-  date: Date;
+  date?: Date;
 
   score: number;
 

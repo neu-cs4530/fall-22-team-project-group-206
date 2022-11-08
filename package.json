@@ -56,7 +56,7 @@
         "dotenv": "^16.0.3",
         "express": "^4.18.2",
         "mongodb": "^4.11.0",
-        "mongoose": "^6.7.0",
+        "mongoose": "^6.7.1",
         "ramda": "^0.27.1",
         "typescript-is": "^0.17.0"
     },

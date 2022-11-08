@@ -1,20 +1,23 @@
-import { Int32 } from 'mongodb';
-import { IScore } from './IScore';
 import * as mongoose from 'mongoose';
+import { IScore } from './IScore';
 
+export const scoreSchema = new mongoose.Schema({
+  teamName: { type: String, required: true },
+  date: { type: Date, required: false, default: mongoose.now },
+  score: { type: Number, required: true },
+  teamMembers: { type: [String], required: true },
+  usedHint: { type: Boolean, default: false },
+  finished: { type: Boolean, default: false },
+});
 
-export const ScoreSchema = new mongoose.Schema({
+export interface ScoreModel {
+  teamName: string;
+  score: number;
+  teamMembers: string[];
+  usedHint?: boolean;
+  finished?: boolean;
+}
 
-    teamName: { type: String, required: true },
-    date: { type: Date, required: true },
-    score: { type: Int32, required: true},
-    teamMembers: { type: [String], required: true},
-    usedHint: { type: Boolean, default: false},
-    finished: { type: Boolean, default: false}
-  
-  });
-  
-  const Score: mongoose.Model<IScore> = mongoose.model<IScore>('Score', ScoreSchema);
-  
-  
-  export default Score;
+const score: mongoose.Model<IScore> = mongoose.model<IScore>('score', scoreSchema);
+
+export default score;
