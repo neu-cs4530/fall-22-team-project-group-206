@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import CrosswordCell from './CrosswordCell/CrosswordCell';
 
+type CellIndex = { row: number; col: number };
+
 function CrosswordGrid(props: { xw: string[][] }): JSX.Element {
   // TODO: these setters will be used in the controller
   const [grid, setGrid] = useState<string[][]>(
     props.xw.map(row => row.map(val => (val !== '.' ? '' : val))),
   );
-  const [selected, setSelected] = useState<{ row: Number; col: Number }>({ row: 0, col: 0 });
-  const isSelected = (row: number, col: number): boolean => {
-    return selected.row === row && selected.col === col;
+  const [selected, setSelected] = useState<CellIndex>({ row: 0, col: 0 });
+  const isSelected = (cell: CellIndex): boolean => {
+    return selected.row === cell.row && selected.col === cell.col;
   };
 
   const rows = grid.map((row, i) => {
