@@ -60,7 +60,7 @@ describe('PuzzleArea', () => {
     [cell3, cell4],
   ];
 
-  const leaderBoard = {
+  const leaderboard = {
     teamName: 'team1',
     date: '1011',
     score: 10,
@@ -71,7 +71,7 @@ describe('PuzzleArea', () => {
   beforeEach(() => {
     mockClear(townEmitter);
     testArea = new CrosswordPuzzleArea(
-      { groupName, id, occupantsByID: [], puzzle, leaderBoard },
+      { groupName, id, occupantsByID: [], puzzle, leaderboard },
       testAreaBox,
       townEmitter,
     );
@@ -88,7 +88,7 @@ describe('PuzzleArea', () => {
         id,
         occupantsByID: [newPlayer.id],
         puzzle,
-        leaderBoard,
+        leaderboard,
       });
     });
     it("Sets the player's PuzzleLabel and emits an update for their location", () => {
@@ -112,7 +112,7 @@ describe('PuzzleArea', () => {
         id,
         occupantsByID: [extraPlayer.id],
         puzzle,
-        leaderBoard,
+        leaderboard,
       });
     });
     it("Clears the player's puzzleLabel and emits an update for their location", () => {
@@ -128,15 +128,15 @@ describe('PuzzleArea', () => {
         groupName: undefined,
         id,
         occupantsByID: [],
-        leaderBoard,
+        leaderboard,
       });
       expect(testArea.groupName).toBeUndefined();
-      expect((testArea.leaderBoard = leaderBoard));
+      expect((testArea.leaderboard = leaderboard));
     });
     it('Clears the puzzle of the puzzle area when the last occupant leaves', () => {
       testArea.remove(newPlayer);
       const lastEmittedUpdate = getLastEmittedEvent(townEmitter, 'interactableUpdate');
-      expect(lastEmittedUpdate).toEqual({ puzzle: undefined, id, occupantsByID: [], leaderBoard });
+      expect(lastEmittedUpdate).toEqual({ puzzle: undefined, id, occupantsByID: [], leaderboard });
       expect(testArea.puzzle).toBeUndefined();
     });
   });
@@ -147,7 +147,7 @@ describe('PuzzleArea', () => {
       groupName,
       puzzle,
       occupantsByID: [newPlayer.id],
-      leaderBoard,
+      leaderboard,
     });
   });
   describe('fromMapObject', () => {
@@ -201,40 +201,6 @@ describe('PuzzleArea', () => {
       expect(val.groupName).toBeUndefined();
       expect(val.puzzle).toBeUndefined();
       expect(val.occupantsByID).toEqual([]);
-    });
-  });
-
-  describe('fromPositionToIndex', () => {
-    // 1 2 3
-    // 4 5 6
-    // 7 8 9
-    const position1 = CrosswordPuzzleArea.fromPositionToIndex({ row: 1, col: 1 }, 3);
-    const position2 = CrosswordPuzzleArea.fromPositionToIndex({ row: 0, col: 0 }, 3);
-    const position3 = CrosswordPuzzleArea.fromPositionToIndex({ row: 0, col: 2 }, 3);
-    const position4 = CrosswordPuzzleArea.fromPositionToIndex({ row: 2, col: 2 }, 3);
-    it('Should return number position correctly', () => {
-      expect(position1).toEqual(5);
-      expect(position2).toEqual(1);
-      expect(position3).toEqual(3);
-      expect(position4).toEqual(9);
-    });
-  });
-
-  describe('setPuzzleModel', () => {
-    it('should set the puzzle model for the puzzle model area', async () => {
-      await testArea.setPuzzleModel();
-      expect(testArea.puzzle?.grid.length).not.toEqual(0);
-    });
-  });
-
-  describe('initializeFromGridToCell', () => {
-    it('should return a CrosswordPuzzleCell grid from a string grid', () => {
-      const cellGridTest: CrosswordPuzzleCell[][] = CrosswordPuzzleArea.initializeFromGridToCell(
-        grid,
-        [2],
-        [1],
-      );
-      expect(cellGridTest).toEqual(cellGrid);
     });
   });
 });

@@ -16,8 +16,9 @@ import {
   TownSettingsUpdate,
   ViewingArea as ViewingAreaModel,
 } from '../types/CoveyTownSocket';
-import { isConversationArea, isViewingArea } from '../types/TypeUtils';
+import { isConversationArea, isCrosswordPuzzleArea, isViewingArea } from '../types/TypeUtils';
 import ConversationAreaController from './ConversationAreaController';
+import CrosswordPuzzleAreaController from './CrosswordAreaController';
 import PlayerController from './PlayerController';
 import ViewingAreaController from './ViewingAreaController';
 
@@ -69,6 +70,11 @@ export type TownEvents = {
    * the town controller's record of viewing areas.
    */
   viewingAreasChanged: (newViewingAreas: ViewingAreaController[]) => void;
+  /**
+   * An event that indicates that the set of crossword puzzle areas has changed. This event is emitted after updating
+   * the town controller's record of crossword puzzle areas.
+   */
+  crosswordPuzzleAreasChanged: (newCrosswordPuzzleAreas: CrosswordPuzzleAreaController[]) => void;
   /**
    * An event that indicates that a new chat message has been received, which is the parameter passed to the listener
    */
@@ -190,6 +196,8 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
 
   private _viewingAreas: ViewingAreaController[] = [];
 
+  private _crosswordPuzzleAreas: CrosswordPuzzleAreaController[] = [];
+
   public constructor({ userName, townID, loginController }: ConnectionProperties) {
     super();
     this._townID = townID;
@@ -309,6 +317,15 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
     this.emit('viewingAreasChanged', newViewingAreas);
   }
 
+  public get crosswordPuzzleAreas() {
+    return this._crosswordPuzzleAreas;
+  }
+
+  public set crosswordPuzzleAreas(newCrosswordPuzzleAreas: CrosswordPuzzleAreaController[]) {
+    this._crosswordPuzzleAreas = newCrosswordPuzzleAreas;
+    this.emit('crosswordPuzzleAreasChanged', newCrosswordPuzzleAreas);
+  }
+
   /**
    * Begin interacting with an interactable object. Emits an event to all listeners.
    * @param interactedObj
@@ -401,14 +418,14 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
 
     /**
      * When an interactable's state changes, push that update into the relevant controller, which is assumed
-     * to be either a Viewing Area or a Conversation Area, and which is assumed to already be represented by a
+     * to be either a Viewing Area, Conversation Area, or Crossword Puzzle Area and which is assumed to already be represented by a
      * ViewingAreaController or ConversationAreaController that this TownController has.
      *
      * If a conversation area transitions from empty to occupied (or occupied to empty), this handler will emit
      * a conversationAreasChagned event to listeners of this TownController.
      *
      * If the update changes properties of the interactable, the interactable is also expected to emit its own
-     * events (@see ViewingAreaController and @see ConversationAreaController)
+     * events (@see ViewingAreaController and @see ConversationAreaController and @see CrosswordPuzzleAreaController)
      */
     this._socket.on('interactableUpdate', interactable => {
       if (isConversationArea(interactable)) {
@@ -427,6 +444,23 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
           eachArea => eachArea.id === interactable.id,
         );
         updatedViewingArea?.updateFrom(interactable);
+      } else if (isCrosswordPuzzleArea(interactable)) {
+        const updatedCrosswordArea = this._crosswordPuzzleAreas.find(
+          eachArea => eachArea.id === interactable.id,
+        );
+        if (updatedCrosswordArea) {
+          const emptyNow = updatedCrosswordArea.isEmpty();
+          if (emptyNow) {
+            updatedCrosswordArea.setPuzzleModel();
+          } else {
+            updatedCrosswordArea.puzzle = interactable.puzzle;
+            updatedCrosswordArea.occupants = this._playersByIDs(interactable.occupantsByID);
+            const emptyAfterChange = updatedCrosswordArea.isEmpty();
+            if (emptyAfterChange) {
+              this.emit('crosswordPuzzleAreasChanged', this.crosswordPuzzleAreas);
+            }
+          }
+        }
       }
     });
   }
@@ -673,6 +707,27 @@ export function useViewingAreaController(viewingAreaID: string): ViewingAreaCont
     throw new Error(`Requested viewing area ${viewingAreaID} does not exist`);
   }
   return viewingArea;
+}
+
+/**
+ * A react hook to retrieve a crossoword puzzle area controller.
+ *
+ * This function will throw an error if the viewing area controller does not exist.
+ *
+ * This hook relies on the TownControllerContext.
+ *
+ * @param viewingAreaID The ID of the viewing area to retrieve the controller for
+ *
+ * @throws Error if there is no viewing area controller matching the specifeid ID
+ */
+ export function useCrosswordAreaPuzzleController(crosswordPuzzleAreaID: string): CrosswordPuzzleAreaController {
+  const townController = useTownController();
+
+  const crosswordPuzzleArea = townController.crosswordPuzzleAreas.find(eachArea => eachArea.id == crosswordPuzzleAreaID);
+  if (!crosswordPuzzleArea) {
+    throw new Error(`Requested viewing area ${crosswordPuzzleAreaID} does not exist`);
+  }
+  return crosswordPuzzleArea;
 }
 
 /**

@@ -8,11 +8,12 @@ import {
   ModalOverlay,
 } from '@chakra-ui/react';
 import React, { useCallback, useEffect } from 'react';
-import { useInteractable } from '../../classes/TownController';
+import { useCrosswordAreaPuzzleController, useInteractable } from '../../classes/TownController';
 import useTownController from '../../hooks/useTownController';
 import CrosswordClues from './CrosswordClues/CrosswordClues';
 import './CrosswordGameModal.css';
 import CrosswordGrid from './CrosswordGrid/CrosswordGrid';
+import { CrosswordPuzzleArea as CrosswordPuzzleAreaInteractable }from '../Town/interactables/CrosswordPuzzleArea';
 
 // TODO: Delete when connected to backend
 const xwData = {
@@ -174,11 +175,13 @@ const xwData = {
   stats: { numSolves: 150 },
 };
 
-function CrosswordGameModal(): JSX.Element {
+function CrosswordGameModal(
+  crosswordPuzzleArea: CrosswordPuzzleAreaInteractable
+): JSX.Element {
   const coveyTownController = useTownController();
-  const crosswordPuzzleArea = useInteractable('crosswordPuzzleArea');
+  const crosswordPuzzleAreaController = useCrosswordAreaPuzzleController(crosswordPuzzleArea?.id)
 
-  const isOpen = crosswordPuzzleArea !== undefined;
+  const isOpen = crosswordPuzzleAreaController.puzzle !== undefined;
 
   const closeModal = useCallback(() => {
     if (crosswordPuzzleArea) {
@@ -192,25 +195,25 @@ function CrosswordGameModal(): JSX.Element {
   }
 
   useEffect(() => {
-    if (crosswordPuzzleArea) {
+    if (crosswordPuzzleAreaController) {
       coveyTownController.pause();
     } else {
       coveyTownController.unPause();
     }
-  }, [coveyTownController, crosswordPuzzleArea]);
+  }, [coveyTownController, crosswordPuzzleAreaController]);
 
   return (
     <Modal isOpen={isOpen} onClose={() => onClose()} size='6xl' isCentered>
       <ModalOverlay />
       <ModalContent padding='15px'>
-        <ModalHeader>{xwData.content.info.title}</ModalHeader>
+        <ModalHeader>{crosswordPuzzleAreaController.puzzle?.info.title}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <HStack>
-            <CrosswordGrid xw={xwData.content.grid} />
+            <CrosswordGrid xw={crosswordPuzzleAreaController.puzzle?.grid} />
             <CrosswordClues
-              acrossClues={xwData.content.clues.across}
-              downClues={xwData.content.clues.down}
+              acrossClues={crosswordPuzzleAreaController.puzzle?.clues.across}
+              downClues={crosswordPuzzleAreaController.puzzle?.clues.down}
             />
           </HStack>
         </ModalBody>
@@ -219,4 +222,14 @@ function CrosswordGameModal(): JSX.Element {
   );
 }
 
-export default CrosswordGameModal;
+/**
+ * The ViewingAreaWrapper is suitable to be *always* rendered inside of a town, and
+ * will activate only if the player begins interacting with a viewing area.
+ */
+ export default function CrosswordPuzzleAreaWrapper(): JSX.Element {
+  const crosswordPuzzleArea = useInteractable<CrosswordPuzzleAreaInteractable>('viewingArea');
+  if (crosswordPuzzleArea) {
+    return <CrosswordGameModal crosswordPuzzleArea={crosswordPuzzleArea} />;
+  }
+  return <></>;
+}

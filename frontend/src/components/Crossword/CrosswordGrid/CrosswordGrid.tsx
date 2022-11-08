@@ -20,7 +20,7 @@ function CrosswordGrid(props: { xw: string[][] }): JSX.Element {
           key={i + j}
           cellID={`${i}-${j}`}
           isRebus={false}
-          isSelected={isSelected(i, j)}
+          isSelected={isSelected({ row: i, col: j})}
           value={cell}
         />
       );

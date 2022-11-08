@@ -9,7 +9,7 @@ import {
   CrosswordPosition,
   CrosswordPuzzleCell,
   CrosswordExternalModel,
-  LeaderBoard,
+  Leaderboard,
 } from '../types/CoveyTownSocket';
 import CrosswordPuzzleService from './CrosswordPuzzleService';
 import InteractableArea from './InteractableArea';
@@ -20,7 +20,7 @@ export default class CrosswordPuzzleArea extends InteractableArea {
 
   public puzzle?: CrosswordPuzzleModel;
 
-  public leaderBoard?: LeaderBoard;
+  public leaderboard?: Leaderboard;
 
   /** The puzzle area is "active" when there are players inside of it  */
   public get isActive(): boolean {
@@ -35,14 +35,14 @@ export default class CrosswordPuzzleArea extends InteractableArea {
    * @param townEmitter a broadcast emitter that can be used to emit updates to players
    */
   public constructor(
-    { id, groupName, puzzle, leaderBoard }: CrosswordPuzzleAreaModel,
+    { id, groupName, puzzle, leaderboard }: CrosswordPuzzleAreaModel,
     coordinates: BoundingBox,
     townEmitter: TownEmitter,
   ) {
     super(id, coordinates, townEmitter);
     this.groupName = groupName;
     this.puzzle = puzzle;
-    this.leaderBoard = leaderBoard;
+    this.leaderboard = leaderboard;
   }
 
   /**
@@ -72,7 +72,7 @@ export default class CrosswordPuzzleArea extends InteractableArea {
       occupantsByID: this.occupantsByID,
       groupName: this.groupName,
       puzzle: this.puzzle,
-      leaderBoard: this.leaderBoard,
+      leaderboard: this.leaderboard,
     };
   }
 
@@ -92,77 +92,5 @@ export default class CrosswordPuzzleArea extends InteractableArea {
     }
     const rect: BoundingBox = { x: mapObject.x, y: mapObject.y, width, height };
     return new CrosswordPuzzleArea({ id: name, occupantsByID: [] }, rect, broadcastEmitter);
-  }
-
-  /**
-   * Method that sets daily puzzle to the CrosswordPuzzleArea
-   * @param externalLink the external api that is applied here to fetch puzzle
-   */
-  public async setPuzzleModel(): Promise<void> {
-    await axios.get(CrosswordPuzzleService.CROSSWORDPUZZLE_EXTERNAL_LINK).then(response => {
-      try {
-        if (!response.data.puzzles[0].content) {
-          throw new Error('puzzle not fetched');
-        }
-        const rawPuzzleModel: CrosswordExternalModel = response.data.puzzles[0]
-          .content as CrosswordExternalModel;
-        const cellGrid: CrosswordPuzzleCell[][] = CrosswordPuzzleArea.initializeFromGridToCell(
-          rawPuzzleModel.grid,
-          rawPuzzleModel.shades,
-          rawPuzzleModel.circle,
-        );
-        this.puzzle = {
-          grid: cellGrid,
-          info: rawPuzzleModel.info,
-          clues: rawPuzzleModel.clues,
-        };
-      } catch (err) {
-        throw new Error('There was an error when trying to fetch');
-      }
-    });
-  }
-
-  /**
-   * Helper method that convert raw data from thrid party api to gird in CrosswordPuzzleModel
-   * @param gird gird from thrid party api
-   * @param shades tiles that is shaded
-   * @param circle tiles that is circled
-   * @returns 2D list of CrosswordPuzzleCell which is used for constructing CrosswordPuzzleModel
-   */
-  public static initializeFromGridToCell(
-    grid: string[][],
-    shades: number[],
-    circle: number[],
-  ): CrosswordPuzzleCell[][] {
-    const cells: CrosswordPuzzleCell[][] = [];
-    for (let row = 0; row < grid.length; row++) {
-      cells.push([]);
-      for (let col = 0; col < grid[0].length; col++) {
-        const currentCell: CrosswordPuzzleCell = {
-          value: '',
-          solution: grid[row][col],
-          isCircled: (circle || []).includes(
-            CrosswordPuzzleArea.fromPositionToIndex({ row, col }, grid[row].length),
-          ),
-          isShaded: (shades || []).includes(
-            CrosswordPuzzleArea.fromPositionToIndex({ row, col }, grid[row].length),
-          ),
-        };
-        cells[row].push(currentCell);
-      }
-    }
-    return cells;
-  }
-
-  /**
-   * Helper methods that takes in position number and return the index array which is represented by [rowIndex, colIndex]
-   * @param row row index of the tile
-   * @param col column index of the tile
-   * @param rowSize length of the gird namly column size of the grid
-   * @param height height of the grid namly row size of the gird
-   * @returns number converted from a CrosswordPositioon
-   */
-  public static fromPositionToIndex({ row, col }: CrosswordPosition, rowSize: number): number {
-    return row * rowSize + col + 1;
   }
 }

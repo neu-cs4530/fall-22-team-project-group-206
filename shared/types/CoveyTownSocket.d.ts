@@ -63,7 +63,7 @@ export interface CrosswordPuzzleArea {
   groupName?: string;
   puzzle?: CrosswordPuzzleModel;
   occupantsByID: string[];
-  leaderBoard?: LeaderBoard;
+  leaderboard?: Leaderboard;
 }
 
 export interface BoundingBox {
@@ -126,7 +126,7 @@ export interface CrosswordPosition {
   col: number; // col index
 }
 
-export interface LeaderBoard {
+export interface Leaderboard {
   teamName: string;
   date: string;
   score: number;
