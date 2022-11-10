@@ -718,20 +718,40 @@ describe('Town', () => {
     });
     it('Should return false if no area exists with that ID', () => {
       expect(
-        town.addCrosswordPuzzleArea({ id: nanoid(), puzzle: defaultPuzzle, occupantsByID: [] }),
+        town.addCrosswordPuzzleArea({
+          id: nanoid(),
+          puzzle: defaultPuzzle,
+          occupantsByID: [],
+          isGameOver: false,
+        }),
       ).toEqual(false);
     });
     it('Should return false if the requested puzzle is undefined', () => {
       expect(
-        town.addCrosswordPuzzleArea({ id: 'Pz1', puzzle: undefined, occupantsByID: [] }),
+        town.addCrosswordPuzzleArea({
+          id: 'Pz1',
+          puzzle: undefined,
+          occupantsByID: [],
+          isGameOver: false,
+        }),
       ).toEqual(false);
     });
     it('Should return false if the area already has a puzzle', () => {
       expect(
-        town.addCrosswordPuzzleArea({ id: 'Pz1', puzzle: defaultPuzzle, occupantsByID: [] }),
+        town.addCrosswordPuzzleArea({
+          id: 'Pz1',
+          puzzle: defaultPuzzle,
+          occupantsByID: [],
+          isGameOver: false,
+        }),
       ).toEqual(true);
       expect(
-        town.addCrosswordPuzzleArea({ id: 'Pz1', puzzle: defaultPuzzle, occupantsByID: [] }),
+        town.addCrosswordPuzzleArea({
+          id: 'Pz1',
+          puzzle: defaultPuzzle,
+          occupantsByID: [],
+          isGameOver: false,
+        }),
       ).toEqual(false);
     });
     describe('When successful', () => {
@@ -751,7 +771,12 @@ describe('Town', () => {
       beforeEach(() => {
         playerTestData.moveTo(45, 122); // Inside of "Name1" area
         expect(
-          town.addCrosswordPuzzleArea({ id: 'Pz1', puzzle: newPuzzle, occupantsByID: [] }),
+          town.addCrosswordPuzzleArea({
+            id: 'Pz1',
+            puzzle: newPuzzle,
+            occupantsByID: [],
+            isGameOver: false,
+          }),
         ).toEqual(true);
       });
       it('Should update the local model for that area', () => {
@@ -768,6 +793,7 @@ describe('Town', () => {
           id: 'Pz1',
           puzzle: newPuzzle,
           occupantsByID: [player.id],
+          isGameOver: false,
         });
       });
     });

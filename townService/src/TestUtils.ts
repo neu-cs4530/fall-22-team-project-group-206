@@ -16,8 +16,11 @@ import {
   ClientToServerEvents,
   ConversationArea,
   CoveyTownSocket,
+  CrosswordPuzzleArea,
+  CrosswordPuzzleModel,
   Direction,
   Interactable,
+  Leaderboard,
   PlayerLocation,
   ServerToClientEvents,
   SocketData,
@@ -38,6 +41,28 @@ export function createConversationForTesting(params?: {
     id: params?.conversationID || nanoid(),
     occupantsByID: [],
     topic: params?.conversationTopic || nanoid(),
+  };
+}
+
+/**
+ * Create a new crossword puzzle area using some random defaults
+ * @param params
+ * @returns
+ */
+export function createCrosswordPuzzleForTesting(params?: {
+  crosswordPuzzleID?: string;
+  crosswordPuzzle?: CrosswordPuzzleModel;
+  groupName?: string;
+  leaderboard?: Leaderboard;
+  boundingBox?: BoundingBox;
+}): CrosswordPuzzleArea {
+  return {
+    id: params?.crosswordPuzzleID || nanoid(),
+    occupantsByID: [],
+    groupName: params?.groupName || nanoid(),
+    puzzle: params?.crosswordPuzzle || undefined,
+    isGameOver: false,
+    leaderboard: params?.leaderboard || undefined,
   };
 }
 
@@ -201,4 +226,10 @@ export function isViewingArea(interactable: Interactable): interactable is Viewi
 
 export function isConversationArea(interactable: Interactable): interactable is ConversationArea {
   return 'topic' in interactable;
+}
+
+export function isCrosswordPuzzleArea(
+  interactable: Interactable,
+): interactable is CrosswordPuzzleArea {
+  return 'isGameOver' in interactable;
 }

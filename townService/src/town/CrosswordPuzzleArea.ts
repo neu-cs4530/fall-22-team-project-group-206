@@ -9,7 +9,7 @@ import {
   CrosswordPosition,
   CrosswordPuzzleCell,
   CrosswordExternalModel,
-  LeaderBoard,
+  Leaderboard,
 } from '../types/CoveyTownSocket';
 import CrosswordPuzzleService from './CrosswordPuzzleService';
 import InteractableArea from './InteractableArea';
@@ -20,7 +20,9 @@ export default class CrosswordPuzzleArea extends InteractableArea {
 
   public puzzle?: CrosswordPuzzleModel;
 
-  public leaderBoard?: LeaderBoard;
+  public leaderboard?: Leaderboard;
+
+  public isGameOver: boolean;
 
   /** The puzzle area is "active" when there are players inside of it  */
   public get isActive(): boolean {
@@ -35,14 +37,15 @@ export default class CrosswordPuzzleArea extends InteractableArea {
    * @param townEmitter a broadcast emitter that can be used to emit updates to players
    */
   public constructor(
-    { id, groupName, puzzle, leaderBoard }: CrosswordPuzzleAreaModel,
+    { id, groupName, puzzle, leaderboard, isGameOver }: CrosswordPuzzleAreaModel,
     coordinates: BoundingBox,
     townEmitter: TownEmitter,
   ) {
     super(id, coordinates, townEmitter);
     this.groupName = groupName;
     this.puzzle = puzzle;
-    this.leaderBoard = leaderBoard;
+    this.leaderboard = leaderboard;
+    this.isGameOver = isGameOver;
   }
 
   /**
@@ -72,7 +75,8 @@ export default class CrosswordPuzzleArea extends InteractableArea {
       occupantsByID: this.occupantsByID,
       groupName: this.groupName,
       puzzle: this.puzzle,
-      leaderBoard: this.leaderBoard,
+      leaderboard: this.leaderboard,
+      isGameOver: this.isGameOver,
     };
   }
 
@@ -91,7 +95,11 @@ export default class CrosswordPuzzleArea extends InteractableArea {
       throw new Error(`Malformed viewing area ${name}`);
     }
     const rect: BoundingBox = { x: mapObject.x, y: mapObject.y, width, height };
-    return new CrosswordPuzzleArea({ id: name, occupantsByID: [] }, rect, broadcastEmitter);
+    return new CrosswordPuzzleArea(
+      { id: name, occupantsByID: [], isGameOver: false },
+      rect,
+      broadcastEmitter,
+    );
   }
 
   /**
