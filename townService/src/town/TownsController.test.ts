@@ -58,7 +58,7 @@ describe('TownsController integration tests', () => {
     const ret = await controller.createTown({
       friendlyName,
       isPubliclyListed: isPublic,
-      mapFile: 'testData/indoorsTest.json',
+      mapFile: 'testData/indoors.json',
     });
     return {
       friendlyName,
