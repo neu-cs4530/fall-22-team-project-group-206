@@ -281,6 +281,8 @@ export default class Town {
       return false;
     }
     area.puzzle = crosswordPuzzleArea.puzzle;
+    area.leaderboard = crosswordPuzzleArea.leaderboard;
+    area.groupName = crosswordPuzzleArea.groupName;
     area.addPlayersWithinBounds(this._players);
     this._broadcastEmitter.emit('interactableUpdate', area.toModel());
     return true;
@@ -387,8 +389,8 @@ export default class Town {
 
     const crosswordPuzzleAreas = objectLayer.objects
       .filter(eachObject => eachObject.type === 'CrosswordPuzzleArea')
-      .map(eachConvAreaObj =>
-        CrosswordPuzzleArea.fromMapObject(eachConvAreaObj, this._broadcastEmitter),
+      .map(eachCwpAreaObj =>
+        CrosswordPuzzleArea.fromMapObject(eachCwpAreaObj, this._broadcastEmitter),
       );
 
     this._interactables = this._interactables
