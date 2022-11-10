@@ -12,6 +12,7 @@ import { ClientToServerEvents, ServerToClientEvents } from './types/CoveyTownSoc
 import { TownsController } from './town/TownsController';
 import { logError } from './Utils';
 import createConnection from './db/DatabaseConnection';
+import scoreRoutes from './db/Router';
 
 // Create the server instances
 const app = Express();
@@ -20,6 +21,8 @@ const server = http.createServer(app);
 const socketServer = new SocketServer<ClientToServerEvents, ServerToClientEvents>(server, {
   cors: { origin: '*' },
 });
+
+const dbSocketServer = scoreRoutes(, app)
 
 // Initialize the towns store with a factory that creates a broadcast emitter for a town
 TownsStore.initializeTownsStore((townID: string) => socketServer.to(townID));

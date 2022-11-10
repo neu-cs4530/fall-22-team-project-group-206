@@ -23,8 +23,8 @@ export async function insertScore(newScore: ScoreModel): Promise<IScore> {
   let createdScore = await addScore(newScoreReal);
   if (createdScore === undefined) {
     Error(`Score with name ${newScore.teamName} not found`);
-    createdScore = createdScore as unknown as IScore;
   }
+  createdScore = createdScore as IScore;
   return createdScore;
 }
 
