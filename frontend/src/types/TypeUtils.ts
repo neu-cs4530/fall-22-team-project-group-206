@@ -22,5 +22,6 @@ export function isViewingArea(interactable: Interactable): interactable is Viewi
 export function isCrosswordPuzzleArea(
   interactable: Interactable,
 ): interactable is CrosswordPuzzleArea {
+  console.log(interactable);
   return 'puzzle' in interactable;
 }

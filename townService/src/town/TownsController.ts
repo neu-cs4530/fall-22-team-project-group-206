@@ -209,6 +209,7 @@ export class TownsController extends Controller {
     @Body() requestBody: CrosswordPuzzleArea,
   ): Promise<void> {
     const town = this._townsStore.getTownByID(townID);
+    console.log('backend gets called', requestBody)
     if (!town?.getPlayerBySessionToken(sessionToken)) {
       throw new InvalidParametersError('Invalid values specified');
     }

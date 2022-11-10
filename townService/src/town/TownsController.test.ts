@@ -2,7 +2,7 @@ import assert from 'assert';
 import { DeepMockProxy, mockDeep } from 'jest-mock-extended';
 import { nanoid } from 'nanoid';
 import { Town } from '../api/Model';
-import { ConversationArea, Interactable, TownEmitter, ViewingArea } from '../types/CoveyTownSocket';
+import { ConversationArea, CrosswordPuzzleArea, Interactable, TownEmitter, ViewingArea } from '../types/CoveyTownSocket';
 import TownsStore from '../lib/TownsStore';
 import {
   createConversationForTesting,
@@ -12,6 +12,7 @@ import {
   isViewingArea,
   isConversationArea,
   MockedPlayer,
+  isCrosswordPuzzleArea,
 } from '../TestUtils';
 import { TownsController } from './TownsController';
 
@@ -354,6 +355,17 @@ describe('TownsController integration tests', () => {
         await expect(
           controller.createViewingArea(testingTown.townID, sessionToken, viewingArea),
         ).rejects.toThrow();
+      });
+    });
+
+    // TODO - add tests for crossword puzzle controller
+    describe('Create Crossword Puzzle Area', () => {
+      it('Executes without error when creating a new crossword puzzle area', async () => {
+        const crosswordPuzzleArea = interactables.find(isCrosswordPuzzleArea) as CrosswordPuzzleArea;
+        if (!crosswordPuzzleArea) {
+          fail('Expected at least one crossword puzzle area to be returned in the initial join data');
+        }
+        await controller.createCrosswordPuzzleArea(testingTown.townID, sessionToken, crosswordPuzzleArea)
       });
     });
   });

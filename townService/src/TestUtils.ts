@@ -22,6 +22,7 @@ import {
   ServerToClientEvents,
   SocketData,
   ViewingArea,
+  CrosswordPuzzleArea
 } from './types/CoveyTownSocket';
 
 /**
@@ -201,4 +202,8 @@ export function isViewingArea(interactable: Interactable): interactable is Viewi
 
 export function isConversationArea(interactable: Interactable): interactable is ConversationArea {
   return 'topic' in interactable;
+}
+
+export function isCrosswordPuzzleArea(interactable: Interactable): interactable is CrosswordPuzzleArea {
+  return 'puzzle' in interactable;
 }

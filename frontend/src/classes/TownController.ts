@@ -12,6 +12,7 @@ import useTownController from '../hooks/useTownController';
 import {
   ChatMessage,
   CoveyTownSocket,
+  CrosswordPuzzleArea as CrosswordPuzzleAreaModel,
   PlayerLocation,
   TownSettingsUpdate,
   ViewingArea as ViewingAreaModel,
@@ -543,6 +544,17 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
   }
 
   /**
+   * Create a new crossword puzzle area, sending the request to the townService. Throws an error if the request
+   * is not successful. Does not immediately update local state about the new crossword puzzle area - it will be
+   * updated once the townService creates the area and emits an interactableUpdate
+   *
+   * @param newArea
+   */
+  async createCrosswordPuzzleArea(newArea: CrosswordPuzzleAreaModel) {
+    await this._townsService.createCrosswordPuzzleArea(this.townID, this.sessionToken, newArea);
+  }
+
+  /**
    * Disconnect from the town, notifying the townService that we are leaving and returning
    * to the login page
    */
@@ -574,6 +586,8 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
 
         this._conversationAreas = [];
         this._viewingAreas = [];
+        this._crosswordPuzzleAreas = [];
+        console.log(initialData.interactables);
         initialData.interactables.forEach(eachInteractable => {
           if (isConversationArea(eachInteractable)) {
             this._conversationAreasInternal.push(
@@ -584,8 +598,16 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
             );
           } else if (isViewingArea(eachInteractable)) {
             this._viewingAreas.push(new ViewingAreaController(eachInteractable));
+          } else if (isCrosswordPuzzleArea(eachInteractable)) {
+            this._crosswordPuzzleAreas.push(
+              CrosswordPuzzleAreaController.fromCrosswordPuzzleAreaModel(
+                eachInteractable,
+                this._playersByIDs.bind(this),
+              ),
+            );
           }
         });
+        console.log(this._crosswordPuzzleAreas);
         this._userID = initialData.userID;
         this._ourPlayer = this.players.find(eachPlayer => eachPlayer.id == this.userID);
         this.emit('connect', initialData.providerVideoToken);
