@@ -21,6 +21,11 @@ export default class CrosswordPuzzleArea extends InteractableArea {
   public puzzle?: CrosswordPuzzleModel;
 
   public leaderboard?: Leaderboard;
+<<<<<<< HEAD
+=======
+
+  public isGameOver: boolean;
+>>>>>>> main
 
   /** The puzzle area is "active" when there are players inside of it  */
   public get isActive(): boolean {
@@ -35,7 +40,11 @@ export default class CrosswordPuzzleArea extends InteractableArea {
    * @param townEmitter a broadcast emitter that can be used to emit updates to players
    */
   public constructor(
+<<<<<<< HEAD
     { id, groupName, puzzle, leaderboard }: CrosswordPuzzleAreaModel,
+=======
+    { id, groupName, puzzle, leaderboard, isGameOver }: CrosswordPuzzleAreaModel,
+>>>>>>> main
     coordinates: BoundingBox,
     townEmitter: TownEmitter,
   ) {
@@ -43,6 +52,10 @@ export default class CrosswordPuzzleArea extends InteractableArea {
     this.groupName = groupName;
     this.puzzle = puzzle;
     this.leaderboard = leaderboard;
+<<<<<<< HEAD
+=======
+    this.isGameOver = isGameOver;
+>>>>>>> main
   }
 
   /**
@@ -73,6 +86,10 @@ export default class CrosswordPuzzleArea extends InteractableArea {
       groupName: this.groupName,
       puzzle: this.puzzle,
       leaderboard: this.leaderboard,
+<<<<<<< HEAD
+=======
+      isGameOver: this.isGameOver,
+>>>>>>> main
     };
   }
 
@@ -91,6 +108,10 @@ export default class CrosswordPuzzleArea extends InteractableArea {
       throw new Error(`Malformed viewing area ${name}`);
     }
     const rect: BoundingBox = { x: mapObject.x, y: mapObject.y, width, height };
-    return new CrosswordPuzzleArea({ id: name, occupantsByID: [] }, rect, broadcastEmitter);
+    return new CrosswordPuzzleArea(
+      { id: name, occupantsByID: [], isGameOver: false },
+      rect,
+      broadcastEmitter,
+    );
   }
 }

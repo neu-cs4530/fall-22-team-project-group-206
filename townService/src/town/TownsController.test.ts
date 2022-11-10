@@ -2,7 +2,14 @@ import assert from 'assert';
 import { DeepMockProxy, mockDeep } from 'jest-mock-extended';
 import { nanoid } from 'nanoid';
 import { Town } from '../api/Model';
-import { ConversationArea, CrosswordPuzzleArea, Interactable, TownEmitter, ViewingArea } from '../types/CoveyTownSocket';
+import {
+  ConversationArea,
+  CrosswordPuzzleModel,
+  Interactable,
+  Leaderboard,
+  TownEmitter,
+  ViewingArea,
+} from '../types/CoveyTownSocket';
 import TownsStore from '../lib/TownsStore';
 import {
   createConversationForTesting,
@@ -12,6 +19,7 @@ import {
   isViewingArea,
   isConversationArea,
   MockedPlayer,
+  createCrosswordPuzzleForTesting,
   isCrosswordPuzzleArea,
 } from '../TestUtils';
 import { TownsController } from './TownsController';
@@ -357,15 +365,71 @@ describe('TownsController integration tests', () => {
         ).rejects.toThrow();
       });
     });
-
-    // TODO - add tests for crossword puzzle controller
     describe('Create Crossword Puzzle Area', () => {
-      it('Executes without error when creating a new crossword puzzle area', async () => {
-        const crosswordPuzzleArea = interactables.find(isCrosswordPuzzleArea) as CrosswordPuzzleArea;
-        if (!crosswordPuzzleArea) {
-          fail('Expected at least one crossword puzzle area to be returned in the initial join data');
-        }
-        await controller.createCrosswordPuzzleArea(testingTown.townID, sessionToken, crosswordPuzzleArea)
+      const testPuzzle: CrosswordPuzzleModel = {
+        grid: [[]],
+        info: {
+          type: 'string',
+          title: 'string',
+          author: 'string',
+          description: 'string',
+        },
+        clues: {
+          down: [],
+          across: [],
+        },
+      };
+
+      const testLeaderboard: Leaderboard = {
+        teamName: 'string',
+        date: 'string',
+        score: 1,
+        users: [],
+        usedHint: false,
+        completePercentage: 1,
+      };
+
+      it('Executes without error when creating a new Crossoword Puzzle ', async () => {
+        await controller.createCrosswordPuzzleArea(
+          testingTown.townID,
+          sessionToken,
+          createCrosswordPuzzleForTesting({
+            crosswordPuzzleID: interactables.find(isCrosswordPuzzleArea)?.id,
+            crosswordPuzzle: testPuzzle,
+            leaderboard: testLeaderboard,
+          }),
+        );
+      });
+      it('Returns an error message if the town ID is invalid', async () => {
+        await expect(
+          controller.createCrosswordPuzzleArea(
+            nanoid(),
+            sessionToken,
+            createCrosswordPuzzleForTesting(),
+          ),
+        ).rejects.toThrow();
+      });
+      it('Checks for a valid session token before creating a crossword puzzle area', async () => {
+        const crosswordPuzzleArea = createCrosswordPuzzleForTesting();
+        const invalidSessionToken = nanoid();
+
+        await expect(
+          controller.createCrosswordPuzzleArea(
+            testingTown.townID,
+            invalidSessionToken,
+            crosswordPuzzleArea,
+          ),
+        ).rejects.toThrow();
+      });
+      it('Returns an error message if addCrosswordPuzzle returns false', async () => {
+        const crosswordPuzzleArea = createCrosswordPuzzleForTesting();
+        await expect(
+          controller.createCrosswordPuzzleArea(
+            testingTown.townID,
+            sessionToken,
+            crosswordPuzzleArea,
+          ),
+        ).rejects.toThrow();
       });
     });
   });
