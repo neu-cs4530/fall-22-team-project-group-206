@@ -9,6 +9,7 @@ import {
   ChatMessage,
   ConversationArea as ConversationAreaModel,
   CoveyTownSocket,
+  CrosswordPuzzleArea as CrosswordPuzzleAreaModel,
   Interactable,
   PlayerLocation,
   ServerToClientEvents,
@@ -17,6 +18,7 @@ import {
 } from '../types/CoveyTownSocket';
 import ConversationArea from './ConversationArea';
 import InteractableArea from './InteractableArea';
+import CrosswordPuzzleArea from './CrosswordPuzzleArea';
 import ViewingArea from './ViewingArea';
 
 /**
@@ -254,6 +256,39 @@ export default class Town {
   }
 
   /**
+   * Creates a new crossword puzzle area in this town if there is not currently an active
+   * crossword puzzle with the same ID. The crossword puzzle area ID must match the name of a
+   * crossword puzzle area that exists in this town's map, and the crossword puzzle area must not
+   * already have a puzzle set.
+   *
+   * If successful creating the crossword puzzle area, this method:
+   *  Adds any players who are in the region defined by the crossword puzzle area to it.
+   *  Notifies all players in the town that the crossword puzzle area has been updated
+   *
+   * @param crosswordPuzzleArea Information describing the crossword puzzle area to create. Ignores any
+   *  occupantsById that are set on the crossword puzzle area that is passed to this method.
+   *
+   * @returns true if the crossword puzzle is successfully created, or false if there is no known
+   * crossword puzzle area with the specified ID or if there is already an active crossword puzzle crossword puzzle area
+   * with the specified ID
+   */
+  public addCrosswordPuzzleArea(crosswordPuzzleArea: CrosswordPuzzleAreaModel): boolean {
+    const area = this._interactables.find(
+      eachArea => eachArea.id === crosswordPuzzleArea.id,
+    ) as CrosswordPuzzleArea;
+
+    if (!area || !crosswordPuzzleArea.puzzle || area.puzzle) {
+      return false;
+    }
+    area.puzzle = crosswordPuzzleArea.puzzle;
+    area.leaderboard = crosswordPuzzleArea.leaderboard;
+    area.groupName = crosswordPuzzleArea.groupName;
+    area.addPlayersWithinBounds(this._players);
+    this._broadcastEmitter.emit('interactableUpdate', area.toModel());
+    return true;
+  }
+
+  /**
    * Creates a new viewing area in this town if there is not currently an active
    * viewing area with the same ID. The viewing area ID must match the name of a
    * viewing area that exists in this town's map, and the viewing area must not
@@ -352,7 +387,16 @@ export default class Town {
         ConversationArea.fromMapObject(eachConvAreaObj, this._broadcastEmitter),
       );
 
-    this._interactables = this._interactables.concat(viewingAreas).concat(conversationAreas);
+    const crosswordPuzzleAreas = objectLayer.objects
+      .filter(eachObject => eachObject.type === 'CrosswordPuzzleArea')
+      .map(eachCwpAreaObj =>
+        CrosswordPuzzleArea.fromMapObject(eachCwpAreaObj, this._broadcastEmitter),
+      );
+
+    this._interactables = this._interactables
+      .concat(viewingAreas)
+      .concat(conversationAreas)
+      .concat(crosswordPuzzleAreas);
     this._validateInteractables();
   }
 

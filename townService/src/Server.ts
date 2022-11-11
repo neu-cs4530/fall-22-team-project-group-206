@@ -16,6 +16,7 @@ import scoreRoutes from './db/Router';
 
 // Create the server instances
 const app = Express();
+
 app.use(CORS());
 const server = http.createServer(app);
 const socketServer = new SocketServer<ClientToServerEvents, ServerToClientEvents>(server, {

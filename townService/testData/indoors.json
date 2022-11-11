@@ -498,10 +498,10 @@
                  "y":1104.66683333333
                 }, 
                 {
-                 "type":"ConversationArea",
+                 "type":"CrosswordPuzzleArea",
                  "height":125.333,
                  "id":29,
-                 "name":"Basement Lounge",
+                 "name":"NYT Daily Crossword",
                  "rotation":0,
                  "visible":true,
                  "width":134.000333333333,
