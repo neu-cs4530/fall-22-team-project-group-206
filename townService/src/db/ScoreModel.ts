@@ -10,14 +10,6 @@ export const scoreSchema = new mongoose.Schema({
   finished: { type: Boolean, default: false },
 });
 
-export interface ScoreModel {
-  teamName: string;
-  score: number;
-  teamMembers: string[];
-  usedHint?: boolean;
-  finished?: boolean;
-}
-
 const score: mongoose.Model<IScore> = mongoose.model<IScore>('score', scoreSchema);
 
 export default score;

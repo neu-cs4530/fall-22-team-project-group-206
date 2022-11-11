@@ -1,4 +1,5 @@
-import Score, { ScoreModel } from './ScoreModel';
+import Score from './ScoreModel';
+import { ScoreModel } from '../types/CoveyTownSocket';
 import { IScore } from './IScore';
 import { addScore, removeScore, findScore, updateScore, getScores } from './LeaderboardDAO';
 

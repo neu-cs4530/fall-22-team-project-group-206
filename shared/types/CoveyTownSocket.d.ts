@@ -127,14 +127,14 @@ export interface CrosswordPosition {
   col: number; // col index
 }
 
-//leaderboard representation
-export interface Leaderboard {
+//score representation
+export interface ScoreModel {
   teamName: string;
   date: string;
   score: number;
-  users: string[];
-  usedHint:boolean;
-  completePercentage:number;
+  teamMembers: string[];
+  usedHint?:boolean;
+  completed?:boolean;
 
 }
 
