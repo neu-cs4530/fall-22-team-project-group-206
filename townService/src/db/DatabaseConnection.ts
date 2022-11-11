@@ -12,11 +12,9 @@ export default async function createConnection() {
 
   try {
     await mongoose.connect(uri);
-  }
-  catch (e) {
+  } catch (e) {
     if (e instanceof Error) {
-      throw new Error('Difficulty connecting to database.')
+      throw new Error('Difficulty connecting to database.');
     }
   }
-
 }
