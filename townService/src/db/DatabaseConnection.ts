@@ -10,9 +10,13 @@ export default async function createConnection() {
     uri = process.env.MONGODB_LOCAL;
   }
 
-  await mongoose.connect(uri, (err: any) => {
-    if (err) {
-      Error('Error connecting to db', err);
+  try {
+    await mongoose.connect(uri);
+  }
+  catch (e) {
+    if (e instanceof Error) {
+      throw new Error('Difficulty connecting to database.')
     }
-  });
+  }
+
 }

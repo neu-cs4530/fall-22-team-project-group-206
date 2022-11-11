@@ -23,7 +23,7 @@ const socketServer = new SocketServer<ClientToServerEvents, ServerToClientEvents
   cors: { origin: '*' },
 });
 
-const dbSocketServer = scoreRoutes(server, app)
+const dbSocketServer = scoreRoutes(server, app);
 
 // Initialize the towns store with a factory that creates a broadcast emitter for a town
 TownsStore.initializeTownsStore((townID: string) => socketServer.to(townID));
