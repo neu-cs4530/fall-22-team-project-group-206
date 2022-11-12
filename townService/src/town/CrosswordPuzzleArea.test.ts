@@ -63,9 +63,9 @@ describe('PuzzleArea', () => {
     teamName: 'team1',
     date: '1011',
     score: 10,
-    users: ['user1', 'user2'],
+    teamMembers: ['user1', 'user2'],
     usedHint: true,
-    completePercentage: 90,
+    completed: false,
   };
   beforeEach(() => {
     mockClear(townEmitter);
