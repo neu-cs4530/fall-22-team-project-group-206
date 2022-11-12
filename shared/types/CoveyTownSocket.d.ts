@@ -62,7 +62,7 @@ export interface CrosswordPuzzleArea {
   groupName?: string;
   puzzle?: CrosswordPuzzleModel;
   occupantsByID: string[];
-  leaderboard?: Leaderboard;
+  leaderboard?: ScoreModel;
   isGameOver: boolean;
 }
 
