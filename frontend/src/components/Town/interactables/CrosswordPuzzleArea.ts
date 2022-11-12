@@ -7,11 +7,8 @@ export default class CrosswordPuzzleArea extends Interactable {
 
   private _isInteracting = false;
 
-  private _townController: TownController;
-
   constructor(scene: TownGameScene) {
     super(scene);
-    this._townController = scene.coveyTownController;
     this.setTintFill();
     this.setAlpha(0.3);
   }

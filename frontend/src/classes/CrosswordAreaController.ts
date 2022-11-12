@@ -39,17 +39,25 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
 
   private _leaderboard?: Leaderboard;
 
+  private _isGameOver: boolean;
+
   /**
    * Create a new CrosswordPuzzleAreaController;
    * @param id
    * @param puzzle
    * @param leaderBoard
    */
-  constructor(id: string, puzzle?: CrosswordPuzzleModel, leaderBoard?: Leaderboard) {
+  constructor(
+    id: string,
+    isGameOver: boolean,
+    puzzle?: CrosswordPuzzleModel,
+    leaderBoard?: Leaderboard,
+  ) {
     super();
     this._id = id;
     this._puzzle = puzzle;
     this._leaderboard = leaderBoard;
+    this._isGameOver = isGameOver;
   }
 
   /**
@@ -104,6 +112,18 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
   }
 
   /**
+   * The puzzle in this crossword puzzle area. Changing the puzzle
+   * will emit an puzzleChange event.
+   */
+  set isGameOver(isGameOver: boolean) {
+    throw Error('Not implemented yet.');
+  }
+
+  get isGameOver(): boolean {
+    return this._isGameOver;
+  }
+
+  /**
    * A crossword puzzle area is empty if there are no occupants in it, or the puzzle is undefined.
    */
   isEmpty(): boolean {
@@ -120,6 +140,7 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
       occupantsByID: this.occupants.map(player => player.id),
       puzzle: this.puzzle,
       leaderboard: this.leaderboard,
+      isGameOver: this.isGameOver,
     };
   }
 
@@ -135,6 +156,7 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
   ): CrosswordPuzzleAreaController {
     const ret = new CrosswordPuzzleAreaController(
       xwPuzzleAreaModel.id,
+      xwPuzzleAreaModel.isGameOver,
       xwPuzzleAreaModel.puzzle,
       xwPuzzleAreaModel.leaderboard,
     );

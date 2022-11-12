@@ -186,7 +186,7 @@ function CrosswordGameModal(props: {
   console.log('Render', props.crosswordPuzzleArea);
   console.log('Rend2', crosswordPuzzleAreaController);
 
-  const isOpen = crosswordPuzzleAreaController.puzzle == undefined;
+  const isOpen = props.crosswordPuzzleArea !== undefined;
 
   const closeModal = useCallback(() => {
     if (props.crosswordPuzzleArea) {
@@ -200,28 +200,28 @@ function CrosswordGameModal(props: {
   }
 
   useEffect(() => {
-    if (crosswordPuzzleAreaController) {
+    if (props.crosswordPuzzleArea) {
       coveyTownController.pause();
     } else {
       coveyTownController.unPause();
     }
-  }, [coveyTownController, crosswordPuzzleAreaController]);
+  }, [coveyTownController, props.crosswordPuzzleArea]);
 
   console.log(crosswordPuzzleAreaController.puzzle);
 
-  if (crosswordPuzzleAreaController.puzzle) {
+  if (crosswordPuzzleAreaController) {
     return (
       <Modal isOpen={isOpen} onClose={() => onClose()} size='6xl' isCentered>
         <ModalOverlay />
         <ModalContent padding='15px'>
-          <ModalHeader>{crosswordPuzzleAreaController.puzzle?.info.title}</ModalHeader>
+          <ModalHeader>{crosswordPuzzleAreaController.puzzle.info.title}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <HStack>
-              <CrosswordGrid xw={crosswordPuzzleAreaController.puzzle?.grid} />
+              <CrosswordGrid xw={crosswordPuzzleAreaController.puzzle.grid} />
               <CrosswordClues
-                acrossClues={crosswordPuzzleAreaController.puzzle?.clues.across}
-                downClues={crosswordPuzzleAreaController.puzzle?.clues.down}
+                acrossClues={crosswordPuzzleAreaController.puzzle.clues.across}
+                downClues={crosswordPuzzleAreaController.puzzle.clues.down}
               />
             </HStack>
           </ModalBody>
@@ -229,7 +229,18 @@ function CrosswordGameModal(props: {
       </Modal>
     );
   } else {
-    return <></>;
+    return (
+      <Modal isOpen={isOpen} onClose={() => onClose()} isCentered>
+        <ModalOverlay />
+        <ModalContent padding='15px'>
+        <ModalHeader>Crossword Puzzle</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <span>Crossword Puzzle Missing</span>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+    );
   }
 }
 

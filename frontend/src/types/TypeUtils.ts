@@ -9,7 +9,7 @@ import {
  * Test to see if an interactable is a conversation area
  */
 export function isConversationArea(interactable: Interactable): interactable is ConversationArea {
-  return 'occupantsByID' in interactable;
+  return 'occupantsByID' in interactable && 'isGameOver' !in interactable;
 }
 
 /**
@@ -22,6 +22,5 @@ export function isViewingArea(interactable: Interactable): interactable is Viewi
 export function isCrosswordPuzzleArea(
   interactable: Interactable,
 ): interactable is CrosswordPuzzleArea {
-  console.log(interactable);
-  return 'puzzle' in interactable;
+  return 'isGameOver' in interactable;
 }

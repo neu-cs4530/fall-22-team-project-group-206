@@ -1,17 +1,12 @@
 import { ITiledMapObject } from '@jonbell/tiled-map-type-guard';
-import axios from 'axios';
 import Player from '../lib/Player';
 import {
   BoundingBox,
   CrosswordPuzzleArea as CrosswordPuzzleAreaModel,
   TownEmitter,
   CrosswordPuzzleModel,
-  CrosswordPosition,
-  CrosswordPuzzleCell,
-  CrosswordExternalModel,
   Leaderboard,
 } from '../types/CoveyTownSocket';
-import CrosswordPuzzleService from './CrosswordPuzzleService';
 import InteractableArea from './InteractableArea';
 
 export default class CrosswordPuzzleArea extends InteractableArea {
@@ -21,11 +16,8 @@ export default class CrosswordPuzzleArea extends InteractableArea {
   public puzzle?: CrosswordPuzzleModel;
 
   public leaderboard?: Leaderboard;
-<<<<<<< HEAD
-=======
 
   public isGameOver: boolean;
->>>>>>> main
 
   /** The puzzle area is "active" when there are players inside of it  */
   public get isActive(): boolean {
@@ -40,11 +32,7 @@ export default class CrosswordPuzzleArea extends InteractableArea {
    * @param townEmitter a broadcast emitter that can be used to emit updates to players
    */
   public constructor(
-<<<<<<< HEAD
-    { id, groupName, puzzle, leaderboard }: CrosswordPuzzleAreaModel,
-=======
     { id, groupName, puzzle, leaderboard, isGameOver }: CrosswordPuzzleAreaModel,
->>>>>>> main
     coordinates: BoundingBox,
     townEmitter: TownEmitter,
   ) {
@@ -52,10 +40,7 @@ export default class CrosswordPuzzleArea extends InteractableArea {
     this.groupName = groupName;
     this.puzzle = puzzle;
     this.leaderboard = leaderboard;
-<<<<<<< HEAD
-=======
     this.isGameOver = isGameOver;
->>>>>>> main
   }
 
   /**
@@ -86,10 +71,7 @@ export default class CrosswordPuzzleArea extends InteractableArea {
       groupName: this.groupName,
       puzzle: this.puzzle,
       leaderboard: this.leaderboard,
-<<<<<<< HEAD
-=======
       isGameOver: this.isGameOver,
->>>>>>> main
     };
   }
 

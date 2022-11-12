@@ -446,12 +446,14 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
         );
         updatedViewingArea?.updateFrom(interactable);
       } else if (isCrosswordPuzzleArea(interactable)) {
+        console.log('hit');
         const updatedCrosswordArea = this._crosswordPuzzleAreas.find(
           eachArea => eachArea.id === interactable.id,
         );
         if (updatedCrosswordArea) {
           const emptyNow = updatedCrosswordArea.isEmpty();
           if (emptyNow) {
+            console.log('hit bang bang');
             updatedCrosswordArea.setPuzzleModel();
           } else {
             updatedCrosswordArea.puzzle = interactable.puzzle;
