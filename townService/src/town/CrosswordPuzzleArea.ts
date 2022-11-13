@@ -20,7 +20,7 @@ export default class CrosswordPuzzleArea extends InteractableArea {
 
   public puzzle?: CrosswordPuzzleModel;
 
-  public leaderboard?: ScoreModel;
+  public leaderboard?: ScoreModel[];
 
   public isGameOver: boolean;
 
