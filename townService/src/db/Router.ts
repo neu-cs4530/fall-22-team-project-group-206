@@ -1,5 +1,5 @@
 import express, { Express, request } from 'express';
-import io from 'socket.io';
+import { Server as SocketServer } from 'socket.io';
 import { Server } from 'http';
 import { IScore } from './IScore';
 import {
@@ -12,102 +12,84 @@ import {
 import { ScoreCreateResponse, ScoreDeleteResponse, ScoreFindResponse } from './Types';
 import { ScoreModel } from '../types/CoveyTownSocket';
 
-export default function scoreRoutes(http: Server, app: Express): io.Server {
+export default function scoreRoutes(http: Server, app: Express): SocketServer {
   /*
    * Create a new score
    */
-  app.post('/score', express.json(), async () => {
-    const newScore: ScoreModel = request.body.scoreModel;
-    const resp: ScoreCreateResponse = { status: 100 };
-
-    await insertScore(newScore);
+  app.post('/score', express.json(), async (req, resp) => {
+    const buildResp: ScoreCreateResponse = { status: 100 };
     try {
+      const newScore: ScoreModel = req.body.scoreModel;
       const createdScore = await insertScore(newScore);
-      resp.status = 200;
-      resp.score = createdScore;
+      buildResp.status = 200;
+      buildResp.score = createdScore;
     } catch (e) {
       if (e instanceof Error) {
-        resp.status = 400;
-        resp.error = e;
+        buildResp.status = 400;
+        buildResp.error = e;
       }
     }
-    express.response.status(resp.status).send(resp);
+    resp.status(buildResp.status).send(buildResp);
   });
 
   /**
    * Delete a score
    */
-  app.delete('/scores/:id', express.json(), async () => {
-    const scoreID: string = request.params.id;
-    const resp: ScoreDeleteResponse = { status: 100 };
+  app.delete('/scores/:id', express.json(), async (req, resp) => {
+    const buildResp: ScoreDeleteResponse = { status: 100 };
     try {
+      const scoreID: string = req.params.id;
       await removeScoreFromLeaderboard(scoreID);
-      resp.status = 200;
+      buildResp.status = 200;
     } catch (e) {
       if (e instanceof Error) {
-        resp.status = 400;
-        resp.error = e;
+        buildResp.status = 400;
+        buildResp.error = e;
       }
     }
-    express.response.status(resp.status).send(resp);
+    resp.status(buildResp.status).send(buildResp);
   });
 
-  /**
-   * List all scores
-   */
-  app.get('/scores', express.json(), async () => {
-    const resp: ScoreFindResponse = { status: 100 };
-    try {
-      const scores: IScore[] = await getAllScores();
-      resp.status = 200;
-      resp.scores = scores;
-    } catch (e) {
-      if (e instanceof Error) {
-        resp.status = 400;
-        resp.error = e;
-      }
-    }
-    express.response.status(resp.status).send(resp);
-  });
 
   /**
    * Update a score
    */
-  app.post('/scores/score', express.json(), async () => {
-    const updatedScore: ScoreModel = request.body.scoreModel;
-    const resp: ScoreCreateResponse = { status: 100 };
+  app.post('/scores/score', express.json(), async (req,resp) => {
+    const buildResp: ScoreCreateResponse = { status: 100 };
     try {
+      const updatedScore: ScoreModel = req.body.scoreModel;
       const newScore: IScore = await updateScoreValue(updatedScore);
-      resp.status = 200;
-      resp.score = newScore;
+      buildResp.status = 200;
+      buildResp.score = newScore;
     } catch (e) {
       if (e instanceof Error) {
-        resp.status = 400;
-        resp.error = e;
+        buildResp.status = 400;
+        buildResp.error = e;
       }
     }
-    express.response.status(resp.status).send(resp);
+    resp.status(buildResp.status).send(buildResp);
   });
 
   /**
    * Get Leaderboard
    */
-  app.get('/scores/:scoreNum', express.json(), async () => {
-    const numScores: number = parseInt(request.params.scoreNum, 10);
-    const resp: ScoreFindResponse = { status: 100 };
+  app.get('/scores/:scoreNum', express.json(), async (req, resp) => {
+    
+    const buildResp: ScoreFindResponse = { status: 100 };
     try {
+      const numScores: number = parseInt(req.params.scoreNum, 10);
       const scores: IScore[] = await getLeaders(numScores);
-      resp.status = 200;
-      resp.scores = scores;
+      buildResp.status = 200;
+      buildResp.scores = scores;
     } catch (e) {
       if (e instanceof Error) {
-        resp.status = 400;
-        resp.error = e;
+        buildResp.status = 400;
+        buildResp.error = e;
       }
     }
-    express.response.status(resp.status).send(resp);
+    resp.status(buildResp.status).send(buildResp);
   });
 
-  const socketServer = new io.Server(http, { cors: { origin: '*' } });
+  const socketServer = new SocketServer(http, { cors: { origin: '*' } });
   return socketServer;
 }

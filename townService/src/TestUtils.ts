@@ -26,6 +26,7 @@ import {
   SocketData,
   ViewingArea,
 } from './types/CoveyTownSocket';
+import { MongooseOptions } from 'mongoose';
 
 /**
  * Create a new conversation area using some random defaults

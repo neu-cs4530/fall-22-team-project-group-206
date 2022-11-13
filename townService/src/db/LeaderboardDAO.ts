@@ -7,17 +7,17 @@ export async function addScore(newScore: IScore): Promise<IScore | undefined> {
 }
 
 export async function removeScore(teamName: string): Promise<IScore | null | undefined> {
-  const doc = await Score.findOneAndDelete({ id: teamName });
+  const doc = await Score.findOneAndDelete((score: IScore) => score.teamName === teamName);
   return doc;
 }
 
 export async function findScore(teamName: string): Promise<IScore | null | undefined> {
-  const doc = await Score.findById({ id: teamName });
+  const doc = await Score.findOne((score: IScore) => score.teamName === teamName);
   return doc;
 }
 
 export async function updateScore(newScore: IScore): Promise<IScore | null | undefined> {
-  const doc = await Score.findByIdAndUpdate(newScore.teamName, newScore);
+  const doc = await Score.findOne((score: IScore) => score.teamName === newScore.teamName, newScore);
   return doc;
 }
 
