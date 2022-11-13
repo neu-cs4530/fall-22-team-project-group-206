@@ -50,11 +50,10 @@ export default function scoreRoutes(http: Server, app: Express): SocketServer {
     resp.status(buildResp.status).send(buildResp);
   });
 
-
   /**
    * Update a score
    */
-  app.post('/scores/score', express.json(), async (req,resp) => {
+  app.post('/scores/score', express.json(), async (req, resp) => {
     const buildResp: ScoreCreateResponse = { status: 100 };
     try {
       const updatedScore: ScoreModel = req.body.scoreModel;
@@ -74,7 +73,6 @@ export default function scoreRoutes(http: Server, app: Express): SocketServer {
    * Get Leaderboard
    */
   app.get('/scores/:scoreNum', express.json(), async (req, resp) => {
-    
     const buildResp: ScoreFindResponse = { status: 100 };
     try {
       const numScores: number = parseInt(req.params.scoreNum, 10);

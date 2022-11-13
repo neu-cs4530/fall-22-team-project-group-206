@@ -17,7 +17,10 @@ export async function findScore(teamName: string): Promise<IScore | null | undef
 }
 
 export async function updateScore(newScore: IScore): Promise<IScore | null | undefined> {
-  const doc = await Score.findOne((score: IScore) => score.teamName === newScore.teamName, newScore);
+  const doc = await Score.findOne(
+    (score: IScore) => score.teamName === newScore.teamName,
+    newScore,
+  );
   return doc;
 }
 

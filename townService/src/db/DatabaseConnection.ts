@@ -17,5 +17,4 @@ export default async function createConnection() {
       throw new Error('Difficulty connecting to database.');
     }
   }
-  
 }
