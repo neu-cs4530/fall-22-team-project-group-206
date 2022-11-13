@@ -380,14 +380,16 @@ describe('TownsController integration tests', () => {
         },
       };
 
-      const testLeaderboard: ScoreModel[] = [{
-        teamName: 'string',
-        date: 'string',
-        score: 1,
-        teamMembers: [],
-        usedHint: false,
-        completed: false,
-      }];
+      const testLeaderboard: ScoreModel[] = [
+        {
+          teamName: 'string',
+          date: 'string',
+          score: 1,
+          teamMembers: [],
+          usedHint: false,
+          completed: false,
+        },
+      ];
 
       it('Executes without error when creating a new Crossoword Puzzle ', async () => {
         await controller.createCrosswordPuzzleArea(
