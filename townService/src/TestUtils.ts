@@ -53,7 +53,7 @@ export function createCrosswordPuzzleForTesting(params?: {
   crosswordPuzzleID?: string;
   crosswordPuzzle?: CrosswordPuzzleModel;
   groupName?: string;
-  leaderboard?: ScoreModel;
+  leaderboard?: ScoreModel[];
   boundingBox?: BoundingBox;
 }): CrosswordPuzzleArea {
   return {

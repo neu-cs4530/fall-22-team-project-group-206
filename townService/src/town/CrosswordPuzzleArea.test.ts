@@ -59,14 +59,14 @@ describe('PuzzleArea', () => {
     [cell3, cell4],
   ];
 
-  const leaderboard = {
+  const leaderboard = [{
     teamName: 'team1',
     date: '1011',
     score: 10,
     teamMembers: ['user1', 'user2'],
     usedHint: true,
     completed: false,
-  };
+  }];
   beforeEach(() => {
     mockClear(townEmitter);
     testArea = new CrosswordPuzzleArea(
