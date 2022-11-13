@@ -127,15 +127,14 @@ describe('PuzzleArea', () => {
     it('Clears the group name of the puzzle area when the last occupant leaves', () => {
       testArea.remove(newPlayer);
       const lastEmittedUpdate = getLastEmittedEvent(townEmitter, 'interactableUpdate');
-      expect(lastEmittedUpdate).toEqual([
-        {
-          groupName: undefined,
-          id,
-          occupantsByID: [],
-          leaderboard,
-          isGameOver: false,
-        },
-      ]);
+      expect(lastEmittedUpdate).toEqual({
+        groupName: undefined,
+        id,
+        occupantsByID: [],
+        leaderboard,
+        isGameOver: false,
+        puzzle: undefined,
+      });
       expect(testArea.groupName).toBeUndefined();
       expect(testArea.leaderboard).toEqual(leaderboard);
     });
