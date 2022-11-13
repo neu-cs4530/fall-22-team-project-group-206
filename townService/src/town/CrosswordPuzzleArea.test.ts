@@ -59,14 +59,16 @@ describe('PuzzleArea', () => {
     [cell3, cell4],
   ];
 
-  const leaderboard = [{
-    teamName: 'team1',
-    date: '1011',
-    score: 10,
-    teamMembers: ['user1', 'user2'],
-    usedHint: true,
-    completed: false,
-  }];
+  const leaderboard = [
+    {
+      teamName: 'team1',
+      date: '1011',
+      score: 10,
+      teamMembers: ['user1', 'user2'],
+      usedHint: true,
+      completed: false,
+    },
+  ];
   beforeEach(() => {
     mockClear(townEmitter);
     testArea = new CrosswordPuzzleArea(
@@ -125,15 +127,17 @@ describe('PuzzleArea', () => {
     it('Clears the group name of the puzzle area when the last occupant leaves', () => {
       testArea.remove(newPlayer);
       const lastEmittedUpdate = getLastEmittedEvent(townEmitter, 'interactableUpdate');
-      expect(lastEmittedUpdate).toEqual([{
-        groupName: undefined,
-        id,
-        occupantsByID: [],
-        leaderboard,
-        isGameOver: false,
-      }]);
+      expect(lastEmittedUpdate).toEqual([
+        {
+          groupName: undefined,
+          id,
+          occupantsByID: [],
+          leaderboard,
+          isGameOver: false,
+        },
+      ]);
       expect(testArea.groupName).toBeUndefined();
-      expect((testArea.leaderboard == leaderboard));
+      expect(testArea.leaderboard).toEqual(leaderboard);
     });
     it('Clears the puzzle of the puzzle area when the last occupant leaves', () => {
       testArea.remove(newPlayer);
