@@ -17,7 +17,6 @@ import scoreRoutes from './db/Router';
 // Create the server instances
 const app = Express();
 
-
 app.use(CORS());
 const server = http.createServer(app);
 const dbServer = http.createServer(app);
@@ -25,7 +24,6 @@ const dbServer = http.createServer(app);
 const socketServer = new SocketServer<ClientToServerEvents, ServerToClientEvents>(server, {
   cors: { origin: '*' },
 });
-
 
 dbServer.listen(process.env.PORT || 4000, () => {
   const address = dbServer.address() as AddressInfo;
@@ -38,7 +36,6 @@ dbServer.listen(process.env.PORT || 4000, () => {
 
 // Initialize the towns store with a factory that creates a broadcast emitter for a town
 TownsStore.initializeTownsStore((townID: string) => socketServer.to(townID));
-
 
 // Connect the socket server to the TownsController. We use here the same pattern as tsoa
 // (the library that we use for REST), which creates a new controller instance for each request
@@ -92,4 +89,3 @@ server.listen(process.env.PORT || 8081, () => {
     TownsStore.getInstance().createTown(process.env.DEMO_TOWN_ID, false);
   }
 });
-
