@@ -6,7 +6,7 @@ import {
   ConversationArea,
   CrosswordPuzzleModel,
   Interactable,
-  Leaderboard,
+  ScoreModel,
   TownEmitter,
   ViewingArea,
 } from '../types/CoveyTownSocket';
@@ -380,14 +380,16 @@ describe('TownsController integration tests', () => {
         },
       };
 
-      const testLeaderboard: Leaderboard = {
-        teamName: 'string',
-        date: 'string',
-        score: 1,
-        users: [],
-        usedHint: false,
-        completePercentage: 1,
-      };
+      const testLeaderboard: ScoreModel[] = [
+        {
+          teamName: 'string',
+          date: 'string',
+          score: 1,
+          teamMembers: [],
+          usedHint: false,
+          completed: false,
+        },
+      ];
 
       it('Executes without error when creating a new Crossoword Puzzle ', async () => {
         await controller.createCrosswordPuzzleArea(

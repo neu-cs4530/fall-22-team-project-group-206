@@ -9,7 +9,7 @@ import {
   CrosswordPosition,
   CrosswordPuzzleCell,
   CrosswordExternalModel,
-  Leaderboard,
+  ScoreModel,
 } from '../types/CoveyTownSocket';
 import CrosswordPuzzleService from './CrosswordPuzzleService';
 import InteractableArea from './InteractableArea';
@@ -20,7 +20,7 @@ export default class CrosswordPuzzleArea extends InteractableArea {
 
   public puzzle?: CrosswordPuzzleModel;
 
-  public leaderboard?: Leaderboard;
+  public leaderboard?: ScoreModel[];
 
   public isGameOver: boolean;
 
