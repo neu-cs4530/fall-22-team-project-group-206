@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import TypedEmitter from 'typed-emitter';
 import Interactable from '../components/Town/Interactable';
+import CrosswordPuzzleArea from '../components/Town/interactables/CrosswordPuzzleArea';
 import ViewingArea from '../components/Town/interactables/ViewingArea';
 import { LoginController } from '../contexts/LoginControllerContext';
 import { TownsService, TownsServiceClient } from '../generated/client';
@@ -419,7 +420,7 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
 
     /**
      * When an interactable's state changes, push that update into the relevant controller, which is assumed
-     * to be either a Viewing Area, Conversation Area, or Crossword Puzzle Area and which is assumed to already be represented by a
+     * to be either a Viewing Area, Conversation Area, or CrosswordPuzzle Area and which is assumed to already be represented by a
      * ViewingAreaController or ConversationAreaController that this TownController has.
      *
      * If a conversation area transitions from empty to occupied (or occupied to empty), this handler will emit
@@ -446,14 +447,12 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
         );
         updatedViewingArea?.updateFrom(interactable);
       } else if (isCrosswordPuzzleArea(interactable)) {
-        console.log('hit');
         const updatedCrosswordArea = this._crosswordPuzzleAreas.find(
           eachArea => eachArea.id === interactable.id,
         );
         if (updatedCrosswordArea) {
           const emptyNow = updatedCrosswordArea.isEmpty();
           if (emptyNow) {
-            console.log('hit bang bang');
             updatedCrosswordArea.setPuzzleModel();
           } else {
             updatedCrosswordArea.puzzle = interactable.puzzle;
@@ -609,7 +608,6 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
             );
           }
         });
-        console.log(this._crosswordPuzzleAreas);
         this._userID = initialData.userID;
         this._ourPlayer = this.players.find(eachPlayer => eachPlayer.id == this.userID);
         this.emit('connect', initialData.providerVideoToken);
@@ -646,12 +644,47 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
   }
 
   /**
+   * Retrieve the crossword puzzle area controller that corresponds to a viewingAreaModel, creating one if necessary
+   *
+   * @param crosswordPuzzleArea
+   * @returns
+   */
+  public getCrosswordPuzzleAreaController(
+    crosswordPuzzleArea: CrosswordPuzzleArea,
+  ): CrosswordPuzzleAreaController {
+    const existingController = this.crosswordPuzzleAreas.find(
+      eachExistingArea => eachExistingArea.id === crosswordPuzzleArea.name,
+    );
+    if (existingController) {
+      return existingController;
+    } else {
+      const newController = new CrosswordPuzzleAreaController(
+        crosswordPuzzleArea.name,
+        false,
+        undefined,
+        undefined,
+      );
+      this.crosswordPuzzleAreas.push(newController);
+      return newController;
+    }
+  }
+
+  /**
    * Emit a viewing area update to the townService
    * @param viewingArea The Viewing Area Controller that is updated and should be emitted
    *    with the event
    */
   public emitViewingAreaUpdate(viewingArea: ViewingAreaController) {
     this._socket.emit('interactableUpdate', viewingArea.viewingAreaModel());
+  }
+
+  /**
+   * Emit a crossword puzzle area update to the townService
+   * @param crosswordPuzzleArea The Crossword Puzzle Area Controller that is updated and should be emitted
+   *    with the event
+   */
+  public emitCrosswordPuzzleAreaUpdate(crosswordPuzzleArea: CrosswordPuzzleAreaController) {
+    this._socket.emit('interactableUpdate', crosswordPuzzleArea.toCrosswordPuzzleAreaModel());
   }
 
   /**

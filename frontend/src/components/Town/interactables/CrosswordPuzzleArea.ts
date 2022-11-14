@@ -28,6 +28,8 @@ export default class CrosswordPuzzleArea extends Interactable {
       { color: '#FFFFFF', backgroundColor: '#000000' },
     );
     this._labelText.setVisible(false);
+    this.townController.getCrosswordPuzzleAreaController(this);
+    this.setDepth(-1);
   }
 
   overlap(): void {
@@ -51,7 +53,6 @@ export default class CrosswordPuzzleArea extends Interactable {
   interact(): void {
     this._labelText?.setVisible(false);
     this._isInteracting = true;
-    // TODO: add link to Modal
   }
 
   getType(): KnownInteractableTypes {

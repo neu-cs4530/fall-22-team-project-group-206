@@ -51,12 +51,15 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
     id: string,
     isGameOver: boolean,
     puzzle?: CrosswordPuzzleModel,
-    leaderBoard?: Leaderboard,
+    leaderboard?: Leaderboard,
   ) {
     super();
     this._id = id;
     this._puzzle = puzzle;
-    this._leaderboard = leaderBoard;
+    if (!puzzle) {
+      this.setPuzzleModel();
+    }
+    this._leaderboard = leaderboard;
     this._isGameOver = isGameOver;
   }
 
@@ -90,9 +93,8 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
    * will emit an puzzleChange event.
    */
   set puzzle(newPuzzle: CrosswordPuzzleModel | undefined) {
-    if (this._puzzle === undefined) {
-      // Get blank puzzle
-    }
+    this._puzzle = newPuzzle;
+    this.emit('puzzleChange', newPuzzle);
   }
 
   get puzzle(): CrosswordPuzzleModel | undefined {
@@ -176,10 +178,11 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
         }
         const rawPuzzleModel: CrosswordExternalModel = response.data.puzzles[0]
           .content as CrosswordExternalModel;
-        const cellGrid: CrosswordPuzzleCell[][] = this.initializeFromGridToCell(
+        console.log(rawPuzzleModel.circles);
+        const cellGrid: CrosswordPuzzleCell[][] = this._initializeFromGridToCell(
           rawPuzzleModel.grid,
           rawPuzzleModel.shades,
-          rawPuzzleModel.circle,
+          rawPuzzleModel.circles,
         );
         this.puzzle = {
           grid: cellGrid,
@@ -194,15 +197,15 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
 
   /**
    * Helper method that convert raw data from thrid party api to gird in CrosswordPuzzleModel
-   * @param gird gird from thrid party api
-   * @param shades tiles that is shaded
-   * @param circle tiles that is circled
+   * @param grid gird from thrid party api
+   * @param shadedCells tiles that is shaded
+   * @param circledCells tiles that is circled
    * @returns 2D list of CrosswordPuzzleCell which is used for constructing CrosswordPuzzleModel
    */
-  public initializeFromGridToCell(
+  private _initializeFromGridToCell(
     grid: string[][],
-    shades: number[],
-    circle: number[],
+    shadedCells: number[],
+    circledCells: number[],
   ): CrosswordPuzzleCell[][] {
     const cells: CrosswordPuzzleCell[][] = [];
     for (let row = 0; row < grid.length; row++) {
@@ -211,12 +214,10 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
         const currentCell: CrosswordPuzzleCell = {
           value: '',
           solution: grid[row][col],
-          isCircled: (circle || []).includes(
-            this.fromPositionToIndex({ row, col }, grid[row].length),
+          isCircled: circledCells.includes(
+            this._fromPositionToIndex({ row, col }, grid[row].length),
           ),
-          isShaded: (shades || []).includes(
-            this.fromPositionToIndex({ row, col }, grid[row].length),
-          ),
+          isShaded: shadedCells.includes(this._fromPositionToIndex({ row, col }, grid[row].length)),
         };
         cells[row].push(currentCell);
       }
@@ -229,11 +230,10 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
    * @param row row index of the tile
    * @param col column index of the tile
    * @param rowSize length of the gird namly column size of the grid
-   * @param height height of the grid namly row size of the gird
    * @returns number converted from a CrosswordPositioon
    */
-  public fromPositionToIndex({ row, col }: CrosswordPosition, rowSize: number): number {
-    return row * rowSize + col + 1;
+  private _fromPositionToIndex({ row, col }: CrosswordPosition, rowSize: number): number {
+    return row * rowSize + col;
   }
 }
 
@@ -242,7 +242,7 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
  *
  * This hook will re-render any components that use it when the set of occupants changes.
  */
-export function useConversationAreaOccupants(
+export function useCrosswordPuzzleAreaOccupants(
   area: CrosswordPuzzleAreaController,
 ): PlayerController[] {
   const [occupants, setOccupants] = useState(area.occupants);
