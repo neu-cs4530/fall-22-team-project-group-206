@@ -8,7 +8,9 @@
         "heroku-postbuild": "cd townService && npm install && npm run build",
         "run-townservice": "heroku local -p 3001 web",
         "lint": "cd townService && npm run-script lint && cd ../frontend && npm run-script lint && cd ../shared && npm run-script lint",
-		"zip": "npm-pack-zip"
+        "zip": "npm-pack-zip",
+        "compile": "tsc app.ts -w",
+        "start": "nodemon app"
     },
     "repository": {
         "type": "git",
@@ -21,6 +23,7 @@
     },
     "homepage": "https://github.com/neu-se/covey.town#readme",
     "devDependencies": {
+        "@types/express": "^4.17.14",
         "@types/jest": "^26.0.15",
         "@typescript-eslint/eslint-plugin": "^4.8.1",
         "@typescript-eslint/parser": "^4.8.1",
@@ -48,7 +51,12 @@
         "npm": "8.x.x"
     },
     "dependencies": {
+        "@types/mongoose": "^5.11.97",
         "@types/ramda": "^0.27.34",
+        "dotenv": "^16.0.3",
+        "express": "^4.18.2",
+        "mongodb": "^4.11.0",
+        "mongoose": "^6.7.1",
         "ramda": "^0.27.1",
         "typescript-is": "^0.17.0"
     },
