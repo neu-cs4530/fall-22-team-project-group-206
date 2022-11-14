@@ -1,4 +1,3 @@
-
 export type TownJoinResponse = {
   /** Unique ID that represents this player * */
   userID: string;
@@ -16,23 +15,23 @@ export type TownJoinResponse = {
   isPubliclyListed: boolean;
   /** Current state of interactables in this town */
   interactables: Interactable[];
-}
+};
 
 export type Interactable = ViewingArea | ConversationArea | CrosswordPuzzleArea;
 
 export type TownSettingsUpdate = {
   friendlyName?: string;
   isPubliclyListed?: boolean;
-}
+};
 
-export type Direction = 'front' | 'back' | 'left' | 'right';
+export type Direction = "front" | "back" | "left" | "right";
 export interface Player {
   id: string;
   userName: string;
   location: PlayerLocation;
-};
+}
 
-export type XY = { x: number, y: number };
+export type XY = { x: number; y: number };
 
 export interface PlayerLocation {
   /* The CENTER x coordinate of this player's location */
@@ -43,7 +42,7 @@ export interface PlayerLocation {
   rotation: Direction;
   moving: boolean;
   interactableID?: string;
-};
+}
 export type ChatMessage = {
   author: string;
   sid: string;
@@ -55,7 +54,7 @@ export interface ConversationArea {
   id: string;
   topic?: string;
   occupantsByID: string[];
-};
+}
 
 //CrosswordPuzzleArea model to represent a crosswordPuzzle area
 export interface CrosswordPuzzleArea {
@@ -63,7 +62,7 @@ export interface CrosswordPuzzleArea {
   groupName?: string;
   puzzle?: CrosswordPuzzleModel;
   occupantsByID: string[];
-  leaderboard?: Leaderboard;
+  leaderboard?: ScoreModel[];
   isGameOver: boolean;
 }
 
@@ -72,7 +71,7 @@ export interface BoundingBox {
   y: number;
   width: number;
   height: number;
-};
+}
 
 export interface ViewingArea {
   id: string;
@@ -95,7 +94,6 @@ export interface CrosswordPuzzleModel {
   grid: CrosswordPuzzleCell[][];
   info: CrosswordPuzzleInfo;
   clues: CrosswordPuzzleClues;
-
 }
 
 //represent a single cell in the CrosswordPuzzle grid
@@ -126,15 +124,14 @@ export interface CrosswordPosition {
   col: number; // col index
 }
 
-//leaderboard representation
-export interface Leaderboard {
+//score representation
+export interface ScoreModel {
   teamName: string;
-  date: string;
+  date?: string;
   score: number;
-  users: string[];
-  usedHint:boolean;
-  completePercentage:number;
-
+  teamMembers: string[];
+  usedHint?: boolean;
+  completed?: boolean;
 }
 
 export interface ServerToClientEvents {

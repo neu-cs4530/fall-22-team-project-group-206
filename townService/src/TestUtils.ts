@@ -20,7 +20,7 @@ import {
   CrosswordPuzzleModel,
   Direction,
   Interactable,
-  Leaderboard,
+  ScoreModel,
   PlayerLocation,
   ServerToClientEvents,
   SocketData,
@@ -53,7 +53,7 @@ export function createCrosswordPuzzleForTesting(params?: {
   crosswordPuzzleID?: string;
   crosswordPuzzle?: CrosswordPuzzleModel;
   groupName?: string;
-  leaderboard?: Leaderboard;
+  leaderboard?: ScoreModel[];
   boundingBox?: BoundingBox;
 }): CrosswordPuzzleArea {
   return {

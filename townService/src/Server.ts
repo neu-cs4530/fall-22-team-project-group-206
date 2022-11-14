@@ -11,6 +11,8 @@ import TownsStore from './lib/TownsStore';
 import { ClientToServerEvents, ServerToClientEvents } from './types/CoveyTownSocket';
 import { TownsController } from './town/TownsController';
 import { logError } from './Utils';
+import createConnection from './db/DatabaseConnection';
+import scoreRoutes from './db/Router';
 
 // Create the server instances
 const app = Express();
@@ -21,8 +23,13 @@ const socketServer = new SocketServer<ClientToServerEvents, ServerToClientEvents
   cors: { origin: '*' },
 });
 
+const dbSocketServer = scoreRoutes(server, app);
+
 // Initialize the towns store with a factory that creates a broadcast emitter for a town
 TownsStore.initializeTownsStore((townID: string) => socketServer.to(townID));
+
+// initialize the database and create a connection
+createConnection();
 
 // Connect the socket server to the TownsController. We use here the same pattern as tsoa
 // (the library that we use for REST), which creates a new controller instance for each request

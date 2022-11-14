@@ -5,7 +5,10 @@ import {
   CrosswordPuzzleArea as CrosswordPuzzleAreaModel,
   TownEmitter,
   CrosswordPuzzleModel,
-  Leaderboard,
+  CrosswordPosition,
+  CrosswordPuzzleCell,
+  CrosswordExternalModel,
+  ScoreModel
 } from '../types/CoveyTownSocket';
 import InteractableArea from './InteractableArea';
 
@@ -15,7 +18,7 @@ export default class CrosswordPuzzleArea extends InteractableArea {
 
   public puzzle?: CrosswordPuzzleModel;
 
-  public leaderboard?: Leaderboard;
+  public leaderboard?: ScoreModel[];
 
   public isGameOver: boolean;
 

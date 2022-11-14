@@ -7,7 +7,7 @@ const getScoreBoard = async (_req: Express.Request, res: Express.Response) =>
     score: 1,
     users: ['string', 'string'],
     usedHint: false,
-    completePercentage: 1,
+    completed: false,
   });
 
 const updateScoreBoard = async (_req: Express.Request, res: Express.Response) => {
