@@ -70,11 +70,7 @@ describe('PuzzleArea', () => {
   beforeEach(() => {
     mockClear(townEmitter);
     testArea = new CrosswordPuzzleArea(
-<<<<<<< HEAD
-      { groupName, id, occupantsByID: [], puzzle, leaderboard },
-=======
       { groupName, id, occupantsByID: [], puzzle, leaderboard, isGameOver: false },
->>>>>>> main
       testAreaBox,
       townEmitter,
     );
@@ -92,10 +88,7 @@ describe('PuzzleArea', () => {
         occupantsByID: [newPlayer.id],
         puzzle,
         leaderboard,
-<<<<<<< HEAD
-=======
         isGameOver: false,
->>>>>>> main
       });
     });
     it("Sets the player's PuzzleLabel and emits an update for their location", () => {
@@ -120,10 +113,7 @@ describe('PuzzleArea', () => {
         occupantsByID: [extraPlayer.id],
         puzzle,
         leaderboard,
-<<<<<<< HEAD
-=======
         isGameOver: false,
->>>>>>> main
       });
     });
     it("Clears the player's puzzleLabel and emits an update for their location", () => {
@@ -140,10 +130,7 @@ describe('PuzzleArea', () => {
         id,
         occupantsByID: [],
         leaderboard,
-<<<<<<< HEAD
-=======
         isGameOver: false,
->>>>>>> main
       });
       expect(testArea.groupName).toBeUndefined();
       expect((testArea.leaderboard = leaderboard));
@@ -151,9 +138,6 @@ describe('PuzzleArea', () => {
     it('Clears the puzzle of the puzzle area when the last occupant leaves', () => {
       testArea.remove(newPlayer);
       const lastEmittedUpdate = getLastEmittedEvent(townEmitter, 'interactableUpdate');
-<<<<<<< HEAD
-      expect(lastEmittedUpdate).toEqual({ puzzle: undefined, id, occupantsByID: [], leaderboard });
-=======
       expect(lastEmittedUpdate).toEqual({
         puzzle: undefined,
         id,
@@ -161,7 +145,6 @@ describe('PuzzleArea', () => {
         leaderboard,
         isGameOver: false,
       });
->>>>>>> main
       expect(testArea.puzzle).toBeUndefined();
     });
   });
@@ -173,10 +156,7 @@ describe('PuzzleArea', () => {
       puzzle,
       occupantsByID: [newPlayer.id],
       leaderboard,
-<<<<<<< HEAD
-=======
       isGameOver: false,
->>>>>>> main
     });
   });
   describe('fromMapObject', () => {
