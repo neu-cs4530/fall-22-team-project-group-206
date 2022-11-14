@@ -2,7 +2,7 @@ import { mock, mockClear } from 'jest-mock-extended';
 import { nanoid } from 'nanoid';
 import Player from '../lib/Player';
 import { getLastEmittedEvent } from '../TestUtils';
-import { TownEmitter, CrosswordPuzzleModel, CrosswordPuzzleCell } from '../types/CoveyTownSocket';
+import { TownEmitter, CrosswordPuzzleModel } from '../types/CoveyTownSocket';
 import CrosswordPuzzleArea from './CrosswordPuzzleArea';
 
 describe('PuzzleArea', () => {
@@ -25,40 +25,6 @@ describe('PuzzleArea', () => {
   };
   const id = nanoid();
   let newPlayer: Player;
-  const grid: string[][] = [
-    ['1', '2'],
-    ['3', '4'],
-  ];
-  const cell1: CrosswordPuzzleCell = {
-    value: '',
-    solution: '1',
-    isCircled: true,
-    isShaded: false,
-  };
-  const cell2: CrosswordPuzzleCell = {
-    value: '',
-    solution: '2',
-    isCircled: false,
-    isShaded: true,
-  };
-  const cell3: CrosswordPuzzleCell = {
-    value: '',
-    solution: '3',
-    isCircled: false,
-    isShaded: false,
-  };
-  const cell4: CrosswordPuzzleCell = {
-    value: '',
-    solution: '4',
-    isCircled: false,
-    isShaded: false,
-  };
-
-  const cellGrid: CrosswordPuzzleCell[][] = [
-    [cell1, cell2],
-    [cell3, cell4],
-  ];
-
   const leaderboard = [
     {
       teamName: 'team1',

@@ -5,10 +5,7 @@ import {
   CrosswordPuzzleArea as CrosswordPuzzleAreaModel,
   TownEmitter,
   CrosswordPuzzleModel,
-  CrosswordPosition,
-  CrosswordPuzzleCell,
-  CrosswordExternalModel,
-  ScoreModel
+  ScoreModel,
 } from '../types/CoveyTownSocket';
 import InteractableArea from './InteractableArea';
 

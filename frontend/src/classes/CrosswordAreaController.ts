@@ -9,7 +9,7 @@ import {
   CrosswordPuzzleArea as CrosswordPuzzleAreaModel,
   CrosswordPuzzleCell,
   CrosswordPuzzleModel,
-  Leaderboard,
+  ScoreModel,
 } from '../types/CoveyTownSocket';
 import PlayerController from './PlayerController';
 
@@ -37,7 +37,7 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
 
   private _puzzle?: CrosswordPuzzleModel;
 
-  private _leaderboard?: Leaderboard;
+  private _leaderboard?: ScoreModel[];
 
   private _isGameOver: boolean;
 
@@ -51,7 +51,7 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
     id: string,
     isGameOver: boolean,
     puzzle?: CrosswordPuzzleModel,
-    leaderboard?: Leaderboard,
+    leaderboard?: ScoreModel[],
   ) {
     super();
     this._id = id;
@@ -105,11 +105,11 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
    * The puzzle in this crossword puzzle area. Changing the puzzle
    * will emit an puzzleChange event.
    */
-  set leaderboard(newLeaderboard: Leaderboard | undefined) {
+  set leaderboard(newLeaderboard: ScoreModel[] | undefined) {
     throw Error('Not implemented yet.');
   }
 
-  get leaderboard(): Leaderboard | undefined {
+  get leaderboard(): ScoreModel[] | undefined {
     return this._leaderboard;
   }
 
