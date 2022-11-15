@@ -1,4 +1,3 @@
-import TownController from '../../../classes/TownController';
 import Interactable, { KnownInteractableTypes } from '../Interactable';
 import TownGameScene from '../TownGameScene';
 
