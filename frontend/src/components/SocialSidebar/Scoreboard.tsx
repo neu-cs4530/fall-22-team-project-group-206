@@ -89,7 +89,7 @@ export default function Scoreboard(): JSX.Element {
             padding='8px'>
             <Grid templateColumns='repeat(5, 1fr)' gap={6}>
               <GridItem colSpan={1} h='5' width='100%'>
-                {leaderboardExample.indexOf(score)}
+                {leaderboardExample.indexOf(score) + 1}
               </GridItem>
               <GridItem
                 colStart={2}
