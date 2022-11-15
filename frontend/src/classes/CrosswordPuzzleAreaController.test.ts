@@ -205,6 +205,9 @@ describe('CrosswordPuzzleArea', () => {
     });
     it('emits the puzzleChange event and resets the puzzle if the new puzzle is undefined', () => {
       const setPuzzleMock = jest.spyOn(
+        // Mocking a private method by creating a prototype as seen in
+        // https://stackoverflow.com/questions/43265944/is-there-any-way-to-mock-private-functions-with-jest
+        // eslint-disable-next-line
         CrosswordPuzzleAreaController.prototype as any,
         '_setPuzzleModel',
       );
