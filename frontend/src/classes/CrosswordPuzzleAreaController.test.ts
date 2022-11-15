@@ -1,7 +1,9 @@
 import { mock, mockClear } from 'jest-mock-extended';
 import { nanoid } from 'nanoid';
 import { CrosswordPuzzleModel, PlayerLocation } from '../types/CoveyTownSocket';
-import CrosswordPuzzleAreaController, { CrosswordPuzzleAreaEvents } from "./CrosswordPuzzleAreaController"
+import CrosswordPuzzleAreaController, {
+  CrosswordPuzzleAreaEvents,
+} from './CrosswordPuzzleAreaController';
 import PlayerController from './PlayerController';
 
 describe('CrosswordPuzzleArea', () => {
@@ -19,75 +21,71 @@ describe('CrosswordPuzzleArea', () => {
     testPuzzle = {
       grid: [
         [
-          {value: '', solution: '.', isCircled: false, isShaded: false},
-          {value: '', solution: '.', isCircled: false, isShaded: false},
-          {value: '', solution: 'M', isCircled: false, isShaded: false},
-          {value: '', solution: 'C', isCircled: false, isShaded: false},
-          {value: '', solution: 'S', isCircled: false, isShaded: false},
+          { value: '', solution: '.', isCircled: false, isShaded: false },
+          { value: '', solution: '.', isCircled: false, isShaded: false },
+          { value: '', solution: 'M', isCircled: false, isShaded: false },
+          { value: '', solution: 'C', isCircled: false, isShaded: false },
+          { value: '', solution: 'S', isCircled: false, isShaded: false },
         ],
         [
-          {value: '', solution: '.', isCircled: false, isShaded: false},
-          {value: '', solution: 'Y', isCircled: false, isShaded: false},
-          {value: '', solution: 'A', isCircled: false, isShaded: false},
-          {value: '', solution: 'L', isCircled: false, isShaded: false},
-          {value: '', solution: 'L', isCircled: false, isShaded: false},
+          { value: '', solution: '.', isCircled: false, isShaded: false },
+          { value: '', solution: 'Y', isCircled: false, isShaded: false },
+          { value: '', solution: 'A', isCircled: false, isShaded: false },
+          { value: '', solution: 'L', isCircled: false, isShaded: false },
+          { value: '', solution: 'L', isCircled: false, isShaded: false },
         ],
         [
-          {value: '', solution: 'T', isCircled: false, isShaded: false},
-          {value: '', solution: 'O', isCircled: false, isShaded: false},
-          {value: '', solution: 'D', isCircled: false, isShaded: false},
-          {value: '', solution: 'A', isCircled: false, isShaded: false},
-          {value: '', solution: 'Y', isCircled: false, isShaded: false},
+          { value: '', solution: 'T', isCircled: false, isShaded: false },
+          { value: '', solution: 'O', isCircled: false, isShaded: false },
+          { value: '', solution: 'D', isCircled: false, isShaded: false },
+          { value: '', solution: 'A', isCircled: false, isShaded: false },
+          { value: '', solution: 'Y', isCircled: false, isShaded: false },
         ],
         [
-          {value: '', solution: 'A', isCircled: false, isShaded: false},
-          {value: '', solution: 'D', isCircled: false, isShaded: false},
-          {value: '', solution: 'A', isCircled: false, isShaded: false},
-          {value: '', solution: 'M', isCircled: false, isShaded: false},
-          {value: '', solution: '.', isCircled: false, isShaded: false},
+          { value: '', solution: 'A', isCircled: false, isShaded: false },
+          { value: '', solution: 'D', isCircled: false, isShaded: false },
+          { value: '', solution: 'A', isCircled: false, isShaded: false },
+          { value: '', solution: 'M', isCircled: false, isShaded: false },
+          { value: '', solution: '.', isCircled: false, isShaded: false },
         ],
         [
-          {value: '', solution: 'D', isCircled: false, isShaded: false},
-          {value: '', solution: 'A', isCircled: false, isShaded: false},
-          {value: '', solution: 'M', isCircled: false, isShaded: false},
-          {value: '', solution: '.', isCircled: false, isShaded: false},
-          {value: '', solution: '.', isCircled: false, isShaded: false},
-        ]
+          { value: '', solution: 'D', isCircled: false, isShaded: false },
+          { value: '', solution: 'A', isCircled: false, isShaded: false },
+          { value: '', solution: 'M', isCircled: false, isShaded: false },
+          { value: '', solution: '.', isCircled: false, isShaded: false },
+          { value: '', solution: '.', isCircled: false, isShaded: false },
+        ],
       ],
       info: {
         type: 'Mini',
         title: 'NYT Mini Test',
         author: 'Some Editor',
-        description: 'Words in boxes'
+        description: 'Words in boxes',
       },
-      clues: { 
+      clues: {
         across: [
           'Show hosts, for short',
           '"You people," more informally',
           'Morning news show since 1952',
           'Conover of comedy',
-          'Resevoir Structure'
-        ], 
+          'Resevoir Structure',
+        ],
         down: [
           '_____ Vice President, title for Kamala Harris',
           'Any animal in the class Bivalvia',
           'Like a knowning wink',
           'Oldest member of the Jedi Council',
-          'Tiny bit'
-        ]}
+          'Tiny bit',
+        ],
+      },
     };
-    testArea = new CrosswordPuzzleAreaController(
-      nanoid(),
-      false,
-      testPuzzle,
-      undefined
-    );
+    testArea = new CrosswordPuzzleAreaController(nanoid(), false, testPuzzle, undefined);
     testArea.occupants = [
       new PlayerController(nanoid(), nanoid(), playerLocation),
       new PlayerController(nanoid(), nanoid(), playerLocation),
       new PlayerController(nanoid(), nanoid(), playerLocation),
     ];
-    
+
     mockClear(mockListeners.occupantsChange);
     mockClear(mockListeners.puzzleChange);
     testArea.addListener('occupantsChange', mockListeners.occupantsChange);
@@ -137,63 +135,64 @@ describe('CrosswordPuzzleArea', () => {
       const newPuzzle = {
         grid: [
           [
-            {value: '', solution: '.', isCircled: false, isShaded: false},
-            {value: '', solution: '.', isCircled: false, isShaded: false},
-            {value: 'M', solution: 'M', isCircled: false, isShaded: false},
-            {value: '', solution: 'C', isCircled: false, isShaded: false},
-            {value: '', solution: 'S', isCircled: false, isShaded: false},
+            { value: '', solution: '.', isCircled: false, isShaded: false },
+            { value: '', solution: '.', isCircled: false, isShaded: false },
+            { value: 'M', solution: 'M', isCircled: false, isShaded: false },
+            { value: '', solution: 'C', isCircled: false, isShaded: false },
+            { value: '', solution: 'S', isCircled: false, isShaded: false },
           ],
           [
-            {value: '', solution: '.', isCircled: false, isShaded: false},
-            {value: '', solution: 'Y', isCircled: false, isShaded: false},
-            {value: 'A', solution: 'A', isCircled: false, isShaded: false},
-            {value: '', solution: 'L', isCircled: false, isShaded: false},
-            {value: '', solution: 'L', isCircled: false, isShaded: false},
+            { value: '', solution: '.', isCircled: false, isShaded: false },
+            { value: '', solution: 'Y', isCircled: false, isShaded: false },
+            { value: 'A', solution: 'A', isCircled: false, isShaded: false },
+            { value: '', solution: 'L', isCircled: false, isShaded: false },
+            { value: '', solution: 'L', isCircled: false, isShaded: false },
           ],
           [
-            {value: '', solution: 'T', isCircled: false, isShaded: false},
-            {value: '', solution: 'O', isCircled: false, isShaded: false},
-            {value: 'D', solution: 'D', isCircled: false, isShaded: false},
-            {value: '', solution: 'A', isCircled: false, isShaded: false},
-            {value: '', solution: 'Y', isCircled: false, isShaded: false},
+            { value: '', solution: 'T', isCircled: false, isShaded: false },
+            { value: '', solution: 'O', isCircled: false, isShaded: false },
+            { value: 'D', solution: 'D', isCircled: false, isShaded: false },
+            { value: '', solution: 'A', isCircled: false, isShaded: false },
+            { value: '', solution: 'Y', isCircled: false, isShaded: false },
           ],
           [
-            {value: '', solution: 'A', isCircled: false, isShaded: false},
-            {value: '', solution: 'D', isCircled: false, isShaded: false},
-            {value: 'A', solution: 'A', isCircled: false, isShaded: false},
-            {value: '', solution: 'M', isCircled: false, isShaded: false},
-            {value: '', solution: '.', isCircled: false, isShaded: false},
+            { value: '', solution: 'A', isCircled: false, isShaded: false },
+            { value: '', solution: 'D', isCircled: false, isShaded: false },
+            { value: 'A', solution: 'A', isCircled: false, isShaded: false },
+            { value: '', solution: 'M', isCircled: false, isShaded: false },
+            { value: '', solution: '.', isCircled: false, isShaded: false },
           ],
           [
-            {value: '', solution: 'D', isCircled: false, isShaded: false},
-            {value: '', solution: 'A', isCircled: false, isShaded: false},
-            {value: 'M', solution: 'M', isCircled: false, isShaded: false},
-            {value: '', solution: '.', isCircled: false, isShaded: false},
-            {value: '', solution: '.', isCircled: false, isShaded: false},
-          ]
+            { value: '', solution: 'D', isCircled: false, isShaded: false },
+            { value: '', solution: 'A', isCircled: false, isShaded: false },
+            { value: 'M', solution: 'M', isCircled: false, isShaded: false },
+            { value: '', solution: '.', isCircled: false, isShaded: false },
+            { value: '', solution: '.', isCircled: false, isShaded: false },
+          ],
         ],
         info: {
           type: 'Mini',
           title: 'NYT Mini Test',
           author: 'Some Editor',
-          description: 'Words in boxes'
+          description: 'Words in boxes',
         },
-        clues: { 
+        clues: {
           across: [
             'Show hosts, for short',
             '"You people," more informally',
             'Morning news show since 1952',
             'Conover of comedy',
-            'Resevoir Structure'
-          ], 
+            'Resevoir Structure',
+          ],
           down: [
             '_____ Vice President, title for Kamala Harris',
             'Any animal in the class Bivalvia',
             'Like a knowning wink',
             'Oldest member of the Jedi Council',
-            'Tiny bit'
-          ]}
-      }
+            'Tiny bit',
+          ],
+        },
+      };
       testArea.puzzle = newPuzzle;
       expect(testArea.puzzle).toEqual(newPuzzle);
       expect(mockListeners.puzzleChange).toBeCalledWith(newPuzzle);
@@ -215,4 +214,4 @@ describe('CrosswordPuzzleArea', () => {
   describe('setting the leaderboard property', () => {
     // TODO - add when leaderboard backend is complete (Frank)
   });
-})
+});
