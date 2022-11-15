@@ -86,7 +86,6 @@ function CrosswordGameModal(props: {
 export default function CrosswordPuzzleAreaWrapper(): JSX.Element {
   const crosswordPuzzleArea =
     useInteractable<CrosswordPuzzleAreaInteractable>('crosswordPuzzleArea');
-  console.log(crosswordPuzzleArea);
   if (crosswordPuzzleArea) {
     return <CrosswordGameModal crosswordPuzzleArea={crosswordPuzzleArea} />;
   }
