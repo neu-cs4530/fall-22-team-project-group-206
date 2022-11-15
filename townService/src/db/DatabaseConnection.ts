@@ -6,8 +6,8 @@ dotenv.config();
 
 export default async function createConnection() {
   let uri = '';
-  if (process.env.MONGODB_LOCAL !== undefined) {
-    uri = process.env.MONGODB_LOCAL;
+  if (process.env.MONGODB_DEPLOYED !== undefined) {
+    uri = process.env.MONGODB_DEPLOYED;
   }
 
   try {
