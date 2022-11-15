@@ -14,8 +14,9 @@ import {
   ModalCloseButton,
   Button,
   useDisclosure,
+  Checkbox,
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { useState } from 'react';
 
 import { ScoreModel } from '../../types/CoveyTownSocket';
 /**
@@ -25,97 +26,121 @@ import { ScoreModel } from '../../types/CoveyTownSocket';
  *
  */
 export default function Scoreboard(): JSX.Element {
+  //dummy data will be removed once leaderboard api is all set
   const score1: ScoreModel = {
-    teamName: 'team1',
+    teamName: 'short name',
     date: '1.1',
     score: 100,
-    teamMembers: ['a123132131321', '3123123123213', '123123312'],
+    teamMembers: ['very long member name', 'very long member name'],
     usedHint: true,
     completed: true,
   };
   const score2: ScoreModel = {
-    teamName: 'team2',
-    date: '1.1',
-    score: 100,
-    teamMembers: ['a1', 'a2', 'a3'],
-    usedHint: true,
+    teamName: 'long team name',
+    date: '1.2',
+    score: 10,
+    teamMembers: ['sn1', 'sn2'],
+    usedHint: false,
     completed: true,
   };
   const score3: ScoreModel = {
-    teamName: 'team3',
-    date: '1.1',
-    score: 29,
-    teamMembers: ['a1', 'a2', 'a3'],
+    teamName: 'very very very long team name',
+    date: '1.3',
+    score: 2,
+    teamMembers: ['long name', 'long name1', 'long name2', 'long name3'],
     usedHint: true,
     completed: true,
   };
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  const LeaderboardExample: ScoreModel[] = [score1, score2, score3];
+
+  const leaderboardExample: ScoreModel[] = [score1, score2, score3];
+  const [detailIndex, setDetailIndex] = useState<number>(0);
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const openDialog = (index: number) => {
+    setDetailIndex(index);
+    onOpen();
+  };
   return (
     <Box>
       <Heading as='h2' fontSize='l'>
         Crossword Leaderboard:
       </Heading>
       <div>
-        <Grid templateColumns='repeat(5, 1fr)' gap={4}>
-          <GridItem colSpan={2} h='5'>
+        <Grid templateColumns='repeat(5, 1fr)' gap={3}>
+          <GridItem colSpan={1} h='5'>
+            Rank
+          </GridItem>
+          <GridItem colSpan={3} h='5'>
             Team name
           </GridItem>
-          <GridItem colStart={4} colEnd={6} h='10'>
+          <GridItem colStart={5} colEnd={6} h='10'>
             Score
           </GridItem>
         </Grid>
       </div>
       <OrderedList margin='3px'>
-        {LeaderboardExample.map(score => (
-          <ListItem key={score.teamName} margin='4px'>
-            <Button onClick={onOpen} width='100%'>
-              <Grid templateColumns='repeat(5, 1fr)' gap={6}>
-                <GridItem colSpan={2} h='5'>
-                  {score.teamName}
-                </GridItem>
-                <GridItem colStart={4} colEnd={6} h='10'>
-                  {score.score}
-                </GridItem>
-              </Grid>
-            </Button>
+        {leaderboardExample.map(score => (
+          <ListItem
+            key={score.teamName}
+            onClick={() => openDialog(leaderboardExample.indexOf(score))}
+            backgroundColor='gray.100'
+            borderRadius={10}
+            margin='4px'
+            padding='8px'>
+            <Grid templateColumns='repeat(5, 1fr)' gap={6}>
+              <GridItem colSpan={1} h='5' width='100%'>
+                {leaderboardExample.indexOf(score)}
+              </GridItem>
+              <GridItem
+                colStart={2}
+                colEnd={5}
+                h='5'
+                width='100%'
+                whiteSpace='nowrap'
+                overflow='hidden'
+                textOverflow='----'>
+                {score.teamName}
+              </GridItem>
 
-            <Modal isOpen={isOpen} onClose={onClose}>
-              <ModalOverlay />
-              <ModalContent>
-                <ModalHeader>{score.teamName}</ModalHeader>
-                <ModalCloseButton />
-                <ModalBody>
-                  <Grid
-                    h='200px'
-                    templateRows='repeat(2, 1fr)'
-                    templateColumns='repeat(5, 1fr)'
-                    gap={4}>
-                    <GridItem colSpan={2} rowSpan={1}>
-                      Team Memembers: {score.teamMembers.map(member => member + ',')}
-                    </GridItem>
-                    <GridItem colSpan={2} rowSpan={1}>
-                      Date: {score.date}
-                    </GridItem>
-                    <GridItem colSpan={2} rowSpan={1}>
-                      Complete: {score.completed}
-                    </GridItem>
-                    <GridItem colSpan={2} rowSpan={1}>
-                      Hint: {score.usedHint}
-                    </GridItem>
-                  </Grid>
-                </ModalBody>
-
-                <ModalFooter>
-                  <Button colorScheme='blue' mr={3} onClick={onClose}>
-                    Close
-                  </Button>
-                </ModalFooter>
-              </ModalContent>
-            </Modal>
+              {score.score}
+            </Grid>
           </ListItem>
         ))}
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>{leaderboardExample[detailIndex].teamName}</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <Grid
+                h='200px'
+                templateRows='repeat(2, 1fr)'
+                templateColumns='repeat(5, 1fr)'
+                gap={4}>
+                <GridItem colSpan={2} rowSpan={1}>
+                  Team Memembers: {leaderboardExample[detailIndex].teamMembers.join(', ')}
+                </GridItem>
+                <GridItem colSpan={2} rowSpan={1}>
+                  Date: {leaderboardExample[detailIndex].date}
+                </GridItem>
+                <GridItem colSpan={2} rowSpan={1}>
+                  <Checkbox isChecked={leaderboardExample[detailIndex].completed}>
+                    Complete
+                  </Checkbox>
+                </GridItem>
+                <GridItem colSpan={2} rowSpan={1}>
+                  <Checkbox isChecked={leaderboardExample[detailIndex].usedHint}>Hint Use</Checkbox>
+                </GridItem>
+              </Grid>
+            </ModalBody>
+
+            <ModalFooter>
+              <Button colorScheme='blue' mr={3} onClick={onClose}>
+                Close
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
       </OrderedList>
     </Box>
   );
