@@ -17,7 +17,7 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 
-import { Leaderboard } from '../../types/CoveyTownSocket';
+import { ScoreModel } from '../../types/CoveyTownSocket';
 /**
  * Lists the current players in the town, along with the current town's name and ID
  *
@@ -25,32 +25,32 @@ import { Leaderboard } from '../../types/CoveyTownSocket';
  *
  */
 export default function Scoreboard(): JSX.Element {
-  const score1: Leaderboard = {
+  const score1: ScoreModel = {
     teamName: 'team1',
     date: '1.1',
     score: 100,
-    users: ['a1', 'a2', 'a3'],
+    teamMembers: ['a123132131321', '3123123123213', '123123312'],
     usedHint: true,
-    completePercentage: 100,
+    completed: true,
   };
-  const score2: Leaderboard = {
+  const score2: ScoreModel = {
     teamName: 'team2',
     date: '1.1',
     score: 100,
-    users: ['a1', 'a2', 'a3'],
+    teamMembers: ['a1', 'a2', 'a3'],
     usedHint: true,
-    completePercentage: 100,
+    completed: true,
   };
-  const score3: Leaderboard = {
+  const score3: ScoreModel = {
     teamName: 'team3',
     date: '1.1',
     score: 29,
-    users: ['a1', 'a2', 'a3'],
+    teamMembers: ['a1', 'a2', 'a3'],
     usedHint: true,
-    completePercentage: 100,
+    completed: true,
   };
   // eslint-disable-next-line @typescript-eslint/naming-convention
-  const LeaderboardExample: Leaderboard[] = [score1, score2, score3];
+  const LeaderboardExample: ScoreModel[] = [score1, score2, score3];
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Box>
@@ -93,13 +93,13 @@ export default function Scoreboard(): JSX.Element {
                     templateColumns='repeat(5, 1fr)'
                     gap={4}>
                     <GridItem colSpan={2} rowSpan={1}>
-                      Users: {score.users}
+                      Team Memembers: {score.teamMembers.map(member => member + ',')}
                     </GridItem>
                     <GridItem colSpan={2} rowSpan={1}>
                       Date: {score.date}
                     </GridItem>
                     <GridItem colSpan={2} rowSpan={1}>
-                      Complete: {score.completePercentage}
+                      Complete: {score.completed}
                     </GridItem>
                     <GridItem colSpan={2} rowSpan={1}>
                       Hint: {score.usedHint}
