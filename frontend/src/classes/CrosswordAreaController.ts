@@ -178,7 +178,6 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
         }
         const rawPuzzleModel: CrosswordExternalModel = response.data.puzzles[0]
           .content as CrosswordExternalModel;
-        console.log(rawPuzzleModel.circles);
         const cellGrid: CrosswordPuzzleCell[][] = this._initializeFromGridToCell(
           rawPuzzleModel.grid,
           rawPuzzleModel.shades,
@@ -235,40 +234,4 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
   private _fromPositionToIndex({ row, col }: CrosswordPosition, rowSize: number): number {
     return row * rowSize + col;
   }
-}
-
-/**
- * A react hook to retrieve the occupants of a CrosswordPuzzleAreaController, returning an array of PlayerController.
- *
- * This hook will re-render any components that use it when the set of occupants changes.
- */
-export function useCrosswordPuzzleAreaOccupants(
-  area: CrosswordPuzzleAreaController,
-): PlayerController[] {
-  const [occupants, setOccupants] = useState(area.occupants);
-  useEffect(() => {
-    area.addListener('occupantsChange', setOccupants);
-    return () => {
-      area.removeListener('occupantsChange', setOccupants);
-    };
-  }, [area]);
-  return occupants;
-}
-
-/**
- * A react hook to retrieve the puzzle of a CrosswordPuzzleAreaController.
- *
- * This hook will re-render any components that use it when the set of puzzle changes.
- */
-export function useCrosswordPuzzleModel(
-  area: CrosswordPuzzleAreaController,
-): CrosswordPuzzleModel | undefined {
-  const [puzzle, setPuzzle] = useState<CrosswordPuzzleModel | undefined>(area.puzzle);
-  useEffect(() => {
-    area.addListener('puzzleChange', setPuzzle);
-    return () => {
-      area.removeListener('puzzleChange', setPuzzle);
-    };
-  }, [area]);
-  return puzzle;
 }

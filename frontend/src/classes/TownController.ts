@@ -588,7 +588,6 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
         this._conversationAreas = [];
         this._viewingAreas = [];
         this._crosswordPuzzleAreas = [];
-        console.log(initialData.interactables);
         initialData.interactables.forEach(eachInteractable => {
           if (isConversationArea(eachInteractable)) {
             this._conversationAreasInternal.push(
@@ -782,10 +781,6 @@ export function useCrosswordAreaPuzzleController(
 ): CrosswordPuzzleAreaController {
   const townController = useTownController();
 
-  console.log(
-    townController.crosswordPuzzleAreas.map(area => area.id),
-    crosswordPuzzleAreaID,
-  );
   const crosswordPuzzleArea = townController.crosswordPuzzleAreas.find(
     eachArea => eachArea.id == crosswordPuzzleAreaID,
   );
