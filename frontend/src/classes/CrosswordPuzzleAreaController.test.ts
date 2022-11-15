@@ -8,8 +8,129 @@ import PlayerController from './PlayerController';
 
 describe('CrosswordPuzzleArea', () => {
   let testArea: CrosswordPuzzleAreaController;
-  let testPuzzle: CrosswordPuzzleModel;
   const mockListeners = mock<CrosswordPuzzleAreaEvents>();
+  const testPuzzle: CrosswordPuzzleModel = {
+    grid: [
+      [
+        { value: '', solution: '.', isCircled: false, isShaded: false },
+        { value: '', solution: '.', isCircled: false, isShaded: false },
+        { value: '', solution: 'M', isCircled: false, isShaded: false },
+        { value: '', solution: 'C', isCircled: false, isShaded: false },
+        { value: '', solution: 'S', isCircled: false, isShaded: false },
+      ],
+      [
+        { value: '', solution: '.', isCircled: false, isShaded: false },
+        { value: '', solution: 'Y', isCircled: false, isShaded: false },
+        { value: '', solution: 'A', isCircled: false, isShaded: false },
+        { value: '', solution: 'L', isCircled: false, isShaded: false },
+        { value: '', solution: 'L', isCircled: false, isShaded: false },
+      ],
+      [
+        { value: '', solution: 'T', isCircled: false, isShaded: false },
+        { value: '', solution: 'O', isCircled: false, isShaded: false },
+        { value: '', solution: 'D', isCircled: false, isShaded: false },
+        { value: '', solution: 'A', isCircled: false, isShaded: false },
+        { value: '', solution: 'Y', isCircled: false, isShaded: false },
+      ],
+      [
+        { value: '', solution: 'A', isCircled: false, isShaded: false },
+        { value: '', solution: 'D', isCircled: false, isShaded: false },
+        { value: '', solution: 'A', isCircled: false, isShaded: false },
+        { value: '', solution: 'M', isCircled: false, isShaded: false },
+        { value: '', solution: '.', isCircled: false, isShaded: false },
+      ],
+      [
+        { value: '', solution: 'D', isCircled: false, isShaded: false },
+        { value: '', solution: 'A', isCircled: false, isShaded: false },
+        { value: '', solution: 'M', isCircled: false, isShaded: false },
+        { value: '', solution: '.', isCircled: false, isShaded: false },
+        { value: '', solution: '.', isCircled: false, isShaded: false },
+      ],
+    ],
+    info: {
+      type: 'Mini',
+      title: 'NYT Mini Test',
+      author: 'Some Editor',
+      description: 'Words in boxes',
+    },
+    clues: {
+      across: [
+        'Show hosts, for short',
+        '"You people," more informally',
+        'Morning news show since 1952',
+        'Conover of comedy',
+        'Resevoir Structure',
+      ],
+      down: [
+        '_____ Vice President, title for Kamala Harris',
+        'Any animal in the class Bivalvia',
+        'Like a knowning wink',
+        'Oldest member of the Jedi Council',
+        'Tiny bit',
+      ],
+    },
+  };
+  const testPuzzleAfterOneWord: CrosswordPuzzleModel = {
+    grid: [
+      [
+        { value: '', solution: '.', isCircled: false, isShaded: false },
+        { value: '', solution: '.', isCircled: false, isShaded: false },
+        { value: 'M', solution: 'M', isCircled: false, isShaded: false },
+        { value: '', solution: 'C', isCircled: false, isShaded: false },
+        { value: '', solution: 'S', isCircled: false, isShaded: false },
+      ],
+      [
+        { value: '', solution: '.', isCircled: false, isShaded: false },
+        { value: '', solution: 'Y', isCircled: false, isShaded: false },
+        { value: 'A', solution: 'A', isCircled: false, isShaded: false },
+        { value: '', solution: 'L', isCircled: false, isShaded: false },
+        { value: '', solution: 'L', isCircled: false, isShaded: false },
+      ],
+      [
+        { value: '', solution: 'T', isCircled: false, isShaded: false },
+        { value: '', solution: 'O', isCircled: false, isShaded: false },
+        { value: 'D', solution: 'D', isCircled: false, isShaded: false },
+        { value: '', solution: 'A', isCircled: false, isShaded: false },
+        { value: '', solution: 'Y', isCircled: false, isShaded: false },
+      ],
+      [
+        { value: '', solution: 'A', isCircled: false, isShaded: false },
+        { value: '', solution: 'D', isCircled: false, isShaded: false },
+        { value: 'A', solution: 'A', isCircled: false, isShaded: false },
+        { value: '', solution: 'M', isCircled: false, isShaded: false },
+        { value: '', solution: '.', isCircled: false, isShaded: false },
+      ],
+      [
+        { value: '', solution: 'D', isCircled: false, isShaded: false },
+        { value: '', solution: 'A', isCircled: false, isShaded: false },
+        { value: 'M', solution: 'M', isCircled: false, isShaded: false },
+        { value: '', solution: '.', isCircled: false, isShaded: false },
+        { value: '', solution: '.', isCircled: false, isShaded: false },
+      ],
+    ],
+    info: {
+      type: 'Mini',
+      title: 'NYT Mini Test',
+      author: 'Some Editor',
+      description: 'Words in boxes',
+    },
+    clues: {
+      across: [
+        'Show hosts, for short',
+        '"You people," more informally',
+        'Morning news show since 1952',
+        'Conover of comedy',
+        'Resevoir Structure',
+      ],
+      down: [
+        '_____ Vice President, title for Kamala Harris',
+        'Any animal in the class Bivalvia',
+        'Like a knowning wink',
+        'Oldest member of the Jedi Council',
+        'Tiny bit',
+      ],
+    },
+  };
 
   beforeEach(() => {
     const playerLocation: PlayerLocation = {
@@ -17,67 +138,6 @@ describe('CrosswordPuzzleArea', () => {
       x: 0,
       y: 0,
       rotation: 'front',
-    };
-    testPuzzle = {
-      grid: [
-        [
-          { value: '', solution: '.', isCircled: false, isShaded: false },
-          { value: '', solution: '.', isCircled: false, isShaded: false },
-          { value: '', solution: 'M', isCircled: false, isShaded: false },
-          { value: '', solution: 'C', isCircled: false, isShaded: false },
-          { value: '', solution: 'S', isCircled: false, isShaded: false },
-        ],
-        [
-          { value: '', solution: '.', isCircled: false, isShaded: false },
-          { value: '', solution: 'Y', isCircled: false, isShaded: false },
-          { value: '', solution: 'A', isCircled: false, isShaded: false },
-          { value: '', solution: 'L', isCircled: false, isShaded: false },
-          { value: '', solution: 'L', isCircled: false, isShaded: false },
-        ],
-        [
-          { value: '', solution: 'T', isCircled: false, isShaded: false },
-          { value: '', solution: 'O', isCircled: false, isShaded: false },
-          { value: '', solution: 'D', isCircled: false, isShaded: false },
-          { value: '', solution: 'A', isCircled: false, isShaded: false },
-          { value: '', solution: 'Y', isCircled: false, isShaded: false },
-        ],
-        [
-          { value: '', solution: 'A', isCircled: false, isShaded: false },
-          { value: '', solution: 'D', isCircled: false, isShaded: false },
-          { value: '', solution: 'A', isCircled: false, isShaded: false },
-          { value: '', solution: 'M', isCircled: false, isShaded: false },
-          { value: '', solution: '.', isCircled: false, isShaded: false },
-        ],
-        [
-          { value: '', solution: 'D', isCircled: false, isShaded: false },
-          { value: '', solution: 'A', isCircled: false, isShaded: false },
-          { value: '', solution: 'M', isCircled: false, isShaded: false },
-          { value: '', solution: '.', isCircled: false, isShaded: false },
-          { value: '', solution: '.', isCircled: false, isShaded: false },
-        ],
-      ],
-      info: {
-        type: 'Mini',
-        title: 'NYT Mini Test',
-        author: 'Some Editor',
-        description: 'Words in boxes',
-      },
-      clues: {
-        across: [
-          'Show hosts, for short',
-          '"You people," more informally',
-          'Morning news show since 1952',
-          'Conover of comedy',
-          'Resevoir Structure',
-        ],
-        down: [
-          '_____ Vice President, title for Kamala Harris',
-          'Any animal in the class Bivalvia',
-          'Like a knowning wink',
-          'Oldest member of the Jedi Council',
-          'Tiny bit',
-        ],
-      },
     };
     testArea = new CrosswordPuzzleAreaController(nanoid(), false, testPuzzle, undefined);
     testArea.occupants = [
@@ -132,70 +192,9 @@ describe('CrosswordPuzzleArea', () => {
       expect(mockListeners.puzzleChange).not.toBeCalled();
     });
     it('emits the puzzleChange event when setting the puzzle and updates the model', () => {
-      const newPuzzle = {
-        grid: [
-          [
-            { value: '', solution: '.', isCircled: false, isShaded: false },
-            { value: '', solution: '.', isCircled: false, isShaded: false },
-            { value: 'M', solution: 'M', isCircled: false, isShaded: false },
-            { value: '', solution: 'C', isCircled: false, isShaded: false },
-            { value: '', solution: 'S', isCircled: false, isShaded: false },
-          ],
-          [
-            { value: '', solution: '.', isCircled: false, isShaded: false },
-            { value: '', solution: 'Y', isCircled: false, isShaded: false },
-            { value: 'A', solution: 'A', isCircled: false, isShaded: false },
-            { value: '', solution: 'L', isCircled: false, isShaded: false },
-            { value: '', solution: 'L', isCircled: false, isShaded: false },
-          ],
-          [
-            { value: '', solution: 'T', isCircled: false, isShaded: false },
-            { value: '', solution: 'O', isCircled: false, isShaded: false },
-            { value: 'D', solution: 'D', isCircled: false, isShaded: false },
-            { value: '', solution: 'A', isCircled: false, isShaded: false },
-            { value: '', solution: 'Y', isCircled: false, isShaded: false },
-          ],
-          [
-            { value: '', solution: 'A', isCircled: false, isShaded: false },
-            { value: '', solution: 'D', isCircled: false, isShaded: false },
-            { value: 'A', solution: 'A', isCircled: false, isShaded: false },
-            { value: '', solution: 'M', isCircled: false, isShaded: false },
-            { value: '', solution: '.', isCircled: false, isShaded: false },
-          ],
-          [
-            { value: '', solution: 'D', isCircled: false, isShaded: false },
-            { value: '', solution: 'A', isCircled: false, isShaded: false },
-            { value: 'M', solution: 'M', isCircled: false, isShaded: false },
-            { value: '', solution: '.', isCircled: false, isShaded: false },
-            { value: '', solution: '.', isCircled: false, isShaded: false },
-          ],
-        ],
-        info: {
-          type: 'Mini',
-          title: 'NYT Mini Test',
-          author: 'Some Editor',
-          description: 'Words in boxes',
-        },
-        clues: {
-          across: [
-            'Show hosts, for short',
-            '"You people," more informally',
-            'Morning news show since 1952',
-            'Conover of comedy',
-            'Resevoir Structure',
-          ],
-          down: [
-            '_____ Vice President, title for Kamala Harris',
-            'Any animal in the class Bivalvia',
-            'Like a knowning wink',
-            'Oldest member of the Jedi Council',
-            'Tiny bit',
-          ],
-        },
-      };
-      testArea.puzzle = newPuzzle;
-      expect(testArea.puzzle).toEqual(newPuzzle);
-      expect(mockListeners.puzzleChange).toBeCalledWith(newPuzzle);
+      testArea.puzzle = testPuzzleAfterOneWord;
+      expect(testArea.puzzle).toEqual(testPuzzleAfterOneWord);
+      expect(mockListeners.puzzleChange).toBeCalledWith(testPuzzleAfterOneWord);
       expect(testArea.toCrosswordPuzzleAreaModel()).toEqual({
         id: testArea.id,
         isGameOver: testArea.isGameOver,
@@ -205,7 +204,18 @@ describe('CrosswordPuzzleArea', () => {
       });
     });
     it('emits the puzzleChange event and resets the puzzle if the new puzzle is undefined', () => {
-      // TODO - mock and return base puzzle if undefined
+      const setPuzzleMock = jest.spyOn(
+        CrosswordPuzzleAreaController.prototype as any,
+        '_setPuzzleModel',
+      );
+      setPuzzleMock.mockImplementation(() => (testArea.puzzle = testPuzzle));
+
+      testArea.puzzle = testPuzzleAfterOneWord;
+      expect(testArea.puzzle).toEqual(testPuzzleAfterOneWord);
+
+      testArea.puzzle = undefined;
+      expect(setPuzzleMock).toHaveBeenCalled();
+      expect(testArea.puzzle).toEqual(testPuzzle);
     });
   });
   describe('setting the isGameOver property', () => {
