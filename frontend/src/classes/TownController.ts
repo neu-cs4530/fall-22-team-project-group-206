@@ -20,7 +20,7 @@ import {
 } from '../types/CoveyTownSocket';
 import { isConversationArea, isCrosswordPuzzleArea, isViewingArea } from '../types/TypeUtils';
 import ConversationAreaController from './ConversationAreaController';
-import CrosswordPuzzleAreaController from './CrosswordAreaController';
+import CrosswordPuzzleAreaController from './CrosswordPuzzleAreaController';
 import PlayerController from './PlayerController';
 import ViewingAreaController from './ViewingAreaController';
 
@@ -453,7 +453,7 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
         if (updatedCrosswordArea) {
           const emptyNow = updatedCrosswordArea.isEmpty();
           if (emptyNow) {
-            updatedCrosswordArea.setPuzzleModel();
+            updatedCrosswordArea.puzzle = undefined;
           } else {
             updatedCrosswordArea.puzzle = interactable.puzzle;
             updatedCrosswordArea.occupants = this._playersByIDs(interactable.occupantsByID);

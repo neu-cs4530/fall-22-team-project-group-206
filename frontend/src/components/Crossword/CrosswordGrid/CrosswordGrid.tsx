@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import CrosswordPuzzleAreaController from '../../../classes/CrosswordAreaController';
+import CrosswordPuzzleAreaController from '../../../classes/CrosswordPuzzleAreaController';
 import { CrosswordPuzzleCell } from '../../../types/CoveyTownSocket';
 import CrosswordCell from './CrosswordCell/CrosswordCell';
 
