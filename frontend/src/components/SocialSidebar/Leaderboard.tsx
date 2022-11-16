@@ -15,7 +15,7 @@ import LeaderboardModel from './LeaderboardModel';
  * List the scores for the player
  */
 export default function Leaderboard(): JSX.Element {
-  //dummy data will be removed once leaderboard api is all set
+  //TODO: dummy data will be removed once leaderboard api is all set
   const score1: ScoreModel = {
     teamName: 'short name',
     date: '1.1',
