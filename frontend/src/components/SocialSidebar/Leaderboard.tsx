@@ -57,7 +57,8 @@ export default function Leaderboard(): JSX.Element {
       backgroundColor='gray.100'
       borderRadius={10}
       margin='4px'
-      padding='8px'>
+      padding='8px'
+      maxWidth='300px'>
       <Grid templateColumns='repeat(5, 1fr)' gap={6}>
         <GridItem colSpan={1} h='5' width='100%'>
           {leaderboardExample.indexOf(score) + 1}
