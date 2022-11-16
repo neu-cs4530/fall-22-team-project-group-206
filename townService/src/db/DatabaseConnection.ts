@@ -11,8 +11,6 @@ export default async function createConnection() {
   }
 
   try {
-    console.log('111');
-    console.log(uri);
     await mongoose.connect(uri);
   } catch (e) {
     if (e instanceof Error) {

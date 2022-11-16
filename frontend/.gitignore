@@ -2,5 +2,3 @@ src/generated
 .env
 # stryker temp files
 .stryker-tmp
-
-.env
