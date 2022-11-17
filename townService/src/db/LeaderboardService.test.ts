@@ -1,5 +1,5 @@
 import { addScore, removeScore, findScore, updateScore, getScores } from './LeaderboardDAO';
-import score from './ScoreModel';
+import Score from './ScoreModel';
 import { IScore } from './IScore';
 import {
   getLeaders,
@@ -9,7 +9,6 @@ import {
   findScoreByID,
 } from './LeaderboardService';
 import { ScoreModel } from '../types/CoveyTownSocket';
-import { AddressConfigurationResource } from 'twilio/lib/rest/conversations/v1/addressConfiguration';
 
 jest.mock('./LeaderboardDAO', () => {
   const original = jest.requireActual('./LeaderboardDAO');
@@ -43,9 +42,9 @@ const testScoreModelBest: ScoreModel = {
   usedHint: false,
 };
 
-const testLeaderboard: ScoreModel[] = [testScoreModel, testScoreModel2, testScoreModelBest];
+const TestLeaderboard: ScoreModel[] = [testScoreModel, testScoreModel2, testScoreModelBest];
 
-const testScore: IScore = new score(testScoreModel);
+const testScore: IScore = new Score(testScoreModel);
 const addFunc: any = addScore as jest.Mock;
 const getScoresFunc: any = getScores as jest.Mock;
 const removeFunc: any = removeScore as jest.Mock;
@@ -76,7 +75,7 @@ describe('LeaderboardService', () => {
 
   describe('getLeaders', () => {
     it('calls getScores and sorts list', async () => {
-      getScoresFunc.mockImplementation(() => testLeaderboard);
+      getScoresFunc.mockImplementation(() => TestLeaderboard);
       const leaderboard = await getLeaders(3);
       expect(getScores).toBeCalledTimes(1);
       expect(leaderboard.length).toEqual(3);
@@ -99,14 +98,14 @@ describe('LeaderboardService', () => {
     });
 
     it('calls getScores and only returns the alloted number', async () => {
-      getScoresFunc.mockImplementation(() => testLeaderboard);
+      getScoresFunc.mockImplementation(() => TestLeaderboard);
       const leaderboard = await getLeaders(1);
       expect(getScores).toBeCalledTimes(1);
       expect(leaderboard.length).toEqual(1);
       expect(leaderboard[0].teamName).toEqual(testScoreModelBest.teamName);
     });
     it('calls getScores and returns all available if there are not enough scores', async () => {
-      getScoresFunc.mockImplementation(() => testLeaderboard);
+      getScoresFunc.mockImplementation(() => TestLeaderboard);
       const leaderboard = await getLeaders(10);
       expect(getScores).toBeCalledTimes(1);
       expect(leaderboard.length).toEqual(3);
