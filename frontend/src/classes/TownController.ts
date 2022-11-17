@@ -451,6 +451,7 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
           eachArea => eachArea.id === interactable.id,
         );
         if (updatedCrosswordArea) {
+          console.log('Updating...', updatedCrosswordArea);
           const emptyNow = updatedCrosswordArea.isEmpty();
           if (emptyNow) {
             updatedCrosswordArea.puzzle = undefined;

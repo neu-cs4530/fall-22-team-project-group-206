@@ -1,21 +1,31 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CrosswordPuzzleAreaController from '../../../classes/CrosswordPuzzleAreaController';
-import { CrosswordPuzzleCell } from '../../../types/CoveyTownSocket';
+import useTownController from '../../../hooks/useTownController';
+import { CrosswordPuzzleCell, CrosswordPuzzleModel } from '../../../types/CoveyTownSocket';
 import CrosswordCell from './CrosswordCell/CrosswordCell';
 
 type CellIndex = { row: number; col: number };
 
 function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaController }): JSX.Element {
-  const [grid, setGrid] = useState<CrosswordPuzzleCell[][] | undefined>(controller.puzzle?.grid);
+  const townController = useTownController();
+  const [puzzle, setPuzzle] = useState<CrosswordPuzzleModel | undefined>(controller.puzzle);
   const [selected, setSelected] = useState<CellIndex>({ row: 0, col: 0 });
   const [direction, setDirection] = useState<'across' | 'down'>('across');
   const isSelected = (cell: CellIndex): boolean => {
     return selected.row === cell.row && selected.col === cell.col;
   };
 
-  if (grid) {
+  useEffect(() => {
+    controller.addListener('puzzleChange', setPuzzle);
+
+    return () => {
+      controller.removeListener('puzzleChange', setPuzzle);
+    };
+  }, [controller]);
+
+  if (puzzle) {
     const handleCellChange = (rowIndex: number, columnIndex: number, newValue: string) => {
-      const updatedGrid: CrosswordPuzzleCell[][] = grid.map((row, i) => {
+      const updatedGrid: CrosswordPuzzleCell[][] = puzzle.grid.map((row, i) => {
         return row.map((cell, j) => {
           if (i === rowIndex && j === columnIndex) {
             return {
@@ -30,7 +40,8 @@ function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaControll
         });
       });
 
-      setGrid(updatedGrid);
+      controller.puzzle = { grid: updatedGrid, info: puzzle.info, clues: puzzle.clues };
+      townController.emitCrosswordPuzzleAreaUpdate(controller);
     };
 
     const handleCellClick = (rowIndex: number, columnIndex: number) => {
@@ -41,7 +52,7 @@ function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaControll
       setSelected({ row: rowIndex, col: columnIndex });
     };
 
-    const rows = grid.map((row, i) => {
+    const rows = puzzle.grid.map((row, i) => {
       const cells = row.map((cell, j) => {
         return (
           <CrosswordCell
