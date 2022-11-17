@@ -1,4 +1,4 @@
-import express, { Express, request } from 'express';
+import express, { Express } from 'express';
 import { Server as SocketServer } from 'socket.io';
 import { Server } from 'http';
 import { IScore } from './IScore';
@@ -7,7 +7,6 @@ import {
   insertScore,
   removeScoreFromLeaderboard,
   updateScoreValue,
-  getAllScores,
 } from './LeaderboardService';
 import { ScoreCreateResponse, ScoreDeleteResponse, ScoreFindResponse } from './Types';
 import { ScoreModel } from '../types/CoveyTownSocket';
