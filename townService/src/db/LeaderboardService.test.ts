@@ -9,6 +9,7 @@ import {
   findScoreByID,
 } from './LeaderboardService';
 import { ScoreModel } from '../types/CoveyTownSocket';
+import { AddressConfigurationResource } from 'twilio/lib/rest/conversations/v1/addressConfiguration';
 
 
 jest.mock("./LeaderboardDAO", () => {
@@ -49,7 +50,7 @@ const testLeaderboard : ScoreModel[] = [
 
 
 const testScore: IScore = new score(testScoreModel)
-const addFunc: any = addScore as jest.Mock
+const addFunc: any = addScore as jest.Mock;
 const getScoresFunc: any = getScores as jest.Mock;
 const removeFunc: any = removeScore as jest.Mock;
 const findFunc: any = findScore as jest.Mock;
