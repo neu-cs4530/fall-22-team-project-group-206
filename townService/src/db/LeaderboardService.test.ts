@@ -42,7 +42,7 @@ const testScoreModelBest: ScoreModel = {
   usedHint: false,
 };
 
-const TestLeaderboard: ScoreModel[] = [testScoreModel, testScoreModel2, testScoreModelBest];
+const leaderboard: ScoreModel[] = [testScoreModel, testScoreModel2, testScoreModelBest];
 
 const testScore: IScore = new Score(testScoreModel);
 const addFunc: any = addScore as jest.Mock;
@@ -75,7 +75,7 @@ describe('LeaderboardService', () => {
 
   describe('getLeaders', () => {
     it('calls getScores and sorts list', async () => {
-      getScoresFunc.mockImplementation(() => TestLeaderboard);
+      getScoresFunc.mockImplementation(() => leaderboard);
       const leaderboard = await getLeaders(3);
       expect(getScores).toBeCalledTimes(1);
       expect(leaderboard.length).toEqual(3);
@@ -98,14 +98,14 @@ describe('LeaderboardService', () => {
     });
 
     it('calls getScores and only returns the alloted number', async () => {
-      getScoresFunc.mockImplementation(() => TestLeaderboard);
+      getScoresFunc.mockImplementation(() => leaderboard);
       const leaderboard = await getLeaders(1);
       expect(getScores).toBeCalledTimes(1);
       expect(leaderboard.length).toEqual(1);
       expect(leaderboard[0].teamName).toEqual(testScoreModelBest.teamName);
     });
     it('calls getScores and returns all available if there are not enough scores', async () => {
-      getScoresFunc.mockImplementation(() => TestLeaderboard);
+      getScoresFunc.mockImplementation(() => leaderboard);
       const leaderboard = await getLeaders(10);
       expect(getScores).toBeCalledTimes(1);
       expect(leaderboard.length).toEqual(3);
