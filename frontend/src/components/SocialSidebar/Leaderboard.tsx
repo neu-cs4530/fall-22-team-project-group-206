@@ -18,27 +18,21 @@ export default function Leaderboard(): JSX.Element {
   //TODO: dummy data will be removed once leaderboard api is all set
   const score1: ScoreModel = {
     teamName: 'short name',
-    date: '1.1',
     score: 100,
     teamMembers: ['very long member name', 'very long member name'],
     usedHint: true,
-    completed: true,
   };
   const score2: ScoreModel = {
     teamName: 'long team name',
-    date: '1.2',
     score: 10,
     teamMembers: ['sn1', 'sn2'],
     usedHint: false,
-    completed: true,
   };
   const score3: ScoreModel = {
     teamName: 'very very very long team name',
-    date: '1.3',
     score: 2,
     teamMembers: ['long name', 'long name1', 'long name2', 'long name3'],
     usedHint: true,
-    completed: true,
   };
 
   const leaderboardExample: ScoreModel[] = [score1, score2, score3];

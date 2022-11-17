@@ -128,11 +128,9 @@ export interface CrosswordPosition {
 //score representation
 export interface ScoreModel {
   teamName: string;
-  date?: string;
   score: number;
   teamMembers: string[];
   usedHint?: boolean;
-  completed?: boolean;
 }
 
 export interface ServerToClientEvents {
