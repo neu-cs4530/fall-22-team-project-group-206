@@ -1,10 +1,15 @@
-import { ConversationArea, Interactable, ViewingArea } from './CoveyTownSocket';
+import {
+  ConversationArea,
+  Interactable,
+  ViewingArea,
+  CrosswordPuzzleArea,
+} from './CoveyTownSocket';
 
 /**
  * Test to see if an interactable is a conversation area
  */
 export function isConversationArea(interactable: Interactable): interactable is ConversationArea {
-  return 'occupantsByID' in interactable;
+  return 'occupantsByID' in interactable && !('isGameOver' in interactable);
 }
 
 /**
@@ -12,4 +17,10 @@ export function isConversationArea(interactable: Interactable): interactable is 
  */
 export function isViewingArea(interactable: Interactable): interactable is ViewingArea {
   return 'isPlaying' in interactable;
+}
+
+export function isCrosswordPuzzleArea(
+  interactable: Interactable,
+): interactable is CrosswordPuzzleArea {
+  return 'isGameOver' in interactable;
 }

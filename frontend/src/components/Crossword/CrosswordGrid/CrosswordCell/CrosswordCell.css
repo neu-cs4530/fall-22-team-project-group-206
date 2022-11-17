@@ -1,5 +1,5 @@
 td {
-  border: 1px solid #08133e;
+  border: 1px solid #8692c4;
   width: 25px;
   height: 25px;
 }
@@ -15,15 +15,19 @@ input {
   background-color: #08133e;
 }
 
+.circled input {
+  border: 1px solid #08133e;
+  border-radius: 50%;
+}
+
+.shaded {
+  background-color: #b5bee4ae;
+}
+
 .selected {
   background-color: #bec7e7;
 }
 
 .selected input {
   background-color: #bec7e7;
-}
-
-.circled input {
-  border: 1px solid #08133e;
-  border-radius: 50%;
 }

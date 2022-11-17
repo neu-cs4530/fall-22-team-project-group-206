@@ -86,8 +86,7 @@ export interface CrosswordExternalModel {
   info: CrosswordPuzzleInfo;
   clues: CrosswordPuzzleClues;
   shades: number[];
-  circle: number[];
-  private: boolean;
+  circles: number[];
 }
 
 //The model used to fit in CrosswordPuzzleArea
