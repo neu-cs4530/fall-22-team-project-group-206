@@ -36,11 +36,12 @@ export default function LeaderboardModel(props: {
             <GridItem colSpan={2} rowSpan={1}>
               Date: {props.scoreModel.date}
             </GridItem>
+            {/* TODO if complete is needed here*/}
             <GridItem colSpan={2} rowSpan={1}>
               <Checkbox isChecked={props.scoreModel.completed}>Complete</Checkbox>
             </GridItem>
             <GridItem colSpan={2} rowSpan={1}>
-              <Checkbox isChecked={props.scoreModel.usedHint}>Hint Use</Checkbox>
+              <Checkbox isChecked={props.scoreModel.usedHint}>Used Hint</Checkbox>
             </GridItem>
           </Grid>
         </ModalBody>

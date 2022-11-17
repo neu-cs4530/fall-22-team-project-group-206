@@ -50,7 +50,7 @@ export default function Leaderboard(): JSX.Element {
     onOpen();
   };
 
-  const orderedList = leaderboardExample.map(score => (
+  const orderedListView = leaderboardExample.map(score => (
     <ListItem
       key={score.teamName}
       onClick={() => openDialog(leaderboardExample.indexOf(score))}
@@ -97,7 +97,7 @@ export default function Leaderboard(): JSX.Element {
           </GridItem>
         </Grid>
       </div>
-      <OrderedList margin='3px'>{orderedList}</OrderedList>
+      <OrderedList margin='3px'>{orderedListView}</OrderedList>
       <LeaderboardModel
         scoreModel={leaderboardExample[detailIndex]}
         open={isOpen}
