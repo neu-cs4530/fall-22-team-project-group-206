@@ -56,7 +56,7 @@ export interface ConversationArea {
   occupantsByID: string[];
 }
 
-//CrosswordPuzzleArea model to represent a crosswordPuzzle area
+// CrosswordPuzzleArea model to represent a crosswordPuzzle area
 export interface CrosswordPuzzleArea {
   id: string;
   groupName?: string;
@@ -80,7 +80,7 @@ export interface ViewingArea {
   elapsedTimeSec: number;
 }
 
-//The model to represent crosswordPuzzle response get from external api
+// The model to represent crosswordPuzzle response get from external api
 export interface CrosswordExternalModel {
   grid: string[][];
   info: CrosswordPuzzleInfo;
@@ -90,14 +90,14 @@ export interface CrosswordExternalModel {
   private: boolean;
 }
 
-//The model used to fit in CrosswordPuzzleArea
+// The model used to fit in CrosswordPuzzleArea
 export interface CrosswordPuzzleModel {
   grid: CrosswordPuzzleCell[][];
   info: CrosswordPuzzleInfo;
   clues: CrosswordPuzzleClues;
 }
 
-//represent a single cell in the CrosswordPuzzle grid
+// represent a single cell in the CrosswordPuzzle grid
 export interface CrosswordPuzzleCell {
   isCircled: boolean; // if the cell is circled
   isShaded: boolean; // if the cell is shaded
@@ -105,7 +105,7 @@ export interface CrosswordPuzzleCell {
   solution: string; // the corrent solution for this cell
 }
 
-//Info type in CrosswordPuzzleModel
+// Info type in CrosswordPuzzleModel
 export interface CrosswordPuzzleInfo {
   type: string;
   title: string;
@@ -113,19 +113,19 @@ export interface CrosswordPuzzleInfo {
   description: string;
 }
 
-//clue type in CrosswordPuzzleModel
+// clue type in CrosswordPuzzleModel
 export interface CrosswordPuzzleClues {
   down: string[];
   across: string[];
 }
 
-//crossword Puzzle's position representation
+// crossword Puzzle's position representation
 export interface CrosswordPosition {
-  row: number; //row index
+  row: number; // row index
   col: number; // col index
 }
 
-//score representation
+// score representation
 export interface ScoreModel {
   teamName: string;
   date?: string;

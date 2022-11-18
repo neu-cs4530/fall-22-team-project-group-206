@@ -6,7 +6,7 @@ import { addScore, removeScore, findScore, updateScore, getScores } from './Lead
 /**
  * gets the top number amount of scores. If there are less scores than the inputted number, all scores are returned.
  * @param numResults
- * @returns
+ * @returns The sorted leaderboard
  */
 export async function getLeaders(numResults: number): Promise<IScore[]> {
   let scores: IScore[] | undefined | null = await getScores();
@@ -22,6 +22,11 @@ export async function getLeaders(numResults: number): Promise<IScore[]> {
   return retScores;
 }
 
+/**
+ * Inserts the provided score into the leaderboard
+ * @param newScore the score being inserted
+ * @returns The score that was inserted
+ */
 export async function insertScore(newScore: ScoreModel): Promise<IScore> {
   const newScoreReal = new Score({
     teamName: newScore.teamName,
@@ -37,6 +42,11 @@ export async function insertScore(newScore: ScoreModel): Promise<IScore> {
   return createdScore;
 }
 
+/**
+ * Removes the score with the matching teamName from the database
+ * @param teamName the team name of the score that is getting removed
+ * @returns the score that was removed from the database
+ */
 export async function removeScoreFromLeaderboard(teamName: string): Promise<IScore> {
   const doc = await removeScore(teamName);
   if (doc === undefined || doc === null) {
@@ -45,6 +55,11 @@ export async function removeScoreFromLeaderboard(teamName: string): Promise<ISco
   return doc as IScore;
 }
 
+/**
+ * Finds a score based on the team name provided
+ * @param teamName the team name of the score being retrieved
+ * @returns the score with the matching team name
+ */
 export async function findScoreByID(teamName: string): Promise<IScore> {
   const scoreFound = await findScore(teamName);
   if (scoreFound === undefined || scoreFound === null) {
@@ -53,6 +68,11 @@ export async function findScoreByID(teamName: string): Promise<IScore> {
   return scoreFound as IScore;
 }
 
+/**
+ * Updates the score with the matching team name in the leaderboard
+ * @param newScore the new score
+ * @returns The old score that was updated.
+ */
 export async function updateScoreValue(newScore: ScoreModel): Promise<IScore> {
   const newScoreDoc = new Score({
     teamName: newScore.teamName,

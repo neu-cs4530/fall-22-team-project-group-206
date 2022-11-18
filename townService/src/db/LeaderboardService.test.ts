@@ -42,7 +42,7 @@ const testScoreModelBest: ScoreModel = {
   usedHint: false,
 };
 
-const leaderboard: ScoreModel[] = [testScoreModel, testScoreModel2, testScoreModelBest];
+const TEST_LEADERBOARD: ScoreModel[] = [testScoreModel, testScoreModel2, testScoreModelBest];
 
 const testScore: IScore = new Score(testScoreModel);
 const addFunc: any = addScore as jest.Mock;
@@ -75,13 +75,13 @@ describe('LeaderboardService', () => {
 
   describe('getLeaders', () => {
     it('calls getScores and sorts list', async () => {
-      getScoresFunc.mockImplementation(() => leaderboard);
-      const leaderboard = await getLeaders(3);
+      getScoresFunc.mockImplementation(() => TEST_LEADERBOARD);
+      const newLeaderboard = await getLeaders(3);
       expect(getScores).toBeCalledTimes(1);
-      expect(leaderboard.length).toEqual(3);
-      expect(leaderboard[0].teamName).toEqual(testScoreModelBest.teamName);
-      expect(leaderboard[1].teamName).toEqual(testScoreModel.teamName);
-      expect(leaderboard[2].teamName).toEqual(testScoreModel2.teamName);
+      expect(newLeaderboard.length).toEqual(3);
+      expect(newLeaderboard[0].teamName).toEqual(testScoreModelBest.teamName);
+      expect(newLeaderboard[1].teamName).toEqual(testScoreModel.teamName);
+      expect(newLeaderboard[2].teamName).toEqual(testScoreModel2.teamName);
     });
 
     it('throws an error when getScores returns undefined', async () => {
@@ -98,20 +98,20 @@ describe('LeaderboardService', () => {
     });
 
     it('calls getScores and only returns the alloted number', async () => {
-      getScoresFunc.mockImplementation(() => leaderboard);
-      const leaderboard = await getLeaders(1);
+      getScoresFunc.mockImplementation(() => TEST_LEADERBOARD);
+      const newLeaderboard = await getLeaders(1);
       expect(getScores).toBeCalledTimes(1);
-      expect(leaderboard.length).toEqual(1);
-      expect(leaderboard[0].teamName).toEqual(testScoreModelBest.teamName);
+      expect(newLeaderboard.length).toEqual(1);
+      expect(newLeaderboard[0].teamName).toEqual(testScoreModelBest.teamName);
     });
     it('calls getScores and returns all available if there are not enough scores', async () => {
-      getScoresFunc.mockImplementation(() => leaderboard);
-      const leaderboard = await getLeaders(10);
+      getScoresFunc.mockImplementation(() => TEST_LEADERBOARD);
+      const newLeaderboard = await getLeaders(10);
       expect(getScores).toBeCalledTimes(1);
-      expect(leaderboard.length).toEqual(3);
-      expect(leaderboard[0].teamName).toEqual(testScoreModelBest.teamName);
-      expect(leaderboard[1].teamName).toEqual(testScoreModel.teamName);
-      expect(leaderboard[2].teamName).toEqual(testScoreModel2.teamName);
+      expect(newLeaderboard.length).toEqual(3);
+      expect(newLeaderboard[0].teamName).toEqual(testScoreModelBest.teamName);
+      expect(newLeaderboard[1].teamName).toEqual(testScoreModel.teamName);
+      expect(newLeaderboard[2].teamName).toEqual(testScoreModel2.teamName);
     });
 
     it('throws an error when a value less than 1 is inputed', async () => {
