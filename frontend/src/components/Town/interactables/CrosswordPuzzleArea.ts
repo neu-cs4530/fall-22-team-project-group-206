@@ -1,4 +1,3 @@
-import TownController from '../../../classes/TownController';
 import Interactable, { KnownInteractableTypes } from '../Interactable';
 import TownGameScene from '../TownGameScene';
 
@@ -7,11 +6,8 @@ export default class CrosswordPuzzleArea extends Interactable {
 
   private _isInteracting = false;
 
-  private _townController: TownController;
-
   constructor(scene: TownGameScene) {
     super(scene);
-    this._townController = scene.coveyTownController;
     this.setTintFill();
     this.setAlpha(0.3);
   }
@@ -31,6 +27,8 @@ export default class CrosswordPuzzleArea extends Interactable {
       { color: '#FFFFFF', backgroundColor: '#000000' },
     );
     this._labelText.setVisible(false);
+    this.townController.getCrosswordPuzzleAreaController(this);
+    this.setDepth(-1);
   }
 
   overlap(): void {
@@ -54,7 +52,6 @@ export default class CrosswordPuzzleArea extends Interactable {
   interact(): void {
     this._labelText?.setVisible(false);
     this._isInteracting = true;
-    // TODO: add link to Modal
   }
 
   getType(): KnownInteractableTypes {
