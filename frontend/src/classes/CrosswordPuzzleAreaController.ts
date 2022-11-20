@@ -99,8 +99,7 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
         this._puzzle = newPuzzle;
       } else {
         this._setPuzzleModel();
-        this._isGameOver = false;
-        this.emit('gameOverChange', false);
+        this.isGameOver = false;
       }
     }
   }

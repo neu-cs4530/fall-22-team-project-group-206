@@ -6,7 +6,7 @@ import CrosswordCell from './CrosswordCell/CrosswordCell';
 import { useToast } from '@chakra-ui/react';
 
 type CellIndex = { row: number; col: number };
-
+const OMIT = '.';
 function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaController }): JSX.Element {
   const townController = useTownController();
   const [puzzle, setPuzzle] = useState<CrosswordPuzzleModel | undefined>(controller.puzzle);
@@ -20,7 +20,7 @@ function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaControll
   const isCompleted = (grid: CrosswordPuzzleCell[][]) => {
     for (let row = 0; row < grid.length; row++) {
       for (let col = 0; col < grid[0].length; col++) {
-        if (grid[row][col].value !== grid[row][col].solution && grid[row][col].solution !== '.') {
+        if (grid[row][col].value !== grid[row][col].solution && grid[row][col].solution !== OMIT) {
           return false;
         }
       }
