@@ -148,6 +148,9 @@ describe('CrosswordPuzzleArea', () => {
 
     mockClear(mockListeners.occupantsChange);
     mockClear(mockListeners.puzzleChange);
+    mockClear(mockListeners.gameOverChange);
+    testArea.addListener('gameOverChange', mockListeners.gameOverChange);
+
     testArea.addListener('occupantsChange', mockListeners.occupantsChange);
     testArea.addListener('puzzleChange', mockListeners.puzzleChange);
   });
@@ -222,7 +225,16 @@ describe('CrosswordPuzzleArea', () => {
     });
   });
   describe('setting the isGameOver property', () => {
-    // TODO - add when isGameOver event is complete (Shuhang)
+    it('does not emit isGameOver event if the game is not finished or reset', () => {
+      testArea.isGameOver = false;
+      expect(testArea.isGameOver).toEqual(false);
+      expect(mockListeners.gameOverChange).not.toBeCalled();
+    });
+    it('emit isGameOver event if the game is finished', () => {
+      testArea.isGameOver = true;
+      expect(testArea.isGameOver).toEqual(true);
+      expect(mockListeners.gameOverChange).toBeCalled();
+    });
   });
   describe('setting the leaderboard property', () => {
     // TODO - add when leaderboard backend is complete (Frank)

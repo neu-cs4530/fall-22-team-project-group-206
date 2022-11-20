@@ -25,6 +25,7 @@ describe('PuzzleArea', () => {
   };
   const id = nanoid();
   let newPlayer: Player;
+
   const leaderboard = [
     {
       teamName: 'team1',
