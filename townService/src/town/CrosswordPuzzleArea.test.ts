@@ -2,7 +2,7 @@ import { mock, mockClear } from 'jest-mock-extended';
 import { nanoid } from 'nanoid';
 import Player from '../lib/Player';
 import { getLastEmittedEvent } from '../TestUtils';
-import { TownEmitter, CrosswordPuzzleModel, CrosswordPuzzleCell } from '../types/CoveyTownSocket';
+import { TownEmitter, CrosswordPuzzleModel } from '../types/CoveyTownSocket';
 import CrosswordPuzzleArea from './CrosswordPuzzleArea';
 
 describe('PuzzleArea', () => {
@@ -25,39 +25,6 @@ describe('PuzzleArea', () => {
   };
   const id = nanoid();
   let newPlayer: Player;
-  const grid: string[][] = [
-    ['1', '2'],
-    ['3', '4'],
-  ];
-  const cell1: CrosswordPuzzleCell = {
-    value: '',
-    solution: '1',
-    isCircled: true,
-    isShaded: false,
-  };
-  const cell2: CrosswordPuzzleCell = {
-    value: '',
-    solution: '2',
-    isCircled: false,
-    isShaded: true,
-  };
-  const cell3: CrosswordPuzzleCell = {
-    value: '',
-    solution: '3',
-    isCircled: false,
-    isShaded: false,
-  };
-  const cell4: CrosswordPuzzleCell = {
-    value: '',
-    solution: '4',
-    isCircled: false,
-    isShaded: false,
-  };
-
-  const cellGrid: CrosswordPuzzleCell[][] = [
-    [cell1, cell2],
-    [cell3, cell4],
-  ];
 
   const leaderboard = [
     {
@@ -213,40 +180,6 @@ describe('PuzzleArea', () => {
       expect(val.groupName).toBeUndefined();
       expect(val.puzzle).toBeUndefined();
       expect(val.occupantsByID).toEqual([]);
-    });
-  });
-
-  describe('fromPositionToIndex', () => {
-    // 1 2 3
-    // 4 5 6
-    // 7 8 9
-    const position1 = CrosswordPuzzleArea.fromPositionToIndex({ row: 1, col: 1 }, 3);
-    const position2 = CrosswordPuzzleArea.fromPositionToIndex({ row: 0, col: 0 }, 3);
-    const position3 = CrosswordPuzzleArea.fromPositionToIndex({ row: 0, col: 2 }, 3);
-    const position4 = CrosswordPuzzleArea.fromPositionToIndex({ row: 2, col: 2 }, 3);
-    it('Should return number position correctly', () => {
-      expect(position1).toEqual(5);
-      expect(position2).toEqual(1);
-      expect(position3).toEqual(3);
-      expect(position4).toEqual(9);
-    });
-  });
-
-  describe('setPuzzleModel', () => {
-    it('should set the puzzle model for the puzzle model area', async () => {
-      await testArea.setPuzzleModel();
-      expect(testArea.puzzle?.grid.length).not.toEqual(0);
-    });
-  });
-
-  describe('initializeFromGridToCell', () => {
-    it('should return a CrosswordPuzzleCell grid from a string grid', () => {
-      const cellGridTest: CrosswordPuzzleCell[][] = CrosswordPuzzleArea.initializeFromGridToCell(
-        grid,
-        [2],
-        [1],
-      );
-      expect(cellGridTest).toEqual(cellGrid);
     });
   });
 });

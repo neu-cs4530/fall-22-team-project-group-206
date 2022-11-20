@@ -22,6 +22,7 @@ const CROSSWORDPUZZLE_EXTERNAL_LINK =
 export type CrosswordPuzzleAreaEvents = {
   puzzleChange: (newPuzzle: CrosswordPuzzleModel | undefined) => void;
   occupantsChange: (newOccupants: PlayerController[]) => void;
+  gameOverChange: (newIsGameOver: boolean) => void;
 };
 
 /**
@@ -44,7 +45,7 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
    * Create a new CrosswordPuzzleAreaController;
    * @param id
    * @param puzzle
-   * @param leaderBoard
+   * @param leaderboard
    */
   constructor(
     id: string,
@@ -98,6 +99,8 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
         this._puzzle = newPuzzle;
       } else {
         this._setPuzzleModel();
+        this._isGameOver = false;
+        this.emit('gameOverChange', false);
       }
     }
   }
@@ -123,7 +126,10 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
    * will emit an puzzleChange event.
    */
   set isGameOver(isGameOver: boolean) {
-    throw Error('Not implemented yet.');
+    if (isGameOver !== this.isGameOver) {
+      this._isGameOver = isGameOver;
+      this.emit('gameOverChange', isGameOver);
+    }
   }
 
   get isGameOver(): boolean {

@@ -3,18 +3,30 @@ import CrosswordPuzzleAreaController from '../../../classes/CrosswordPuzzleAreaC
 import useTownController from '../../../hooks/useTownController';
 import { CrosswordPuzzleCell, CrosswordPuzzleModel } from '../../../types/CoveyTownSocket';
 import CrosswordCell from './CrosswordCell/CrosswordCell';
+import { useToast } from '@chakra-ui/react';
 
 type CellIndex = { row: number; col: number };
 
 function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaController }): JSX.Element {
   const townController = useTownController();
   const [puzzle, setPuzzle] = useState<CrosswordPuzzleModel | undefined>(controller.puzzle);
+
   const [selected, setSelected] = useState<CellIndex>({ row: 0, col: 0 });
   const [direction, setDirection] = useState<'across' | 'down'>('across');
+  const toast = useToast();
   const isSelected = (cell: CellIndex): boolean => {
     return selected.row === cell.row && selected.col === cell.col;
   };
-
+  const isCompleted = (grid: CrosswordPuzzleCell[][]) => {
+    for (let row = 0; row < grid.length; row++) {
+      for (let col = 0; col < grid[0].length; col++) {
+        if (grid[row][col].value !== grid[row][col].solution && grid[row][col].solution !== '.') {
+          return false;
+        }
+      }
+    }
+    return true;
+  };
   useEffect(() => {
     controller.addListener('puzzleChange', setPuzzle);
 
@@ -39,6 +51,17 @@ function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaControll
           }
         });
       });
+
+      if (isCompleted(updatedGrid)) {
+        controller.isGameOver = true;
+        toast({
+          title: `Puzzle Finished!`,
+          description: 'Your Team Score is ...',
+          position: 'top',
+          status: 'success',
+          isClosable: true,
+        });
+      }
 
       controller.puzzle = { grid: updatedGrid, info: puzzle.info, clues: puzzle.clues };
       townController.emitCrosswordPuzzleAreaUpdate(controller);
