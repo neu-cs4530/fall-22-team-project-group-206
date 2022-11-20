@@ -150,6 +150,7 @@ describe('CrosswordPuzzleArea', () => {
     mockClear(mockListeners.puzzleChange);
     mockClear(mockListeners.gameOverChange);
     testArea.addListener('gameOverChange', mockListeners.gameOverChange);
+
     testArea.addListener('occupantsChange', mockListeners.occupantsChange);
     testArea.addListener('puzzleChange', mockListeners.puzzleChange);
   });
