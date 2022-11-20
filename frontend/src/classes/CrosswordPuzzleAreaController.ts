@@ -23,7 +23,6 @@ export type CrosswordPuzzleAreaEvents = {
   puzzleChange: (newPuzzle: CrosswordPuzzleModel | undefined) => void;
   occupantsChange: (newOccupants: PlayerController[]) => void;
   gameOverChange: (newIsGameOver: boolean) => void;
-
 };
 
 /**
@@ -127,7 +126,6 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
    * will emit an puzzleChange event.
    */
   set isGameOver(isGameOver: boolean) {
-
     if (isGameOver !== this.isGameOver) {
       this._isGameOver = isGameOver;
       this.emit('gameOverChange', isGameOver);

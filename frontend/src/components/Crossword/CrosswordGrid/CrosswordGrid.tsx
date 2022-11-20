@@ -14,7 +14,6 @@ function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaControll
   const [selected, setSelected] = useState<CellIndex>({ row: 0, col: 0 });
   const [direction, setDirection] = useState<'across' | 'down'>('across');
   const toast = useToast();
-
   const isSelected = (cell: CellIndex): boolean => {
     return selected.row === cell.row && selected.col === cell.col;
   };
@@ -63,31 +62,6 @@ function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaControll
           isClosable: true,
         });
       }
-
-  useEffect(() => {
-    controller.addListener('puzzleChange', setPuzzle);
-
-    return () => {
-      controller.removeListener('puzzleChange', setPuzzle);
-    };
-  }, [controller]);
-
-  if (puzzle) {
-    const handleCellChange = (rowIndex: number, columnIndex: number, newValue: string) => {
-      const updatedGrid: CrosswordPuzzleCell[][] = puzzle.grid.map((row, i) => {
-        return row.map((cell, j) => {
-          if (i === rowIndex && j === columnIndex) {
-            return {
-              value: newValue,
-              solution: cell.solution,
-              isCircled: cell.isCircled,
-              isShaded: cell.isShaded,
-            };
-          } else {
-            return cell;
-          }
-        });
-      });
 
       controller.puzzle = { grid: updatedGrid, info: puzzle.info, clues: puzzle.clues };
       townController.emitCrosswordPuzzleAreaUpdate(controller);
