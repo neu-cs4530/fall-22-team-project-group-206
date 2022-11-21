@@ -11,6 +11,10 @@ import {
   ScoreModel,
 } from '../types/CoveyTownSocket';
 import PlayerController from './PlayerController';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 
 const CROSSWORDPUZZLE_EXTERNAL_LINK =
   'https://api.foracross.com/api/puzzle_list?page=0&pageSize=1&filter%5BnameOrTitleFilter%5D=Will%20Shortz&filter%5BsizeFilter%5D%5BMini%5D=false&filter%5BsizeFilter%5D%5BStandard%5D=true';
@@ -259,14 +263,22 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
   }
 
   private async _addNewScore(newScore: ScoreModel): Promise<void> {
-    const insertedScoreResp = await axios.post('/score', newScore);
+    let url = ''
+    if(process.env.LEADERBOARD_API_URL !== undefined) {
+      url = process.env.LEADERBOARD_API_URL
+    }
+    const insertedScoreResp = await axios.post(url.concat('/score'), newScore);
     if (insertedScoreResp.status !== 200) {
       throw new Error('Error, status code:'.concat(insertedScoreResp.status.toString()))
     }
   }
 
   private async _setLeaderboard(numSpots: number): Promise<void> {
-    await axios.get('/scores/'.concat(numSpots.toString(10))).then(response => {
+    let url = ''
+    if(process.env.LEADERBOARD_API_URL !== undefined) {
+      url = process.env.LEADERBOARD_API_URL
+    }
+    await axios.get(url.concat('/scores/').concat(numSpots.toString(10))).then(response => {
       if (response.status === 200) {
         const scores = response.data;
         this.leaderboard = scores;
