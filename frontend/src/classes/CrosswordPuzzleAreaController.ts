@@ -60,6 +60,9 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
       this._setPuzzleModel();
     }
     this._leaderboard = leaderboard;
+    if (!leaderboard) {
+      this._setLeaderboard(10);
+    }
     this._isGameOver = isGameOver;
   }
 
@@ -156,6 +159,16 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
     };
   }
 
+  public insertNewScore(score: number, usedHint = false) {
+    const newScore: ScoreModel = {
+      teamName: this.occupants.flatMap(player => player.userName)[0],
+      score: score,
+      teamMembers: this.occupants.map(player => player.userName),
+      usedHint: usedHint,
+    };
+    this._addNewScore(newScore);
+  }
+
   /**
    * Create a new CrosswordPuzzleAreaController to match a given CrosswordPuzzleAreaModel
    * @param xwPuzzleAreaModel Crossword puzzle area to represent
@@ -243,5 +256,23 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
    */
   private _fromPositionToIndex({ row, col }: CrosswordPosition, rowSize: number): number {
     return row * rowSize + col;
+  }
+
+  private async _addNewScore(newScore: ScoreModel): Promise<void> {
+    const insertedScoreResp = await axios.post('/score', newScore);
+    if (insertedScoreResp.status !== 200) {
+      throw new Error('Error, status code:'.concat(insertedScoreResp.status.toString()))
+    }
+  }
+
+  private async _setLeaderboard(numSpots: number): Promise<void> {
+    await axios.get('/scores/'.concat(numSpots.toString(10))).then(response => {
+      if (response.status === 200) {
+        const scores = response.data;
+        this.leaderboard = scores;
+      } else {
+        throw new Error('Error, status code:'.concat(response.status.toString()));
+      }
+    });
   }
 }
