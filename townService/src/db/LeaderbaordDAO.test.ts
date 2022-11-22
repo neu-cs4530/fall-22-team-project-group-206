@@ -8,7 +8,7 @@ import { ScoreModel } from '../types/CoveyTownSocket';
 // eslint-disable-next-line
 const mockingoose = require('mockingoose');
 
-jest.setTimeout(30000)
+jest.setTimeout(30000);
 describe('LeaderboardDAO', () => {
   const testScore = { teamName: 'name', score: 50, teamMembers: ['jaime'] };
   describe('findScore', () => {
@@ -58,7 +58,7 @@ describe('LeaderboardDAO', () => {
     });
   });
   describe('addScore', () => {
-    it('calls the create method in mongoose', async () => {
+    it('calls the save method in mongoose', async () => {
       mockingoose(Score).toReturn(testScore, 'save');
       const returnedScore = await addScore(new Score(testScore));
       expect(returnedScore?.teamName).toEqual(testScore.teamName);
@@ -66,5 +66,4 @@ describe('LeaderboardDAO', () => {
       expect(returnedScore?.score).toEqual(testScore.score);
     });
   });
-
 });
