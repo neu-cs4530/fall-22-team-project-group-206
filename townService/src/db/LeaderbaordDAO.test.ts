@@ -1,7 +1,5 @@
 import { addScore, removeScore, findScore, updateScore, getScores } from './LeaderboardDAO';
 import Score from './ScoreModel';
-import { IScore } from './IScore';
-import { ScoreModel } from '../types/CoveyTownSocket';
 
 // This module can only be imported with require,
 // that is why we had to disable lint to allow it to still build

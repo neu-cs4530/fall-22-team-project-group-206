@@ -45,11 +45,11 @@ const testScoreModelBest: ScoreModel = {
 const TEST_LEADERBOARD: ScoreModel[] = [testScoreModel, testScoreModel2, testScoreModelBest];
 
 const testScore: IScore = new Score(testScoreModel);
-const addFunc: any = addScore as jest.Mock;
-const getScoresFunc: any = getScores as jest.Mock;
-const removeFunc: any = removeScore as jest.Mock;
-const findFunc: any = findScore as jest.Mock;
-const updateFunc: any = updateScore as jest.Mock;
+const addFunc = addScore as jest.Mock;
+const getScoresFunc = getScores as jest.Mock;
+const removeFunc = removeScore as jest.Mock;
+const findFunc = findScore as jest.Mock;
+const updateFunc = updateScore as jest.Mock;
 
 describe('LeaderboardService', () => {
   beforeEach(() => {
