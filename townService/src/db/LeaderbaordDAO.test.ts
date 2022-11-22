@@ -2,10 +2,10 @@ import { addScore, removeScore, findScore, updateScore, getScores } from './Lead
 import Score from './ScoreModel';
 import { IScore } from './IScore';
 import { ScoreModel } from '../types/CoveyTownSocket';
+const mockingoose = require('mockingoose');
 
 describe('LeaderboardDAO', () => {
   const testScore = { teamName: 'name', score: 50, teamMembers: ['jaime'] };
-  const mockingoose = require('mockingoose');
   describe('findScore', () => {
     it('calls the findOne method in mongoose', async () => {
       mockingoose(Score).toReturn(testScore, 'findOne');
