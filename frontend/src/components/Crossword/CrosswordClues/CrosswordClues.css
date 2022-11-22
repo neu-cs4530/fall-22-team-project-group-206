@@ -2,6 +2,7 @@
   color: rgb(3, 0, 27);
   font-size: 1em;
   font-weight: 400;
+  padding-left: 16px;
 }
 
 .clues-list span {
@@ -11,9 +12,8 @@
 
 .clues-list ul {
   height: 400px;
+  width: 300px;
   overflow: scroll;
-  margin: 0;
-  padding: 0;
 }
 
 .clues-list li {

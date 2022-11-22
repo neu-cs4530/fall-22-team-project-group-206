@@ -31,3 +31,11 @@ input {
 .selected input {
   background-color: #bec7e7;
 }
+
+td span {
+  position: absolute;
+  z-index: 100;
+  margin: 0px;
+  padding: 0px;
+  font-size: 0.4rem;
+}

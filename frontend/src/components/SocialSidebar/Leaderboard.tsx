@@ -7,7 +7,7 @@ import {
   GridItem,
   useDisclosure,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { ScoreModel } from '../../types/CoveyTownSocket';
 import LeaderboardModel from './LeaderboardModel';
@@ -15,6 +15,13 @@ import LeaderboardModel from './LeaderboardModel';
  * List the scores for the player
  */
 export default function Leaderboard(): JSX.Element {
+  const [leaderboard, setLeaderboard] = useState([])
+  useEffect(() => {
+    // Call API to get Leaderboard here
+    // addListener to call leaderboard
+    // setLeaderboard(_newLeaderboard_)
+  })
+
   //TODO: dummy data will be removed once leaderboard api is all set
   const score1: ScoreModel = {
     teamName: 'short name',
