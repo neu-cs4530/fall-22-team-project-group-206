@@ -7,7 +7,7 @@ import { IScore } from './IScore';
  * @returns the score that was created
  */
 export async function addScore(newScore: IScore): Promise<IScore | undefined> {
-  const doc = await Score.create(newScore);
+  const doc = await newScore.save();
   return doc;
 }
 
