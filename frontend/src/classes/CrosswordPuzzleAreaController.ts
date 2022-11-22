@@ -15,7 +15,6 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-
 const CROSSWORDPUZZLE_EXTERNAL_LINK =
   'https://api.foracross.com/api/puzzle_list?page=0&pageSize=1&filter%5BnameOrTitleFilter%5D=Will%20Shortz&filter%5BsizeFilter%5D%5BMini%5D=false&filter%5BsizeFilter%5D%5BStandard%5D=true';
 
@@ -120,7 +119,7 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
    * will emit an puzzleChange event.
    */
   set leaderboard(newLeaderboard: ScoreModel[] | undefined) {
-    throw Error('Not implemented yet.');
+    this._leaderboard = newLeaderboard;
   }
 
   get leaderboard(): ScoreModel[] | undefined {
@@ -263,20 +262,20 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
   }
 
   private async _addNewScore(newScore: ScoreModel): Promise<void> {
-    let url = ''
-    if(process.env.LEADERBOARD_API_URL !== undefined) {
-      url = process.env.LEADERBOARD_API_URL
+    let url = '';
+    if (process.env.LEADERBOARD_API_URL !== undefined) {
+      url = process.env.LEADERBOARD_API_URL;
     }
     const insertedScoreResp = await axios.post(url.concat('/score'), newScore);
     if (insertedScoreResp.status !== 200) {
-      throw new Error('Error, status code:'.concat(insertedScoreResp.status.toString()))
+      throw new Error('Error, status code:'.concat(insertedScoreResp.status.toString()));
     }
   }
 
   private async _setLeaderboard(numSpots: number): Promise<void> {
-    let url = ''
-    if(process.env.LEADERBOARD_API_URL !== undefined) {
-      url = process.env.LEADERBOARD_API_URL
+    let url = '';
+    if (process.env.LEADERBOARD_API_URL !== undefined) {
+      url = process.env.LEADERBOARD_API_URL;
     }
     await axios.get(url.concat('/scores/').concat(numSpots.toString(10))).then(response => {
       if (response.status === 200) {
@@ -287,4 +286,6 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
       }
     });
   }
+
+  //TODO: Implement useLeaderboard react hook
 }

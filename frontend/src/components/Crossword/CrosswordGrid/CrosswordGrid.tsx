@@ -54,6 +54,8 @@ function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaControll
 
       if (isCompleted(updatedGrid)) {
         controller.isGameOver = true;
+        // TODO: Use score value and hint value once implemented
+        controller.insertNewScore(50, false);
         toast({
           title: `Puzzle Finished!`,
           description: 'Your Team Score is ...',
