@@ -8,6 +8,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
+import { useCrosswordAreaPuzzleController } from '../../classes/TownController';
 
 import { ScoreModel } from '../../types/CoveyTownSocket';
 import LeaderboardModel from './LeaderboardModel';
@@ -34,6 +35,8 @@ export default function Leaderboard(): JSX.Element {
     teamMembers: ['long name', 'long name1', 'long name2', 'long name3'],
     usedHint: true,
   };
+
+  
 
   const leaderboardExample: ScoreModel[] = [score1, score2, score3];
   const [detailIndex, setDetailIndex] = useState<number>(0);
