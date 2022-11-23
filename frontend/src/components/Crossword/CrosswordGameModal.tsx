@@ -14,6 +14,7 @@ import CrosswordClues from './CrosswordClues/CrosswordClues';
 import './CrosswordGameModal.css';
 import CrosswordGrid from './CrosswordGrid/CrosswordGrid';
 import CrosswordPuzzleAreaInteractable from '../Town/interactables/CrosswordPuzzleArea';
+import CrosswordToolbar from './CrosswordToolbar/CrosswordToolbar';
 
 function CrosswordGameModal(props: {
   crosswordPuzzleArea: CrosswordPuzzleAreaInteractable;
@@ -52,6 +53,7 @@ function CrosswordGameModal(props: {
           <ModalHeader>{crosswordPuzzleAreaController.puzzle.info.title}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
+            <CrosswordToolbar controller={crosswordPuzzleAreaController} />
             <HStack>
               <CrosswordGrid controller={crosswordPuzzleAreaController} />
               <CrosswordClues

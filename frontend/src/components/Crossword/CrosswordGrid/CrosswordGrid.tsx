@@ -145,7 +145,7 @@ function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaControll
     });
 
     return (
-      <table style={{ borderCollapse: 'collapse' }}>
+      <table id='crossword-grid' style={{ borderCollapse: 'collapse' }}>
         <tbody>{rows}</tbody>
       </table>
     );
