@@ -6,7 +6,7 @@ import { CrosswordPuzzleCell, CrosswordPuzzleModel } from '../../../types/CoveyT
 import CrosswordCell from './CrosswordCell/CrosswordCell';
 
 type CellIndex = { row: number; col: number };
-type Direction = 'across' | 'down'
+type Direction = 'across' | 'down';
 const BLACK_CELL_STRING = '.';
 
 function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaController }): JSX.Element {
@@ -44,17 +44,17 @@ function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaControll
   }, [controller]);
 
   if (puzzle) {
-    const getHighlightedCells = (cellIndex: CellIndex, direction: Direction): CellIndex[] => {
-      const highlightedIndices: CellIndex[];
-      switch (direction) {
-        case 'across':
-          
-          break;
-        case 'down':
+    // const getHighlightedCells = (cellIndex: CellIndex, direction: Direction): CellIndex[] => {
+    //   const highlightedIndices: CellIndex[];
+    //   switch (direction) {
+    //     case 'across':
 
-          break;
-      }
-    }
+    //       break;
+    //     case 'down':
+
+    //       break;
+    //   }
+    // }
 
     const handleCellChange = (rowIndex: number, columnIndex: number, newValue: string) => {
       const updatedGrid: CrosswordPuzzleCell[][] = puzzle.grid.map((row, i) => {
@@ -85,7 +85,7 @@ function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaControll
           isClosable: true,
         });
       }
-      
+
       townController.emitCrosswordPuzzleAreaUpdate(controller);
     };
 

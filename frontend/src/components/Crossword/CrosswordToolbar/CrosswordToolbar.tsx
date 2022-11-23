@@ -2,12 +2,13 @@ import { Box, Button, Flex, Menu, MenuButton, MenuItem, MenuList, Spacer } from 
 import React from 'react';
 import CrosswordPuzzleAreaController from '../../../classes/CrosswordPuzzleAreaController';
 
-const TIMER_WIDTH = document.getElementById('crossword-grid')?.offsetWidth;
-
 function CrosswordToolbar({ controller }: { controller: CrosswordPuzzleAreaController }) {
+  const timerWidth = document.getElementById('crossword-grid')
+    ? document.getElementById('crossword-grid')?.offsetWidth
+    : 393;
   return (
     <Flex gap={'2'} paddingBottom={'12px'}>
-      <Box p='2' bg='gray.200' width={TIMER_WIDTH} textAlign='center'>
+      <Box p='2' bg='gray.200' width={timerWidth} textAlign='center'>
         00:00
       </Box>
       <Menu>
