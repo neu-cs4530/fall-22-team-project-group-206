@@ -1,16 +1,8 @@
-import {
-  Box,
-  Heading,
-  ListItem,
-  OrderedList,
-  Grid,
-  GridItem,
-  useDisclosure,
-} from '@chakra-ui/react';
+import { Box, ListItem, List, Grid, GridItem, useDisclosure } from '@chakra-ui/react';
 import React, { useState } from 'react';
 
-import { ScoreModel } from '../../types/CoveyTownSocket';
-import LeaderboardModel from './LeaderboardModel';
+import { ScoreModel } from '../../../types/CoveyTownSocket';
+import LeaderboardModal from './LeaderboardModal';
 /**
  * List the scores for the player
  */
@@ -52,7 +44,7 @@ export default function Leaderboard(): JSX.Element {
       borderRadius={10}
       margin='4px'
       padding='8px'
-      maxWidth='300px'>
+      maxWidth='500px'>
       <Grid templateColumns='repeat(5, 1fr)' gap={6}>
         <GridItem colSpan={1} h='5' width='100%'>
           {leaderboardExample.indexOf(score) + 1}
@@ -75,9 +67,6 @@ export default function Leaderboard(): JSX.Element {
 
   return (
     <Box>
-      <Heading as='h2' fontSize='l'>
-        Crossword Leaderboard:
-      </Heading>
       <div>
         <Grid templateColumns='repeat(5, 1fr)' gap={3}>
           <GridItem colSpan={1} h='5'>
@@ -87,12 +76,12 @@ export default function Leaderboard(): JSX.Element {
             Team name
           </GridItem>
           <GridItem colStart={5} colEnd={6} h='10'>
-            Score
+            Time
           </GridItem>
         </Grid>
       </div>
-      <OrderedList margin='3px'>{orderedListView}</OrderedList>
-      <LeaderboardModel
+      <List margin='3px'>{orderedListView}</List>
+      <LeaderboardModal
         scoreModel={leaderboardExample[detailIndex]}
         open={isOpen}
         close={onClose}

@@ -10,14 +10,16 @@ import {
   ModalCloseButton,
   Button,
   Checkbox,
+  ListItem,
+  List,
 } from '@chakra-ui/react';
 import React from 'react';
 
-import { ScoreModel } from '../../types/CoveyTownSocket';
+import { ScoreModel } from '../../../types/CoveyTownSocket';
 /**
  * Detail for scores
  */
-export default function LeaderboardModel(props: {
+export default function LeaderboardModal(props: {
   scoreModel: ScoreModel;
   open: boolean;
   close: () => void;
@@ -31,11 +33,18 @@ export default function LeaderboardModel(props: {
         <ModalBody>
           <Grid h='200px' templateRows='repeat(2, 1fr)' templateColumns='repeat(5, 1fr)' gap={4}>
             <GridItem colSpan={2} rowSpan={1}>
-              Team Memembers: {props.scoreModel.teamMembers.join(', ')}
+              Team Members:{' '}
+              <List>
+                {props.scoreModel.teamMembers.map(member => (
+                  <ListItem key={member}>{member}</ListItem>
+                ))}
+              </List>
             </GridItem>
 
             <GridItem colSpan={2} rowSpan={1}>
-              <Checkbox isChecked={props.scoreModel.usedHint}>Used Hint</Checkbox>
+              <Checkbox isChecked={props.scoreModel.usedHint} disabled>
+                Used Hint
+              </Checkbox>
             </GridItem>
           </Grid>
         </ModalBody>
