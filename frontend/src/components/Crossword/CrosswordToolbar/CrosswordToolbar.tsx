@@ -1,6 +1,5 @@
 import { Box, Button, Flex, Menu, MenuButton, MenuItem, MenuList, Spacer } from '@chakra-ui/react';
 import React from 'react';
-import CrosswordPuzzleAreaController from '../../../classes/CrosswordPuzzleAreaController';
 
 const TIMER_WIDTH = document.getElementById('crossword-grid')?.offsetWidth;
 
