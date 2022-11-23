@@ -4,7 +4,7 @@ import CrosswordPuzzleAreaController from '../../../classes/CrosswordPuzzleAreaC
 
 const TIMER_WIDTH = document.getElementById('crossword-grid')?.offsetWidth;
 
-function CrosswordToolbar({ controller }: { controller: CrosswordPuzzleAreaController }) {
+function CrosswordToolbar() {
   return (
     <Flex gap={'2'} paddingBottom={'12px'}>
       <Box p='2' bg='gray.200' width={TIMER_WIDTH} textAlign='center'>
