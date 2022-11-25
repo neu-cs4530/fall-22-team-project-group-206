@@ -1,8 +1,8 @@
-import { IScore } from './IScore';
+import { ScoreModel } from '../types/CoveyTownSocket';
 
 export interface ScoreCreateResponse {
   status: number;
-  score?: IScore;
+  score?: ScoreModel;
   error?: Error;
 }
 
@@ -13,6 +13,6 @@ export interface ScoreDeleteResponse {
 
 export interface ScoreFindResponse {
   status: number;
-  scores?: IScore[];
+  scores?: ScoreModel[];
   error?: Error;
 }

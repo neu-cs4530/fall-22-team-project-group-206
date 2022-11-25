@@ -56,7 +56,7 @@ export default function scoreRoutes(http: Server, app: Express): SocketServer {
     const buildResp: ScoreCreateResponse = { status: 100 };
     try {
       const updatedScore: ScoreModel = req.body.scoreModel;
-      const newScore: IScore = await updateScoreValue(updatedScore);
+      const newScore: ScoreModel = await updateScoreValue(updatedScore);
       buildResp.status = 200;
       buildResp.score = newScore;
     } catch (e) {
@@ -75,7 +75,7 @@ export default function scoreRoutes(http: Server, app: Express): SocketServer {
     const buildResp: ScoreFindResponse = { status: 100 };
     try {
       const numScores: number = parseInt(req.params.scoreNum, 10);
-      const scores: IScore[] = await getLeaders(numScores);
+      const scores: ScoreModel[] = await getLeaders(numScores);
       buildResp.status = 200;
       buildResp.scores = scores;
     } catch (e) {
