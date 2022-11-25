@@ -10,6 +10,4 @@ export interface IScore extends mongoose.Document {
   teamMembers: string[];
 
   usedHint?: boolean;
-
-  finished?: boolean;
 }

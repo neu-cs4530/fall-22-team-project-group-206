@@ -2,12 +2,12 @@ import { ScoreModel } from '../types/CoveyTownSocket';
 import { addScore, removeScore, findScore, updateScore, getScores } from './LeaderboardDAO';
 
 export async function getLeaders(numResults: number): Promise<ScoreModel[]> {
-  let scores: ScoreModel[] = await getScores();
+  const scores: ScoreModel[] = await getScores();
   const retScores = scores.slice(0, numResults);
   return retScores;
 }
 export async function insertScore(newScore: ScoreModel): Promise<ScoreModel> {
-  let createdScore = await addScore(newScore);
+  const createdScore = await addScore(newScore);
   return createdScore;
 }
 

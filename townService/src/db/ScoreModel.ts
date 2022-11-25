@@ -7,7 +7,6 @@ export const scoreSchema = new mongoose.Schema({
   score: { type: Number, required: true },
   teamMembers: { type: [String], required: true },
   usedHint: { type: Boolean, default: false },
-  finished: { type: Boolean, default: false },
 });
 
 const score: mongoose.Model<IScore> = mongoose.model<IScore>('score', scoreSchema);
