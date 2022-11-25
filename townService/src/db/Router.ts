@@ -1,6 +1,4 @@
 import express, { Express } from 'express';
-import { Server as SocketServer } from 'socket.io';
-import { Server } from 'http';
 import {
   getLeaders,
   insertScore,
@@ -10,7 +8,7 @@ import {
 import { ScoreModifyResponse, ScoreFindResponse } from './Types';
 import { ScoreModel } from '../types/CoveyTownSocket';
 
-export default function scoreRoutes(http: Server, app: Express): SocketServer {
+export default function scoreRoutes(app: Express) {
   /*
    * Create a new score
    */
@@ -85,7 +83,4 @@ export default function scoreRoutes(http: Server, app: Express): SocketServer {
     }
     resp.status(buildResp.status).send(buildResp.data);
   });
-
-  const socketServer = new SocketServer(http, { cors: { origin: '*' } });
-  return socketServer;
 }
