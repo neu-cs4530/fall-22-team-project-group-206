@@ -78,9 +78,7 @@ server.listen(process.env.PORT || 8081, () => {
   // eslint-disable-next-line no-console
   console.log(`Listening on ${address.port}`);
   // initialize the database and create a connection
-  if (process.env.MONGODB_DEPLOYED || process.env.MONGODB_LOCAL) {
-    createConnection();
-  }
+  createConnection();
   if (process.env.DEMO_TOWN_ID) {
     TownsStore.getInstance().createTown(process.env.DEMO_TOWN_ID, false);
   }
