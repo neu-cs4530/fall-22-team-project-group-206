@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import { IScore } from './IScore';
+import { ScoreDoc } from './ScoreDoc';
 
 export const scoreSchema = new mongoose.Schema({
   teamName: { type: String, required: true, unique: true },
@@ -9,6 +9,6 @@ export const scoreSchema = new mongoose.Schema({
   usedHint: { type: Boolean, required: true, default: false },
 });
 
-const score: mongoose.Model<IScore> = mongoose.model<IScore>('score', scoreSchema);
+const score: mongoose.Model<ScoreDoc> = mongoose.model<ScoreDoc>('score', scoreSchema);
 
 export default score;
