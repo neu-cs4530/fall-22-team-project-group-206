@@ -11,14 +11,14 @@ export async function getLeaders(numResults: number): Promise<ScoreModel[]> {
   if (numResults > 10 || numResults < 1) {
     throw new Error('Invalid number of results inputted for leaderboard');
   }
-  const retScores = scores.slice(0, numResults);
-  const sortedScores = retScores.sort((a: ScoreModel, b: ScoreModel): number => {
+  const sortedScores = scores.sort((a: ScoreModel, b: ScoreModel): number => {
     if (a.score - b.score !== 0) {
       return a.score - b.score;
     }
     return Number(a.usedHint) - Number(b.usedHint);
   });
-  return sortedScores;
+  const retScores = scores.slice(0, numResults);
+  return retScores;
 }
 
 /**
