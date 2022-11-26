@@ -23,6 +23,18 @@ const TIMER_WIDTH = document.getElementById('crossword-grid')?.offsetWidth;
 
 function CrosswordToolbar({ controller }: { controller: CrosswordPuzzleAreaController }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const leaderboardModal = (
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <ModalOverlay />
+      <ModalContent padding='10px'>
+        <ModalHeader>Crossword Leaderboard</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          <Leaderboard />
+        </ModalBody>
+      </ModalContent>
+    </Modal>
+  );
   return (
     <Flex gap={'2'} paddingBottom={'12px'}>
       <Box p='2' bg='gray.200' width={TIMER_WIDTH} textAlign='center'>
@@ -46,16 +58,7 @@ function CrosswordToolbar({ controller }: { controller: CrosswordPuzzleAreaContr
       <Button p='4' colorScheme='blue' size='md' onClick={onOpen}>
         Leaderboard
       </Button>
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent padding='10px'>
-          <ModalHeader>Crossword Leaderboard</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Leaderboard />
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+      {leaderboardModal}
     </Flex>
   );
 }
