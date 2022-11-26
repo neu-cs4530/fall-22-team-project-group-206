@@ -1,6 +1,11 @@
 import { ScoreModel } from '../types/CoveyTownSocket';
 import Score from './ScoreModel';
 
+/**
+ * Adds a new score to the database
+ * @param newScore the new score being added
+ * @returns the score that was created
+ */
 export async function addScore(newScore: ScoreModel): Promise<ScoreModel> {
   const mongooseDocument = new Score(newScore);
   const doc = await Score.create(mongooseDocument);
@@ -30,6 +35,7 @@ export async function removeScore(name: string): Promise<ScoreModel> {
   return removedScore;
 }
 
+
 export async function findScore(name: string): Promise<ScoreModel> {
   const doc = await Score.findOne({ teamName: name });
   if (doc === null || doc === undefined) {
@@ -43,6 +49,7 @@ export async function findScore(name: string): Promise<ScoreModel> {
   };
   return foundScore;
 }
+
 
 export async function updateScore(newScore: ScoreModel): Promise<ScoreModel> {
   const mongooseDocument = new Score(newScore);

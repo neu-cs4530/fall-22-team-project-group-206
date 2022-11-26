@@ -24,6 +24,8 @@ const socketServer = new SocketServer<ClientToServerEvents, ServerToClientEvents
   cors: { origin: '*' },
 });
 
+
+
 // Initialize the towns store with a factory that creates a broadcast emitter for a town
 TownsStore.initializeTownsStore((townID: string) => socketServer.to(townID));
 
