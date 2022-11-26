@@ -16,6 +16,7 @@ import {
   ModalCloseButton,
 } from '@chakra-ui/react';
 import React from 'react';
+
 import CrosswordPuzzleAreaController from '../../../classes/CrosswordPuzzleAreaController';
 import Leaderboard from './Leaderboard';
 
@@ -35,6 +36,12 @@ function CrosswordToolbar({ controller }: { controller: CrosswordPuzzleAreaContr
       </ModalContent>
     </Modal>
   );
+
+
+const TIMER_WIDTH = document.getElementById('crossword-grid')?.offsetWidth;
+
+function CrosswordToolbar() {
+
   return (
     <Flex gap={'2'} paddingBottom={'12px'}>
       <Box p='2' bg='gray.200' width={TIMER_WIDTH} textAlign='center'>
