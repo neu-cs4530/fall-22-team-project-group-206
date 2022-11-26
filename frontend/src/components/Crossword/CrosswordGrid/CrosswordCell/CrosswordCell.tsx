@@ -7,6 +7,7 @@ function CrosswordCell(props: {
   number: number | undefined;
   isRebus: boolean;
   isSelected: boolean;
+  isHighlighted: boolean;
   cellModel: CrosswordPuzzleCell;
   onChange: (rowIndex: number, columnIndex: number, newValue: string) => void;
   onClick: (rowIndex: number, columnIndex: number) => void;
@@ -41,7 +42,6 @@ function CrosswordCell(props: {
           value={props.cellModel.value}
           onChange={e => handleCellChange(e.target.value)}
           onClick={() => handleCellClick()}
-          onFocus={() => handleCellClick()}
         />
       </td>
     );
@@ -54,7 +54,18 @@ function CrosswordCell(props: {
           value={props.cellModel.value}
           onChange={e => handleCellChange(e.target.value)}
           onClick={() => handleCellClick()}
-          onFocus={() => handleCellClick()}
+        />
+      </td>
+    );
+  }
+  if (props.isHighlighted && !props.isSelected) {
+    return (
+      <td className='highlighted'>
+        <span>{props.number}</span>
+        <input
+          value={props.cellModel.value}
+          onChange={e => handleCellChange(e.target.value)}
+          onClick={() => handleCellClick()}
         />
       </td>
     );
@@ -67,7 +78,6 @@ function CrosswordCell(props: {
           value={props.cellModel.value}
           onChange={e => handleCellChange(e.target.value)}
           onClick={() => handleCellClick()}
-          onFocus={() => handleCellClick()}
         />
       </td>
     );
@@ -79,7 +89,6 @@ function CrosswordCell(props: {
         value={props.cellModel.value}
         onChange={e => handleCellChange(e.target.value)}
         onClick={() => handleCellClick()}
-        onFocus={() => handleCellClick()}
       />
     </td>
   );

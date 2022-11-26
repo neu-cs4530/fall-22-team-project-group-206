@@ -24,12 +24,20 @@ input {
   background-color: #b5bee4ae;
 }
 
-.selected {
+.highlighted {
   background-color: #bec7e7;
 }
 
-.selected input {
+.highlighted input {
   background-color: #bec7e7;
+}
+
+.selected {
+  background-color: #fff23c;
+}
+
+.selected input {
+  background-color: #fff23c;
 }
 
 td span {
