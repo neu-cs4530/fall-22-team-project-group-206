@@ -11,6 +11,7 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 import LeaderboardModal from './LeaderboardModal';
+import Timer from './Timer';
 
 const TIMER_WIDTH = document.getElementById('crossword-grid')?.offsetWidth;
 
@@ -20,7 +21,7 @@ function CrosswordToolbar() {
   return (
     <Flex gap={'2'} paddingBottom={'12px'}>
       <Box p='2' bg='gray.200' width={TIMER_WIDTH} textAlign='center'>
-        00:00
+        <Timer />
       </Box>
       <Menu>
         <MenuButton p='4' as={Button} colorScheme='gray'>
