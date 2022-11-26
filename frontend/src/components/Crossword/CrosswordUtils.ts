@@ -5,6 +5,10 @@ export type Direction = 'across' | 'down';
 
 export const BLACK_CELL_STRING = '.';
 
+function isOutsideGridOrBlackCell(cell: CrosswordPuzzleCell): boolean {
+  return cell === undefined || cell.solution == BLACK_CELL_STRING;
+}
+
 function getLeadingCells(
   selectedIndex: CellIndex,
   dir: Direction,
@@ -14,10 +18,7 @@ function getLeadingCells(
   switch (dir) {
     case 'across':
       for (let i = selectedIndex.col; i >= 0; i--) {
-        if (
-          grid[selectedIndex.row][i] === undefined ||
-          grid[selectedIndex.row][i].solution == BLACK_CELL_STRING
-        ) {
+        if (isOutsideGridOrBlackCell(grid[selectedIndex.row][i])) {
           break;
         } else {
           highlightedIndices.push({ row: selectedIndex.row, col: i });
@@ -26,10 +27,7 @@ function getLeadingCells(
       break;
     case 'down':
       for (let i = selectedIndex.row; i >= 0; i--) {
-        if (
-          grid[i][selectedIndex.col] === undefined ||
-          grid[i][selectedIndex.col].solution == BLACK_CELL_STRING
-        ) {
+        if (isOutsideGridOrBlackCell(grid[i][selectedIndex.col])) {
           break;
         } else {
           highlightedIndices.push({ row: i, col: selectedIndex.col });
@@ -50,10 +48,7 @@ function getTrailingCells(
   switch (dir) {
     case 'across':
       for (let i = selectedIndex.col; i < puzzleWidth; i++) {
-        if (
-          grid[selectedIndex.row][i] === undefined ||
-          grid[selectedIndex.row][i].solution == BLACK_CELL_STRING
-        ) {
+        if (isOutsideGridOrBlackCell(grid[selectedIndex.row][i])) {
           break;
         } else {
           highlightedIndices.push({ row: selectedIndex.row, col: i });
@@ -62,10 +57,7 @@ function getTrailingCells(
       break;
     case 'down':
       for (let i = selectedIndex.row; i < puzzleHeight; i++) {
-        if (
-          grid[i][selectedIndex.col] === undefined ||
-          grid[i][selectedIndex.col].solution == BLACK_CELL_STRING
-        ) {
+        if (isOutsideGridOrBlackCell(grid[i][selectedIndex.col])) {
           break;
         } else {
           highlightedIndices.push({ row: i, col: selectedIndex.col });

@@ -53,7 +53,7 @@ function CrosswordGameModal(props: {
           <ModalHeader>{crosswordPuzzleAreaController.puzzle.info.title}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <CrosswordToolbar />
+            <CrosswordToolbar controller={crosswordPuzzleAreaController} />
             <HStack>
               <CrosswordGrid controller={crosswordPuzzleAreaController} />
               <CrosswordClues

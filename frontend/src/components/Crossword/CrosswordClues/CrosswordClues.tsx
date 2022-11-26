@@ -14,7 +14,7 @@ function CrosswordClues(props: {
   downClues: (string | null)[];
 }): JSX.Element {
   function createClueView(clue: string | null, clueNumber: number): JSX.Element | null {
-    return clue !== null ? <ClueView clueNumber={clueNumber} clue={clue} /> : null;
+    return clue !== null ? <ClueView key={clueNumber} clueNumber={clueNumber} clue={clue} /> : null;
   }
 
   function createClueViews(clueList: (string | null)[]): (JSX.Element | null)[] {
