@@ -1,16 +1,16 @@
 import {
   Box,
+  Grid,
+  GridItem,
   Heading,
   ListItem,
   OrderedList,
-  Grid,
-  GridItem,
   useDisclosure,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
-
 import { ScoreModel } from '../../types/CoveyTownSocket';
 import LeaderboardModel from './LeaderboardModel';
+
 /**
  * List the scores for the player
  */

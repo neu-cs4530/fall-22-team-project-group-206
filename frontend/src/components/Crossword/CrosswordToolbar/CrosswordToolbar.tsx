@@ -1,12 +1,16 @@
 import { Box, Button, Flex, Menu, MenuButton, MenuItem, MenuList, Spacer } from '@chakra-ui/react';
 import React from 'react';
+import CrosswordPuzzleAreaController from '../../../classes/CrosswordPuzzleAreaController';
 
-const TIMER_WIDTH = document.getElementById('crossword-grid')?.offsetWidth;
+const CELL_WIDTH = 28;
 
-function CrosswordToolbar() {
+function CrosswordToolbar({ controller }: { controller: CrosswordPuzzleAreaController }) {
+  const timerWidth = controller.puzzle?.grid.length
+    ? controller.puzzle?.grid.length * CELL_WIDTH
+    : 0;
   return (
     <Flex gap={'2'} paddingBottom={'12px'}>
-      <Box p='2' bg='gray.200' width={TIMER_WIDTH} textAlign='center'>
+      <Box p='2' bg='gray.200' width={timerWidth} textAlign='center'>
         00:00
       </Box>
       <Menu>
