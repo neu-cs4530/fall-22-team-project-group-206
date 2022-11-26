@@ -10,12 +10,11 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import React from 'react';
-import CrosswordPuzzleAreaController from '../../../classes/CrosswordPuzzleAreaController';
 import LeaderboardModal from './LeaderboardModal';
 
 const TIMER_WIDTH = document.getElementById('crossword-grid')?.offsetWidth;
 
-function CrosswordToolbar({ controller }: { controller: CrosswordPuzzleAreaController }) {
+function CrosswordToolbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -45,5 +44,4 @@ function CrosswordToolbar({ controller }: { controller: CrosswordPuzzleAreaContr
     </Flex>
   );
 }
-
 export default CrosswordToolbar;

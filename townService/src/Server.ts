@@ -29,7 +29,7 @@ dbServer.listen(process.env.PORT || 4000, () => {
   const address = dbServer.address() as AddressInfo;
   // eslint-disable-next-line no-console
   console.log(`Listening to db on ${address.port}`);
-  const dbSocketServer = scoreRoutes(dbServer, app);
+  scoreRoutes(dbServer, app);
   // initialize the database and create a connection
   createConnection();
 });
