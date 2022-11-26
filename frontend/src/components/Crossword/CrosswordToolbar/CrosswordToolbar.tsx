@@ -7,34 +7,17 @@ import {
   MenuItem,
   MenuList,
   Spacer,
-  Modal,
   useDisclosure,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalCloseButton,
 } from '@chakra-ui/react';
 import React from 'react';
 import CrosswordPuzzleAreaController from '../../../classes/CrosswordPuzzleAreaController';
-import Leaderboard from './Leaderboard';
+import LeaderboardModal from './LeaderboardModal';
 
 const TIMER_WIDTH = document.getElementById('crossword-grid')?.offsetWidth;
 
 function CrosswordToolbar({ controller }: { controller: CrosswordPuzzleAreaController }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const leaderboardModal = (
-    <Modal isOpen={isOpen} onClose={onClose}>
-      <ModalOverlay />
-      <ModalContent padding='10px'>
-        <ModalHeader>Crossword Leaderboard</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody>
-          <Leaderboard />
-        </ModalBody>
-      </ModalContent>
-    </Modal>
-  );
+
   return (
     <Flex gap={'2'} paddingBottom={'12px'}>
       <Box p='2' bg='gray.200' width={TIMER_WIDTH} textAlign='center'>
@@ -58,7 +41,7 @@ function CrosswordToolbar({ controller }: { controller: CrosswordPuzzleAreaContr
       <Button p='4' colorScheme='blue' size='md' onClick={onOpen}>
         Leaderboard
       </Button>
-      {leaderboardModal}
+      <LeaderboardModal onClose={onClose} isOpen={isOpen} />
     </Flex>
   );
 }

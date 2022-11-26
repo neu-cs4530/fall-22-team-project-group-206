@@ -2,7 +2,7 @@ import { Box, ListItem, List, Grid, GridItem, useDisclosure } from '@chakra-ui/r
 import React, { useState } from 'react';
 
 import { ScoreModel } from '../../../types/CoveyTownSocket';
-import LeaderboardModal from './LeaderboardModal';
+import LeaderboardModal from './ScoreboardModal';
 /**
  * List the scores for the player
  */
