@@ -129,7 +129,7 @@ export interface ScoreModel {
   teamName: string;
   score: number;
   teamMembers: string[];
-  usedHint?: boolean;
+  usedHint: boolean = false;
 }
 
 export interface ServerToClientEvents {

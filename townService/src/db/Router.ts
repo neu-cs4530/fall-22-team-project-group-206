@@ -25,7 +25,7 @@ export default function scoreRoutes(app: Express) {
         buildResp.data.error = e;
       }
     }
-    resp.status(buildResp.status).send(buildResp);
+    resp.status(buildResp.status).send(buildResp.data);
   });
 
   /**
@@ -43,7 +43,7 @@ export default function scoreRoutes(app: Express) {
         buildResp.data.error = e;
       }
     }
-    resp.status(buildResp.status).send(buildResp);
+    resp.status(buildResp.status).send(buildResp.data);
   });
 
   /**

@@ -1,10 +1,19 @@
 import { ScoreModel } from '../types/CoveyTownSocket';
-import { addScore, removeScore, findScore, updateScore, getScores } from './LeaderboardDAO';
+import { addScore, removeScore, findScore, updateScore, getTodaysScores } from './LeaderboardDAO';
 
 export async function getLeaders(numResults: number): Promise<ScoreModel[]> {
-  const scores: ScoreModel[] = await getScores();
+  const scores: ScoreModel[] = await getTodaysScores();
+  if (numResults > 10 || numResults < 1) {
+    throw new Error('Invalid number of results inputted for leaderboard');
+  }
   const retScores = scores.slice(0, numResults);
-  return retScores;
+  const sortedScores = retScores.sort((a: ScoreModel, b: ScoreModel): number => {
+    if (a.score - b.score !== 0) {
+      return a.score - b.score;
+    }
+    return Number(a.usedHint) - Number(b.usedHint);
+  });
+  return sortedScores;
 }
 export async function insertScore(newScore: ScoreModel): Promise<ScoreModel> {
   const createdScore = await addScore(newScore);
@@ -24,9 +33,4 @@ export async function findScoreByID(teamName: string): Promise<ScoreModel> {
 export async function updateScoreValue(newScore: ScoreModel): Promise<ScoreModel> {
   const updatedScore = await updateScore(newScore);
   return updatedScore;
-}
-
-export async function getAllScores(): Promise<ScoreModel[]> {
-  const scores: ScoreModel[] = await getScores();
-  return scores;
 }
