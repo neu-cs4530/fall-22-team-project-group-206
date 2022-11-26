@@ -3,10 +3,8 @@ import React, { useEffect, useState } from 'react';
 import CrosswordPuzzleAreaController from '../../../classes/CrosswordPuzzleAreaController';
 import useTownController from '../../../hooks/useTownController';
 import { CrosswordPuzzleCell, CrosswordPuzzleModel } from '../../../types/CoveyTownSocket';
+import { BLACK_CELL_STRING, CellIndex, Direction, getHighlightedCells } from '../CrosswordUtils';
 import CrosswordCell from './CrosswordCell/CrosswordCell';
-
-type CellIndex = { row: number; col: number };
-type Direction = 'across' | 'down';
 
 type GameState = {
   selectedIndex: CellIndex;
@@ -14,72 +12,10 @@ type GameState = {
   highlightedCells: CellIndex[];
 };
 
-const BLACK_CELL_STRING = '.';
-
 function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaController }): JSX.Element {
   const toast = useToast();
   const townController = useTownController();
   const [puzzle, setPuzzle] = useState<CrosswordPuzzleModel | undefined>(controller.puzzle);
-
-  const getHighlightedCells = (
-    selectedIndex: CellIndex,
-    dir: Direction,
-    grid: CrosswordPuzzleCell[][] | undefined,
-  ): CellIndex[] => {
-    if (!grid) {
-      return [];
-    }
-    const highlightedIndices: CellIndex[] = [];
-    const puzzleWidth = grid[0].length;
-    const puzzleHeight = grid.length;
-    switch (dir) {
-      case 'across':
-        for (let i = selectedIndex.col; i >= 0; i--) {
-          if (
-            grid[selectedIndex.row][i] === undefined ||
-            grid[selectedIndex.row][i].solution == BLACK_CELL_STRING
-          ) {
-            break;
-          } else {
-            highlightedIndices.push({ row: selectedIndex.row, col: i });
-          }
-        }
-        for (let i = selectedIndex.col; i < puzzleWidth; i++) {
-          if (
-            grid[selectedIndex.row][i] === undefined ||
-            grid[selectedIndex.row][i].solution == BLACK_CELL_STRING
-          ) {
-            break;
-          } else {
-            highlightedIndices.push({ row: selectedIndex.row, col: i });
-          }
-        }
-        break;
-      case 'down':
-        for (let i = selectedIndex.row; i < puzzleHeight; i++) {
-          if (
-            grid[i][selectedIndex.col] === undefined ||
-            grid[i][selectedIndex.col].solution == BLACK_CELL_STRING
-          ) {
-            break;
-          } else {
-            highlightedIndices.push({ row: i, col: selectedIndex.col });
-          }
-        }
-        for (let i = selectedIndex.row; i >= 0; i--) {
-          if (
-            grid[i][selectedIndex.col] === undefined ||
-            grid[i][selectedIndex.col].solution == BLACK_CELL_STRING
-          ) {
-            break;
-          } else {
-            highlightedIndices.push({ row: i, col: selectedIndex.col });
-          }
-        }
-        break;
-    }
-    return highlightedIndices;
-  };
 
   const [gameState, setGameState] = useState<GameState>({
     selectedIndex: { row: 0, col: 0 },
