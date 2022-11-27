@@ -42,15 +42,15 @@ function CrosswordCell(props: {
     return <td className='filled'></td>;
   }
   if (props.cellModel.usedHint && props.cellModel.value === props.cellModel.solution) {
-    let className = 'checked_correct';
+    let styleClassName = 'checked_correct';
     if (props.isSelected) {
-      className = `${className} selected`;
+      styleClassName = `${styleClassName} selected`;
     }
     if (props.isHighlighted) {
-      className = `${className} highlighted`;
+      styleClassName = `${styleClassName} highlighted`;
     }
     return (
-      <td className={className}>
+      <td className={styleClassName}>
         <span>{props.number}</span>
         <input
           style={{ fontSize: fontSize }}
@@ -62,15 +62,15 @@ function CrosswordCell(props: {
     );
   }
   if (props.cellModel.usedHint && props.cellModel.value !== props.cellModel.solution) {
-    let className = 'checked_incorrect';
+    let styleClassName = 'checked_incorrect';
     if (props.isSelected) {
-      className = `${className} selected`;
+      styleClassName = `${styleClassName} selected`;
     }
     if (props.isHighlighted) {
-      className = `${className} highlighted`;
+      styleClassName = `${styleClassName} highlighted`;
     }
     return (
-      <td className={className}>
+      <td className={styleClassName}>
         <span>{props.number}</span>
         <input
           style={{ fontSize: fontSize }}
