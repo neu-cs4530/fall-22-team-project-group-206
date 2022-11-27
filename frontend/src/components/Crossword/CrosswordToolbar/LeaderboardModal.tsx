@@ -11,7 +11,7 @@ import Leaderboard from './Leaderboard';
 /**
  * Detail for scores
  */
-export default function ScoreboardModal(props: {
+export default function LeaderboardModal(props: {
   onClose: () => void;
   isOpen: boolean;
 }): JSX.Element {

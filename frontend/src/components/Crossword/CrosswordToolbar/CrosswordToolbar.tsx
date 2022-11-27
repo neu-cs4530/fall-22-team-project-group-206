@@ -61,7 +61,9 @@ function CrosswordToolbar({ controller }: { controller: CrosswordPuzzleAreaContr
       <Button p='4' colorScheme='gray'>
         Rebus
       </Button>
+
       <OccupantsDisplay players={occupants} />
+
       <Spacer></Spacer>
       <Button p='4' colorScheme='blue' size='md' onClick={onOpen}>
         Leaderboard

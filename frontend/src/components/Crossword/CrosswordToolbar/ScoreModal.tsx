@@ -19,7 +19,7 @@ import { ScoreModel } from '../../../types/CoveyTownSocket';
 /**
  * Detail for scores
  */
-export default function LeaderboardModal(props: {
+export default function ScoreModal(props: {
   scoreModel: ScoreModel;
   open: boolean;
   close: () => void;
