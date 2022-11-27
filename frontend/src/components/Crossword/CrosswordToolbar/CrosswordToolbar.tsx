@@ -1,10 +1,22 @@
-import { Box, Button, Flex, Menu, MenuButton, MenuItem, MenuList, Spacer } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Flex,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Spacer,
+  useDisclosure,
+} from '@chakra-ui/react';
 import React from 'react';
+import LeaderboardModal from './LeaderboardModal';
 import CrosswordPuzzleAreaController from '../../../classes/CrosswordPuzzleAreaController';
 
 const CELL_WIDTH = 28;
 
 function CrosswordToolbar({ controller }: { controller: CrosswordPuzzleAreaController }) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const timerWidth = controller.puzzle?.grid.length
     ? controller.puzzle?.grid.length * CELL_WIDTH
     : 0;
@@ -27,12 +39,13 @@ function CrosswordToolbar({ controller }: { controller: CrosswordPuzzleAreaContr
       <Button p='4' colorScheme='gray'>
         Rebus
       </Button>
+
       <Spacer></Spacer>
-      <Button p='4' colorScheme='blue' size='md'>
+      <Button p='4' colorScheme='blue' size='md' onClick={onOpen}>
         Leaderboard
       </Button>
+      <LeaderboardModal onClose={onClose} isOpen={isOpen} />
     </Flex>
   );
 }
-
 export default CrosswordToolbar;
