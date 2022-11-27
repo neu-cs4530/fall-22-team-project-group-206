@@ -67,7 +67,7 @@ describe('PuzzleArea', () => {
         puzzle,
         leaderboard,
         isGameOver: false,
-        startDate: testDate,
+        startTime: testDate,
       });
     });
     it("Sets the player's PuzzleLabel and emits an update for their location", () => {
@@ -93,7 +93,7 @@ describe('PuzzleArea', () => {
         puzzle,
         leaderboard,
         isGameOver: false,
-        startDate: testDate,
+        startTime: testDate,
       });
     });
     it("Clears the player's puzzleLabel and emits an update for their location", () => {
@@ -140,7 +140,7 @@ describe('PuzzleArea', () => {
       occupantsByID: [newPlayer.id],
       leaderboard,
       isGameOver: false,
-      startDate: testDate,
+      startTime: testDate,
     });
   });
   describe('fromMapObject', () => {
