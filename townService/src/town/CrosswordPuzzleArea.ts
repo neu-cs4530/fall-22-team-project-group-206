@@ -19,6 +19,8 @@ export default class CrosswordPuzzleArea extends InteractableArea {
 
   public isGameOver: boolean;
 
+  public startTime?: number;
+
   /** The puzzle area is "active" when there are players inside of it  */
   public get isActive(): boolean {
     return this._occupants.length > 0;
@@ -32,7 +34,7 @@ export default class CrosswordPuzzleArea extends InteractableArea {
    * @param townEmitter a broadcast emitter that can be used to emit updates to players
    */
   public constructor(
-    { id, groupName, puzzle, leaderboard, isGameOver }: CrosswordPuzzleAreaModel,
+    { id, groupName, puzzle, leaderboard, isGameOver, startTime }: CrosswordPuzzleAreaModel,
     coordinates: BoundingBox,
     townEmitter: TownEmitter,
   ) {
@@ -41,6 +43,7 @@ export default class CrosswordPuzzleArea extends InteractableArea {
     this.puzzle = puzzle;
     this.leaderboard = leaderboard;
     this.isGameOver = isGameOver;
+    this.startTime = startTime;
   }
 
   /**
@@ -56,6 +59,7 @@ export default class CrosswordPuzzleArea extends InteractableArea {
     if (this._occupants.length === 0) {
       this.groupName = undefined;
       this.puzzle = undefined;
+      this.startTime = undefined;
       this._emitAreaChanged();
     }
   }
@@ -72,6 +76,7 @@ export default class CrosswordPuzzleArea extends InteractableArea {
       puzzle: this.puzzle,
       leaderboard: this.leaderboard,
       isGameOver: this.isGameOver,
+      startTime: this.startTime,
     };
   }
 

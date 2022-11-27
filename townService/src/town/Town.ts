@@ -283,6 +283,7 @@ export default class Town {
     area.puzzle = crosswordPuzzleArea.puzzle;
     area.leaderboard = crosswordPuzzleArea.leaderboard;
     area.groupName = crosswordPuzzleArea.groupName;
+    area.startTime = crosswordPuzzleArea.startTime;
     area.addPlayersWithinBounds(this._players);
     this._broadcastEmitter.emit('interactableUpdate', area.toModel());
     return true;

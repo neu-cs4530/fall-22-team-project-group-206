@@ -24,6 +24,8 @@ export type CrosswordPuzzleAreaEvents = {
   puzzleChange: (newPuzzle: CrosswordPuzzleModel | undefined) => void;
   occupantsChange: (newOccupants: PlayerController[]) => void;
   gameOverChange: (newIsGameOver: boolean) => void;
+  groupNameChange: (newGroupName: string | undefined) => void;
+  startTimeChange: (newStartTime: number | undefined) => void;
 };
 
 /**
@@ -42,6 +44,10 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
 
   private _isGameOver: boolean;
 
+  private _startTime?: number;
+
+  private _groupName?: string;
+
   /**
    * Create a new CrosswordPuzzleAreaController;
    * @param id
@@ -53,6 +59,8 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
     isGameOver: boolean,
     puzzle?: CrosswordPuzzleModel,
     leaderboard?: ScoreModel[],
+    startTime?: number,
+    groupName?: string,
   ) {
     super();
     this._id = id;
@@ -62,6 +70,8 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
     }
     this._leaderboard = leaderboard;
     this._isGameOver = isGameOver;
+    this._startTime = startTime;
+    this._groupName = groupName;
   }
 
   /**
@@ -110,7 +120,7 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
   }
 
   /**
-   * The puzzle in this crossword puzzle area. Changing the puzzle
+   * The leaderboard in this crossword puzzle area. Changing the leaderboard
    * will emit an puzzleChange event.
    */
   set leaderboard(newLeaderboard: ScoreModel[] | undefined) {
@@ -122,8 +132,8 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
   }
 
   /**
-   * The puzzle in this crossword puzzle area. Changing the puzzle
-   * will emit an puzzleChange event.
+   * The isGameOver in this crossword puzzle area. Changing the isGameOver
+   * will emit an gameOverChange event.
    */
   set isGameOver(isGameOver: boolean) {
     if (isGameOver !== this.isGameOver) {
@@ -134,6 +144,36 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
 
   get isGameOver(): boolean {
     return this._isGameOver;
+  }
+
+  /**
+   * The puzzle in this crossword puzzle area. Changing the start time
+   * will emit an puzzleChange event.
+   */
+  set startTime(startTime: number | undefined) {
+    if (startTime !== this._startTime) {
+      this._startTime = startTime;
+      this.emit('startTimeChange', startTime);
+    }
+  }
+
+  get startTime(): number | undefined {
+    return this._startTime;
+  }
+
+  /**
+   * The groupName in this crossword puzzle area. Changing the group name
+   * will emit an groupNameChange event.
+   */
+  set groupName(groupName: string | undefined) {
+    if (groupName !== this._groupName) {
+      this._groupName = groupName;
+      this.emit('groupNameChange', groupName);
+    }
+  }
+
+  get groupName(): string | undefined {
+    return this._groupName;
   }
 
   /**
@@ -154,6 +194,8 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
       puzzle: this.puzzle,
       leaderboard: this.leaderboard,
       isGameOver: this.isGameOver,
+      groupName: this.groupName,
+      startTime: this.startTime,
     };
   }
 
@@ -172,6 +214,8 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
       crosswordPuzzleAreaModel.isGameOver,
       crosswordPuzzleAreaModel.puzzle,
       crosswordPuzzleAreaModel.leaderboard,
+      crosswordPuzzleAreaModel.startTime,
+      crosswordPuzzleAreaModel.groupName,
     );
     ret.occupants = playerFinder(crosswordPuzzleAreaModel.occupantsByID);
     return ret;
@@ -199,6 +243,7 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
           info: rawPuzzleModel.info,
           clues: rawPuzzleModel.clues,
         };
+        this.startTime = Date.now();
       } catch (err) {
         throw new Error('There was an error when trying to fetch');
       }

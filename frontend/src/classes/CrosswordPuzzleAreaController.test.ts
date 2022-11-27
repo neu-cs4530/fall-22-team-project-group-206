@@ -149,8 +149,11 @@ describe('CrosswordPuzzleArea', () => {
     mockClear(mockListeners.occupantsChange);
     mockClear(mockListeners.puzzleChange);
     mockClear(mockListeners.gameOverChange);
+    mockClear(mockListeners.groupNameChange);
+    mockClear(mockListeners.startTimeChange);
     testArea.addListener('gameOverChange', mockListeners.gameOverChange);
-
+    testArea.addListener('groupNameChange', mockListeners.groupNameChange);
+    testArea.addListener('startTimeChange', mockListeners.startTimeChange);
     testArea.addListener('occupantsChange', mockListeners.occupantsChange);
     testArea.addListener('puzzleChange', mockListeners.puzzleChange);
   });
@@ -234,6 +237,30 @@ describe('CrosswordPuzzleArea', () => {
       testArea.isGameOver = true;
       expect(testArea.isGameOver).toEqual(true);
       expect(mockListeners.gameOverChange).toBeCalled();
+    });
+  });
+  describe('setting the groupName property', () => {
+    it('does not emit groupName event if group name is unchanged', () => {
+      testArea.groupName = undefined;
+      expect(testArea.groupName).toBeUndefined();
+      expect(mockListeners.groupNameChange).not.toBeCalled();
+    });
+    it('emit groupName event if the groupName is changed', () => {
+      testArea.groupName = 'group name';
+      expect(testArea.groupName).toEqual('group name');
+      expect(mockListeners.groupNameChange).toBeCalled();
+    });
+  });
+  describe('setting the startTime property', () => {
+    it('does not emit startTime event if start time is unchanged', () => {
+      testArea.startTime = undefined;
+      expect(testArea.startTime).toBeUndefined();
+      expect(mockListeners.startTimeChange).not.toBeCalled();
+    });
+    it('emit groupName event if the groupName is changed', () => {
+      testArea.startTime = 1;
+      expect(testArea.startTime).toEqual(1);
+      expect(mockListeners.startTimeChange).toBeCalled();
     });
   });
   describe('setting the leaderboard property', () => {

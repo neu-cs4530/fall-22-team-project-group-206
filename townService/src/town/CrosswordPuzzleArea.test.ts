@@ -36,10 +36,19 @@ describe('PuzzleArea', () => {
       completed: false,
     },
   ];
+  const testDate = new Date('Nov 26, 2022 15:37:25').getTime();
   beforeEach(() => {
     mockClear(townEmitter);
     testArea = new CrosswordPuzzleArea(
-      { groupName, id, occupantsByID: [], puzzle, leaderboard, isGameOver: false },
+      {
+        groupName,
+        id,
+        occupantsByID: [],
+        puzzle,
+        leaderboard,
+        isGameOver: false,
+        startTime: testDate,
+      },
       testAreaBox,
       townEmitter,
     );
@@ -58,6 +67,7 @@ describe('PuzzleArea', () => {
         puzzle,
         leaderboard,
         isGameOver: false,
+        startDate: testDate,
       });
     });
     it("Sets the player's PuzzleLabel and emits an update for their location", () => {
@@ -83,6 +93,7 @@ describe('PuzzleArea', () => {
         puzzle,
         leaderboard,
         isGameOver: false,
+        startDate: testDate,
       });
     });
     it("Clears the player's puzzleLabel and emits an update for their location", () => {
@@ -101,6 +112,7 @@ describe('PuzzleArea', () => {
         leaderboard,
         isGameOver: false,
         puzzle: undefined,
+        startDate: undefined,
       });
       expect(testArea.groupName).toBeUndefined();
       expect(testArea.leaderboard).toEqual(leaderboard);
@@ -114,6 +126,7 @@ describe('PuzzleArea', () => {
         occupantsByID: [],
         leaderboard,
         isGameOver: false,
+        startDate: undefined,
       });
       expect(testArea.puzzle).toBeUndefined();
     });
@@ -127,6 +140,7 @@ describe('PuzzleArea', () => {
       occupantsByID: [newPlayer.id],
       leaderboard,
       isGameOver: false,
+      startDate: testDate,
     });
   });
   describe('fromMapObject', () => {
@@ -180,6 +194,7 @@ describe('PuzzleArea', () => {
       expect(val.groupName).toBeUndefined();
       expect(val.puzzle).toBeUndefined();
       expect(val.occupantsByID).toEqual([]);
+      expect(val.startTime).toBeUndefined();
     });
   });
 });

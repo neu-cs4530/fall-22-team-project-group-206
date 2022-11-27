@@ -64,6 +64,7 @@ export interface CrosswordPuzzleArea {
   occupantsByID: string[];
   leaderboard?: ScoreModel[];
   isGameOver: boolean;
+  startTime?:number;
 }
 
 export interface BoundingBox {

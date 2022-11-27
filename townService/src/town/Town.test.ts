@@ -429,7 +429,7 @@ describe('Town', () => {
   let town: Town;
   let player: Player;
   let playerTestData: MockedPlayer;
-
+  const testDate = new Date('Nov 26, 2022 15:37:25').getTime();
   beforeEach(async () => {
     town = new Town(nanoid(), false, nanoid(), townEmitter);
     playerTestData = mockPlayer(town.townID);
@@ -723,6 +723,7 @@ describe('Town', () => {
           puzzle: defaultPuzzle,
           occupantsByID: [],
           isGameOver: false,
+          startTime: testDate,
         }),
       ).toEqual(false);
     });
@@ -794,6 +795,8 @@ describe('Town', () => {
           puzzle: newPuzzle,
           occupantsByID: [player.id],
           isGameOver: false,
+          groupName: undefined,
+          startDate: undefined,
         });
       });
     });
