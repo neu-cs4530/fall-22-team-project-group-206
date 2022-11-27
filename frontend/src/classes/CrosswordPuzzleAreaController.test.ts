@@ -12,7 +12,7 @@ describe('CrosswordPuzzleArea', () => {
   const testPuzzle: CrosswordPuzzleModel = {
     grid: [
       [
-        { value: '', solution: '.', isCircled: false, isShaded: false, usedHint: false},
+        { value: '', solution: '.', isCircled: false, isShaded: false, usedHint: false },
         { value: '', solution: '.', isCircled: false, isShaded: false, usedHint: false },
         { value: '', solution: 'M', isCircled: false, isShaded: false, usedHint: false },
         { value: '', solution: 'C', isCircled: false, isShaded: false, usedHint: false },
@@ -42,7 +42,7 @@ describe('CrosswordPuzzleArea', () => {
       [
         { value: '', solution: 'D', isCircled: false, isShaded: false, usedHint: false },
         { value: '', solution: 'A', isCircled: false, isShaded: false, usedHint: false },
-        { value: '', solution: 'M', isCircled: false, isShaded: false, usedHint: false},
+        { value: '', solution: 'M', isCircled: false, isShaded: false, usedHint: false },
         { value: '', solution: '.', isCircled: false, isShaded: false, usedHint: false },
         { value: '', solution: '.', isCircled: false, isShaded: false, usedHint: false },
       ],
