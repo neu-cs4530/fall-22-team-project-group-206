@@ -19,19 +19,9 @@ const app = Express();
 
 app.use(CORS());
 const server = http.createServer(app);
-const dbServer = http.createServer(app);
 
 const socketServer = new SocketServer<ClientToServerEvents, ServerToClientEvents>(server, {
   cors: { origin: '*' },
-});
-
-dbServer.listen(process.env.PORT || 4000, () => {
-  const address = dbServer.address() as AddressInfo;
-  // eslint-disable-next-line no-console
-  console.log(`Listening to db on ${address.port}`);
-  scoreRoutes(dbServer, app);
-  // initialize the database and create a connection
-  createConnection();
 });
 
 // Initialize the towns store with a factory that creates a broadcast emitter for a town
@@ -54,6 +44,8 @@ app.use('/docs', swaggerUi.serve, async (_req: Express.Request, res: Express.Res
 
 // Register the TownsController routes with the express server
 RegisterRoutes(app);
+// Register the REST routes with the express server
+scoreRoutes(app);
 
 // Add a middleware for Express to handle errors
 app.use(
@@ -85,6 +77,8 @@ server.listen(process.env.PORT || 8081, () => {
   const address = server.address() as AddressInfo;
   // eslint-disable-next-line no-console
   console.log(`Listening on ${address.port}`);
+  // initialize the database and create a connection
+  createConnection();
   if (process.env.DEMO_TOWN_ID) {
     TownsStore.getInstance().createTown(process.env.DEMO_TOWN_ID, false);
   }

@@ -10,8 +10,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import React from 'react';
-import LeaderboardModal from './LeaderboardModal';
-
+import LeaderboardModal from '../Leaderboard/LeaderboardModal';
 import Timer from './Timer';
 import CrosswordPuzzleAreaController from '../../../classes/CrosswordPuzzleAreaController';
 import OccupantsDisplay from './OccupantsDisplay';

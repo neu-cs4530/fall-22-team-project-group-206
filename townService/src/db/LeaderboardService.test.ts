@@ -1,6 +1,5 @@
-import { addScore, removeScore, findScore, updateScore, getScores } from './LeaderboardDAO';
-import Score from './ScoreModel';
-import { IScore } from './IScore';
+import { addScore, removeScore, findScore, updateScore, getTodaysScores } from './LeaderboardDAO';
+
 import {
   getLeaders,
   insertScore,
@@ -19,7 +18,7 @@ jest.mock('./LeaderboardDAO', () => {
     removeScore: jest.fn(),
     findScore: jest.fn(),
     updateScore: jest.fn(),
-    getScores: jest.fn(),
+    getTodaysScores: jest.fn(),
   };
 });
 
@@ -36,17 +35,15 @@ const testScoreModel2: ScoreModel = {
   usedHint: true,
 };
 const testScoreModelBest: ScoreModel = {
-  teamName: 'best',
+  teamName: 'test',
   score: 10,
   teamMembers: ['player1', 'player2'],
   usedHint: false,
 };
 
 const TEST_LEADERBOARD: ScoreModel[] = [testScoreModel, testScoreModel2, testScoreModelBest];
-
-const testScore: IScore = new Score(testScoreModel);
 const addFunc = addScore as jest.Mock;
-const getScoresFunc = getScores as jest.Mock;
+const getTodaysScoresFunc = getTodaysScores as jest.Mock;
 const removeFunc = removeScore as jest.Mock;
 const findFunc = findScore as jest.Mock;
 const updateFunc = updateScore as jest.Mock;
@@ -65,63 +62,43 @@ describe('LeaderboardService', () => {
       expect(score.teamMembers).toEqual(testScoreModel.teamMembers);
       expect(score.usedHint).toEqual(testScoreModel.usedHint);
     });
-    it('throws an error when addScore is undefined', async () => {
-      addFunc.mockImplementation(() => undefined);
-      await expect(async () => {
-        await insertScore(testScoreModel);
-      }).rejects.toThrowError();
-    });
   });
 
   describe('getLeaders', () => {
     it('calls getScores and sorts list', async () => {
-      getScoresFunc.mockImplementation(() => TEST_LEADERBOARD);
+      getTodaysScoresFunc.mockImplementation(() => TEST_LEADERBOARD);
       const newLeaderboard = await getLeaders(3);
-      expect(getScores).toBeCalledTimes(1);
+      expect(getTodaysScores).toBeCalledTimes(1);
       expect(newLeaderboard.length).toEqual(3);
       expect(newLeaderboard[0].teamName).toEqual(testScoreModelBest.teamName);
       expect(newLeaderboard[1].teamName).toEqual(testScoreModel.teamName);
       expect(newLeaderboard[2].teamName).toEqual(testScoreModel2.teamName);
     });
-
-    it('throws an error when getScores returns undefined', async () => {
-      getScoresFunc.mockImplementation(() => undefined);
-      await expect(async () => {
-        await getLeaders(5);
-      }).rejects.toThrowError();
-    });
-    it('throws an error when getScores returns null', async () => {
-      getScoresFunc.mockImplementation(() => null);
-      await expect(async () => {
-        await getLeaders(5);
-      }).rejects.toThrowError();
-    });
-
     it('calls getScores and only returns the alloted number', async () => {
-      getScoresFunc.mockImplementation(() => TEST_LEADERBOARD);
+      getTodaysScoresFunc.mockImplementation(() => TEST_LEADERBOARD);
       const newLeaderboard = await getLeaders(1);
-      expect(getScores).toBeCalledTimes(1);
+      expect(getTodaysScores).toBeCalledTimes(1);
       expect(newLeaderboard.length).toEqual(1);
       expect(newLeaderboard[0].teamName).toEqual(testScoreModelBest.teamName);
     });
     it('calls getScores and returns all available if there are not enough scores', async () => {
-      getScoresFunc.mockImplementation(() => TEST_LEADERBOARD);
+      getTodaysScoresFunc.mockImplementation(() => TEST_LEADERBOARD);
       const newLeaderboard = await getLeaders(10);
-      expect(getScores).toBeCalledTimes(1);
+      expect(getTodaysScores).toBeCalledTimes(1);
       expect(newLeaderboard.length).toEqual(3);
       expect(newLeaderboard[0].teamName).toEqual(testScoreModelBest.teamName);
       expect(newLeaderboard[1].teamName).toEqual(testScoreModel.teamName);
       expect(newLeaderboard[2].teamName).toEqual(testScoreModel2.teamName);
     });
 
-    it('throws an error when a value less than 1 is inputed', async () => {
-      getScoresFunc.mockImplementation(() => 'response');
+    it('throws an error when a value less than 1 is inputted', async () => {
+      getTodaysScoresFunc.mockImplementation(() => 'response');
       await expect(async () => {
         await getLeaders(0);
       }).rejects.toThrowError();
     });
-    it('throws an error when a value greater than 10 is inputed', async () => {
-      getScoresFunc.mockImplementation(() => 'response');
+    it('throws an error when a value greater than 10 is inputted', async () => {
+      getTodaysScoresFunc.mockImplementation(() => 'response');
       await expect(async () => {
         await getLeaders(11);
       }).rejects.toThrowError();
@@ -136,18 +113,6 @@ describe('LeaderboardService', () => {
       expect(removedScore.teamName).toEqual(testScoreModel.teamName);
       expect(removedScore.teamMembers).toEqual(testScoreModel.teamMembers);
     });
-    it('throws an error when removeScore returns undefined', async () => {
-      removeFunc.mockImplementation(() => undefined);
-      await expect(async () => {
-        await removeScoreFromLeaderboard('test');
-      }).rejects.toThrowError();
-    });
-    it('throws an error when removeScore returns null', async () => {
-      removeFunc.mockImplementation(() => null);
-      await expect(async () => {
-        await removeScoreFromLeaderboard('test');
-      }).rejects.toThrowError();
-    });
   });
 
   describe('findScoreByID', () => {
@@ -158,18 +123,6 @@ describe('LeaderboardService', () => {
       expect(foundScore.teamName).toEqual(testScoreModel.teamName);
       expect(foundScore.teamMembers).toEqual(testScoreModel.teamMembers);
     });
-    it('throws an error when removeScore returns undefined', async () => {
-      findFunc.mockImplementation(() => undefined);
-      await expect(async () => {
-        await findScoreByID('test');
-      }).rejects.toThrowError();
-    });
-    it('throws an error when removeScore returns null', async () => {
-      findFunc.mockImplementation(() => null);
-      await expect(async () => {
-        await findScoreByID('test');
-      }).rejects.toThrowError();
-    });
   });
 
   describe('updateScoreValue', () => {
@@ -179,18 +132,6 @@ describe('LeaderboardService', () => {
       expect(updateScore).toBeCalledTimes(1);
       expect(prevScore.teamName).toEqual(testScoreModel2.teamName);
       expect(prevScore.teamMembers).toEqual(testScoreModel2.teamMembers);
-    });
-    it('throws an error when updateScore returns undefined', async () => {
-      updateFunc.mockImplementation(() => undefined);
-      await expect(async () => {
-        await updateScoreValue(testScoreModel2);
-      }).rejects.toThrowError();
-    });
-    it('throws an error when updateScore returns null', async () => {
-      updateFunc.mockImplementation(() => null);
-      await expect(async () => {
-        await updateScoreValue(testScoreModel2);
-      }).rejects.toThrowError();
     });
   });
 });

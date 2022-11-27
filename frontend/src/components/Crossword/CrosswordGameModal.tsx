@@ -1,5 +1,4 @@
 import {
-  HStack,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -10,11 +9,9 @@ import {
 import React, { useCallback, useEffect } from 'react';
 import { useCrosswordAreaPuzzleController, useInteractable } from '../../classes/TownController';
 import useTownController from '../../hooks/useTownController';
-import CrosswordClues from './CrosswordClues/CrosswordClues';
 import './CrosswordGameModal.css';
 import CrosswordGrid from './CrosswordGrid/CrosswordGrid';
 import CrosswordPuzzleAreaInteractable from '../Town/interactables/CrosswordPuzzleArea';
-import CrosswordToolbar from './CrosswordToolbar/CrosswordToolbar';
 
 function CrosswordGameModal(props: {
   crosswordPuzzleArea: CrosswordPuzzleAreaInteractable;
@@ -53,14 +50,7 @@ function CrosswordGameModal(props: {
           <ModalHeader>{crosswordPuzzleAreaController.puzzle.info.title}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <CrosswordToolbar controller={crosswordPuzzleAreaController} />
-            <HStack>
-              <CrosswordGrid controller={crosswordPuzzleAreaController} />
-              <CrosswordClues
-                acrossClues={crosswordPuzzleAreaController.puzzle.clues.across}
-                downClues={crosswordPuzzleAreaController.puzzle.clues.down}
-              />
-            </HStack>
+            <CrosswordGrid controller={crosswordPuzzleAreaController} />
           </ModalBody>
         </ModalContent>
       </Modal>

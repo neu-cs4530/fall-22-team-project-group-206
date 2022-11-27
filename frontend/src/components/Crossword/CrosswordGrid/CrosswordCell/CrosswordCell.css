@@ -40,6 +40,14 @@ input {
   background-color: #fff23c;
 }
 
+.checked_correct input {
+  color: #0f2a98;
+}
+
+.checked_incorrect input {
+  color: #e2215b;
+}
+
 td span {
   position: absolute;
   z-index: 100;

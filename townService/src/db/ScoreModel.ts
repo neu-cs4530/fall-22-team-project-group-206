@@ -1,15 +1,14 @@
 import * as mongoose from 'mongoose';
-import { IScore } from './IScore';
+import { ScoreDoc } from './ScoreDoc';
 
 export const scoreSchema = new mongoose.Schema({
   teamName: { type: String, required: true, unique: true },
-  date: { type: Date, required: false, default: mongoose.now },
+  date: { type: Date, required: false, default: new Date() },
   score: { type: Number, required: true },
   teamMembers: { type: [String], required: true },
-  usedHint: { type: Boolean, default: false },
-  finished: { type: Boolean, default: false },
+  usedHint: { type: Boolean, required: true, default: false },
 });
 
-const score: mongoose.Model<IScore> = mongoose.model<IScore>('score', scoreSchema);
+const score: mongoose.Model<ScoreDoc> = mongoose.model<ScoreDoc>('score', scoreSchema);
 
 export default score;

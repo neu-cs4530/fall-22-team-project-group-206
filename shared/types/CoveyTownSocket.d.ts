@@ -103,6 +103,7 @@ export interface CrosswordPuzzleCell {
   isShaded: boolean; // if the cell is shaded
   value: string; // the current input from user
   solution: string; // the corrent solution for this cell
+  usedHint: boolean; // if the cell was checked
 }
 
 // Info type in CrosswordPuzzleModel
@@ -130,7 +131,7 @@ export interface ScoreModel {
   teamName: string;
   score: number;
   teamMembers: string[];
-  usedHint?: boolean;
+  usedHint: boolean = false;
 }
 
 export interface ServerToClientEvents {
