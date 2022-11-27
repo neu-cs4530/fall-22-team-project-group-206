@@ -102,6 +102,7 @@ export interface CrosswordPuzzleCell {
   isShaded: boolean; // if the cell is shaded
   value: string; // the current input from user
   solution: string; // the corrent solution for this cell
+  usedHint: boolean; // if the cell was checked
 }
 
 // Info type in CrosswordPuzzleModel

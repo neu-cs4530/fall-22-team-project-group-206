@@ -228,6 +228,7 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
             this._fromPositionToIndex({ row, col }, grid[row].length),
           ),
           isShaded: shadedCells.includes(this._fromPositionToIndex({ row, col }, grid[row].length)),
+          usedHint: false,
         };
         cells[row].push(currentCell);
       }
