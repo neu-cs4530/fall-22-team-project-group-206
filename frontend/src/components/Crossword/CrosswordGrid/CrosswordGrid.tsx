@@ -1,10 +1,12 @@
-import { useToast } from '@chakra-ui/react';
+import { HStack, useToast } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import CrosswordPuzzleAreaController from '../../../classes/CrosswordPuzzleAreaController';
 import useTownController from '../../../hooks/useTownController';
 import { CrosswordPuzzleCell, CrosswordPuzzleModel } from '../../../types/CoveyTownSocket';
 import { BLACK_CELL_STRING, CellIndex, Direction, getHighlightedCells } from '../CrosswordUtils';
 import CrosswordCell from './CrosswordCell/CrosswordCell';
+import CrosswordClues from './CrosswordClues/CrosswordClues';
+import CrosswordToolbar from './CrosswordToolbar/CrosswordToolbar';
 
 type GameState = {
   selectedIndex: CellIndex;
@@ -22,6 +24,8 @@ function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaControll
     direction: 'across',
     highlightedCells: getHighlightedCells({ row: 0, col: 0 }, 'across', controller.puzzle?.grid),
   });
+
+  const [isRebus, setRebus] = useState<boolean>(false);
 
   const isSelected = (cell: CellIndex): boolean => {
     return gameState.selectedIndex.row === cell.row && gameState.selectedIndex.col === cell.col;
@@ -56,6 +60,10 @@ function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaControll
   }, [controller]);
 
   if (puzzle) {
+    const handleRebusMode = () => {
+      setRebus(!isRebus);
+    };
+
     const handleCellChange = (rowIndex: number, columnIndex: number, newValue: string) => {
       const updatedGrid: CrosswordPuzzleCell[][] = puzzle.grid.map((row, i) => {
         return row.map((cell, j) => {
@@ -65,6 +73,7 @@ function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaControll
               solution: cell.solution,
               isCircled: cell.isCircled,
               isShaded: cell.isShaded,
+              usedHint: cell.usedHint,
             };
           } else {
             return cell;
@@ -123,6 +132,92 @@ function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaControll
       );
     };
 
+    const handleCheckCell = () => {
+      const updatedGrid: CrosswordPuzzleCell[][] = puzzle.grid.map((row, i) => {
+        return row.map((cell, j) => {
+          if (isSelected({ row: i, col: j })) {
+            return {
+              value: cell.value,
+              solution: cell.solution,
+              isCircled: cell.isCircled,
+              isShaded: cell.isShaded,
+              usedHint: true,
+            };
+          } else {
+            return cell;
+          }
+        });
+      });
+
+      controller.puzzle = { grid: updatedGrid, info: puzzle.info, clues: puzzle.clues };
+      townController.emitCrosswordPuzzleAreaUpdate(controller);
+    };
+
+    const handleCheckWord = () => {
+      const updatedGrid: CrosswordPuzzleCell[][] = puzzle.grid.map((row, i) => {
+        return row.map((cell, j) => {
+          if (isSelected({ row: i, col: j }) || isHighlighted({ row: i, col: j })) {
+            return {
+              value: cell.value,
+              solution: cell.solution,
+              isCircled: cell.isCircled,
+              isShaded: cell.isShaded,
+              usedHint: true,
+            };
+          } else {
+            return cell;
+          }
+        });
+      });
+
+      controller.puzzle = { grid: updatedGrid, info: puzzle.info, clues: puzzle.clues };
+      townController.emitCrosswordPuzzleAreaUpdate(controller);
+    };
+
+    const handleCheckPuzzle = () => {
+      const updatedGrid: CrosswordPuzzleCell[][] = puzzle.grid.map(row => {
+        return row.map(cell => {
+          return {
+            value: cell.value,
+            solution: cell.solution,
+            isCircled: cell.isCircled,
+            isShaded: cell.isShaded,
+            usedHint: true,
+          };
+        });
+      });
+
+      controller.puzzle = { grid: updatedGrid, info: puzzle.info, clues: puzzle.clues };
+      townController.emitCrosswordPuzzleAreaUpdate(controller);
+    };
+
+    const handleRevealPuzzle = () => {
+      const updatedGrid: CrosswordPuzzleCell[][] = puzzle.grid.map(row => {
+        return row.map(cell => {
+          const newValue = cell.solution;
+          return {
+            value: newValue,
+            solution: cell.solution,
+            isCircled: cell.isCircled,
+            isShaded: cell.isShaded,
+            usedHint: true,
+          };
+        });
+      });
+
+      controller.puzzle = { grid: updatedGrid, info: puzzle.info, clues: puzzle.clues };
+      controller.isGameOver = true;
+      toast({
+        title: `Puzzle Finished!`,
+        description: 'Your Team Score is ...',
+        position: 'top',
+        status: 'success',
+        isClosable: true,
+      });
+
+      townController.emitCrosswordPuzzleAreaUpdate(controller);
+    };
+
     let counter = 0;
 
     const rows = puzzle.grid.map((row, i) => {
@@ -134,7 +229,7 @@ function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaControll
               key={`${i}_${j}`}
               number={counter}
               cellID={`${i}_${j}`}
-              isRebus={false}
+              isRebus={isRebus}
               isSelected={isSelected({ row: i, col: j })}
               isHighlighted={isHighlighted({ row: i, col: j })}
               cellModel={cell}
@@ -148,7 +243,7 @@ function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaControll
               key={`${i}_${j}`}
               number={undefined}
               cellID={`${i}_${j}`}
-              isRebus={false}
+              isRebus={isRebus}
               isSelected={isSelected({ row: i, col: j })}
               isHighlighted={isHighlighted({ row: i, col: j })}
               cellModel={cell}
@@ -162,9 +257,24 @@ function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaControll
     });
 
     return (
-      <table id='crossword-grid' style={{ borderCollapse: 'collapse' }}>
-        <tbody>{rows}</tbody>
-      </table>
+      <>
+        <CrosswordToolbar
+          controller={controller}
+          handleRebusProps={{ isRebus: isRebus, handleRebus: handleRebusMode }}
+          handleCheckProps={{
+            handleCheckCell: handleCheckCell,
+            handleCheckWord: handleCheckWord,
+            handleCheckPuzzle: handleCheckPuzzle,
+            handleRevealPuzzle: handleRevealPuzzle,
+          }}
+        />
+        <HStack>
+          <table id='crossword-grid' style={{ borderCollapse: 'collapse' }}>
+            <tbody>{rows}</tbody>
+          </table>
+          <CrosswordClues acrossClues={puzzle.clues.across} downClues={puzzle.clues.down} />
+        </HStack>
+      </>
     );
   } else {
     return <></>;
