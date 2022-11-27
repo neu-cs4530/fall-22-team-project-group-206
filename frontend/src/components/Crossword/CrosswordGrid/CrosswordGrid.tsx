@@ -26,7 +26,6 @@ function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaControll
   });
 
   const [isRebus, setRebus] = useState<boolean>(false);
-
   const isSelected = (cell: CellIndex): boolean => {
     return gameState.selectedIndex.row === cell.row && gameState.selectedIndex.col === cell.col;
   };

@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Menu, MenuButton, MenuItem, MenuList, Spacer } from '@chakra-ui/react';
+import { Box, Button, Flex, Menu, MenuButton, MenuItem, MenuList, Spacer, useDisclosure } from '@chakra-ui/react';
 import React from 'react';
 import CrosswordPuzzleAreaController from '../../../../classes/CrosswordPuzzleAreaController';
 
@@ -24,6 +24,7 @@ function CrosswordToolbar({
   const timerWidth = controller.puzzle?.grid.length
     ? controller.puzzle?.grid.length * CELL_WIDTH
     : 0;
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <Flex gap={'2'} paddingBottom={'12px'}>

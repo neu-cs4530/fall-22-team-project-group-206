@@ -2,6 +2,7 @@ import axios from 'axios';
 import EventEmitter from 'events';
 import _ from 'lodash';
 import TypedEmitter from 'typed-emitter';
+import { useEffect, useState } from 'react';
 import {
   CrosswordExternalModel,
   CrosswordPosition,
@@ -245,4 +246,22 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
   private _fromPositionToIndex({ row, col }: CrosswordPosition, rowSize: number): number {
     return row * rowSize + col;
   }
+}
+
+/**
+ * A react hook to retrieve the occupants of a CrosswordPuzzleAreaController, returning an array of PlayerController.
+ *
+ * This hook will re-render any components that use it when the set of occupants changes.
+ */
+export function useCrosswordPuzzleAreaOccupants(
+  area: CrosswordPuzzleAreaController,
+): PlayerController[] {
+  const [occupants, setOccupants] = useState(area.occupants);
+  useEffect(() => {
+    area.addListener('occupantsChange', setOccupants);
+    return () => {
+      area.removeListener('occupantsChange', setOccupants);
+    };
+  }, [area]);
+  return occupants;
 }

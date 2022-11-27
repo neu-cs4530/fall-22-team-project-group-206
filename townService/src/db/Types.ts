@@ -1,18 +1,23 @@
-import { IScore } from './IScore';
+import { ScoreModel } from '../types/CoveyTownSocket';
 
-export interface ScoreCreateResponse {
+/**
+ * The api response for CRUD operations conducted on scores within the database.
+ */
+export interface ScoreModifyResponse {
   status: number;
-  score?: IScore;
-  error?: Error;
+  data: {
+    score?: ScoreModel;
+    error?: Error;
+  };
 }
 
-export interface ScoreDeleteResponse {
-  status: number;
-  error?: Error;
-}
-
+/**
+ * The api response for finding multiple scores within the database (ex. the whole leaderboard).
+ */
 export interface ScoreFindResponse {
   status: number;
-  scores?: IScore[];
-  error?: Error;
+  data: {
+    scores?: ScoreModel[];
+    error?: Error;
+  };
 }
