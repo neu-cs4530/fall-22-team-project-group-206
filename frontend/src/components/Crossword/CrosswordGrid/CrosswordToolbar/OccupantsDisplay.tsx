@@ -2,14 +2,13 @@ import { Flex } from '@chakra-ui/react';
 import React from 'react';
 import PlayerController from '../../../../classes/PlayerController';
 import OccupantModal from './OccupantModal';
-
+const MAX_OCCUPANTS_DISPLAY = 3;
 export default function OccupantsDisplay(props: { players: PlayerController[] }): JSX.Element {
   // TODO: uncomment when multiplayer fixed
   //   useEffect(() => {
   //     setNumOccupants(props.players.length);
   //   }, [props.players]);
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  const MAX_OCCUPANTS_DISPLAY = 3;
+
   return (
     <Flex>
       <OccupantModal name={props.players[0].userName} />
