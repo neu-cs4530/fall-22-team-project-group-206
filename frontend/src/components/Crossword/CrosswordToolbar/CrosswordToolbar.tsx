@@ -13,10 +13,6 @@ import React from 'react';
 import LeaderboardModal from './LeaderboardModal';
 import CrosswordPuzzleAreaController from '../../../classes/CrosswordPuzzleAreaController';
 
-import { PlayerLocation } from '../../../../../shared/types/CoveyTownSocket';
-import PlayerController from '../../../classes/PlayerController';
-import { nanoid } from 'nanoid';
-
 const CELL_WIDTH = 28;
 
 function CrosswordToolbar({ controller }: { controller: CrosswordPuzzleAreaController }) {
