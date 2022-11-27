@@ -767,15 +767,15 @@ export function useViewingAreaController(viewingAreaID: string): ViewingAreaCont
 }
 
 /**
- * A react hook to retrieve a crossoword puzzle area controller.
+ * A react hook to retrieve a crossword puzzle area controller.
  *
  * This function will throw an error if the viewing area controller does not exist.
  *
  * This hook relies on the TownControllerContext.
  *
- * @param viewingAreaID The ID of the viewing area to retrieve the controller for
+ * @param crosswordPuzzleAreaID The ID of the crossword puzzle area to retrieve the controller for
  *
- * @throws Error if there is no viewing area controller matching the specifeid ID
+ * @throws Error if there is no crossword puzzle area controller matching the specified ID
  */
 export function useCrosswordAreaPuzzleController(
   crosswordPuzzleAreaID: string,

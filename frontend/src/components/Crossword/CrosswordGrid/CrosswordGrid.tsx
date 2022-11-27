@@ -1,32 +1,52 @@
+import { useToast } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import CrosswordPuzzleAreaController from '../../../classes/CrosswordPuzzleAreaController';
 import useTownController from '../../../hooks/useTownController';
 import { CrosswordPuzzleCell, CrosswordPuzzleModel } from '../../../types/CoveyTownSocket';
+import { BLACK_CELL_STRING, CellIndex, Direction, getHighlightedCells } from '../CrosswordUtils';
 import CrosswordCell from './CrosswordCell/CrosswordCell';
-import { useToast } from '@chakra-ui/react';
 
-type CellIndex = { row: number; col: number };
-const OMIT = '.';
+type GameState = {
+  selectedIndex: CellIndex;
+  direction: Direction;
+  highlightedCells: CellIndex[];
+};
+
 function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaController }): JSX.Element {
+  const toast = useToast();
   const townController = useTownController();
   const [puzzle, setPuzzle] = useState<CrosswordPuzzleModel | undefined>(controller.puzzle);
 
-  const [selected, setSelected] = useState<CellIndex>({ row: 0, col: 0 });
-  const [direction, setDirection] = useState<'across' | 'down'>('across');
-  const toast = useToast();
+  const [gameState, setGameState] = useState<GameState>({
+    selectedIndex: { row: 0, col: 0 },
+    direction: 'across',
+    highlightedCells: getHighlightedCells({ row: 0, col: 0 }, 'across', controller.puzzle?.grid),
+  });
+
   const isSelected = (cell: CellIndex): boolean => {
-    return selected.row === cell.row && selected.col === cell.col;
+    return gameState.selectedIndex.row === cell.row && gameState.selectedIndex.col === cell.col;
+  };
+  const isHighlighted = (cell: CellIndex): boolean => {
+    return (
+      gameState.highlightedCells.findIndex(
+        eachCell => cell.row === eachCell.row && cell.col === eachCell.col,
+      ) !== -1
+    );
   };
   const isCompleted = (grid: CrosswordPuzzleCell[][]) => {
     for (let row = 0; row < grid.length; row++) {
       for (let col = 0; col < grid[0].length; col++) {
-        if (grid[row][col].value !== grid[row][col].solution && grid[row][col].solution !== OMIT) {
+        if (
+          grid[row][col].value !== grid[row][col].solution &&
+          grid[row][col].solution !== BLACK_CELL_STRING
+        ) {
           return false;
         }
       }
     }
     return true;
   };
+
   useEffect(() => {
     controller.addListener('puzzleChange', setPuzzle);
 
@@ -52,6 +72,8 @@ function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaControll
         });
       });
 
+      controller.puzzle = { grid: updatedGrid, info: puzzle.info, clues: puzzle.clues };
+
       if (isCompleted(updatedGrid)) {
         controller.isGameOver = true;
         toast({
@@ -63,31 +85,78 @@ function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaControll
         });
       }
 
-      controller.puzzle = { grid: updatedGrid, info: puzzle.info, clues: puzzle.clues };
       townController.emitCrosswordPuzzleAreaUpdate(controller);
     };
 
     const handleCellClick = (rowIndex: number, columnIndex: number) => {
       if (isSelected({ row: rowIndex, col: columnIndex })) {
-        const newDirection = direction === 'across' ? 'down' : 'across';
-        setDirection(newDirection);
+        const newDirection = gameState.direction === 'across' ? 'down' : 'across';
+        setGameState({
+          ...gameState,
+          direction: newDirection,
+          highlightedCells: getHighlightedCells(
+            { row: rowIndex, col: columnIndex },
+            newDirection,
+            puzzle.grid,
+          ),
+        });
+      } else {
+        setGameState({
+          ...gameState,
+          selectedIndex: { row: rowIndex, col: columnIndex },
+          highlightedCells: getHighlightedCells(
+            { row: rowIndex, col: columnIndex },
+            gameState.direction,
+            puzzle.grid,
+          ),
+        });
       }
-      setSelected({ row: rowIndex, col: columnIndex });
     };
+
+    const isNumberedCell = (rowIndex: number, columnIndex: number): boolean => {
+      return (
+        puzzle.grid[rowIndex][columnIndex].solution !== BLACK_CELL_STRING &&
+        (rowIndex == 0 ||
+          columnIndex == 0 ||
+          puzzle.grid[rowIndex][columnIndex - 1].solution == BLACK_CELL_STRING ||
+          puzzle.grid[rowIndex - 1][columnIndex].solution == BLACK_CELL_STRING)
+      );
+    };
+
+    let counter = 0;
 
     const rows = puzzle.grid.map((row, i) => {
       const cells = row.map((cell, j) => {
-        return (
-          <CrosswordCell
-            key={i + j}
-            cellID={`${i}-${j}`}
-            isRebus={false}
-            isSelected={isSelected({ row: i, col: j })}
-            cellModel={cell}
-            onChange={handleCellChange}
-            onClick={handleCellClick}
-          />
-        );
+        if (isNumberedCell(i, j)) {
+          counter = counter + 1;
+          return (
+            <CrosswordCell
+              key={`${i}_${j}`}
+              number={counter}
+              cellID={`${i}_${j}`}
+              isRebus={false}
+              isSelected={isSelected({ row: i, col: j })}
+              isHighlighted={isHighlighted({ row: i, col: j })}
+              cellModel={cell}
+              onChange={handleCellChange}
+              onClick={handleCellClick}
+            />
+          );
+        } else {
+          return (
+            <CrosswordCell
+              key={`${i}_${j}`}
+              number={undefined}
+              cellID={`${i}_${j}`}
+              isRebus={false}
+              isSelected={isSelected({ row: i, col: j })}
+              isHighlighted={isHighlighted({ row: i, col: j })}
+              cellModel={cell}
+              onChange={handleCellChange}
+              onClick={handleCellClick}
+            />
+          );
+        }
       });
       return <tr key={i}>{cells}</tr>;
     });
