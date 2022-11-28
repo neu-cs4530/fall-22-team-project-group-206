@@ -142,7 +142,7 @@ export default class Town {
     });
 
     // Set up a listener to process updates to interactables.
-    // Currently only knows how to process updates for ViewingArea's and CrosswordPuzzleArea's, 
+    // Currently only knows how to process updates for ViewingArea's and CrosswordPuzzleArea's,
     // and ignores any other updates for any other kind of interactable.
     // For ViewingArea's: dispatches an updateModel call to the viewingArea that
     // corresponds to the interactable being updated. Does not throw an error if

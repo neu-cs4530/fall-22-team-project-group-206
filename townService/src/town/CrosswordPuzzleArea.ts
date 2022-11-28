@@ -9,7 +9,7 @@ import {
   ScoreModel,
   CrosswordPuzzleCell,
   CellIndex,
-  CrosswordExternalModel
+  CrosswordExternalModel,
 } from '../types/CoveyTownSocket';
 import InteractableArea from './InteractableArea';
 
@@ -136,7 +136,7 @@ export default class CrosswordPuzzleArea extends InteractableArea {
         }
         const rawPuzzleModel: CrosswordExternalModel = response.data.puzzles[0]
           .content as CrosswordExternalModel;
-        const cellGrid: CrosswordPuzzleCell[][] = this._initializeFromGridToCell(
+        const cellGrid: CrosswordPuzzleCell[][] = CrosswordPuzzleArea._initializeFromGridToCell(
           rawPuzzleModel.grid,
           rawPuzzleModel.shades,
           rawPuzzleModel.circles,
@@ -159,7 +159,7 @@ export default class CrosswordPuzzleArea extends InteractableArea {
    * @param circledCells tiles that is circled
    * @returns 2D list of CrosswordPuzzleCell which is used for constructing CrosswordPuzzleModel
    */
-  private _initializeFromGridToCell(
+  private static _initializeFromGridToCell(
     grid: string[][],
     shadedCells: number[],
     circledCells: number[],
@@ -172,9 +172,11 @@ export default class CrosswordPuzzleArea extends InteractableArea {
           value: '',
           solution: grid[row][col],
           isCircled: circledCells.includes(
-            this._fromPositionToIndex({ row, col }, grid[row].length),
+            CrosswordPuzzleArea._fromPositionToIndex({ row, col }, grid[row].length),
           ),
-          isShaded: shadedCells.includes(this._fromPositionToIndex({ row, col }, grid[row].length)),
+          isShaded: shadedCells.includes(
+            CrosswordPuzzleArea._fromPositionToIndex({ row, col }, grid[row].length),
+          ),
           usedHint: false,
         };
         cells[row].push(currentCell);
@@ -190,7 +192,7 @@ export default class CrosswordPuzzleArea extends InteractableArea {
    * @param rowSize length of the gird namly column size of the grid
    * @returns number converted from a CrosswordPositioon
    */
-  private _fromPositionToIndex({ row, col }: CellIndex, rowSize: number): number {
+  private static _fromPositionToIndex({ row, col }: CellIndex, rowSize: number): number {
     return row * rowSize + col;
   }
 }

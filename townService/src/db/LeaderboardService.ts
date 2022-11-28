@@ -17,7 +17,7 @@ export async function getLeaders(numResults: number): Promise<ScoreModel[]> {
     }
     return Number(a.usedHint) - Number(b.usedHint);
   });
-  const retScores = scores.slice(0, numResults);
+  const retScores = sortedScores.slice(0, numResults);
   return retScores;
 }
 
