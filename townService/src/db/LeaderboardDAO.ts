@@ -47,8 +47,11 @@ export async function removeScore(name: string): Promise<ScoreModel> {
  */
 export async function findScore(name: string): Promise<ScoreModel> {
   const doc = await Score.findOne({ teamName: name });
-  if (doc === null || doc === undefined) {
-    throw new Error('Error finding score, database returned null or undefined');
+  if (doc === null) {
+    throw new Error('Error finding score, database returned null');
+  }
+  if (doc === undefined) {
+    throw new Error('Error finding score, database returned undefined');
   }
   const foundScore: ScoreModel = {
     teamName: doc.teamName,
@@ -101,4 +104,18 @@ export async function getTodaysScores(): Promise<ScoreModel[]> {
     });
   });
   return scoreModels;
+}
+
+/**
+ * Returns all the scores from today found within the database.
+ * @returns A list of score models that each represent a score from the present day.
+ */
+export async function isTeamNameInUse(teamName: string): Promise<boolean> {
+  // The database should do a reset every day but just in case this is in place
+  const docs = await Score.find({ teamName: { $eq: teamName } });
+  if (docs === null || docs === undefined) {
+    throw new Error('Error finding scores, database returned undefined');
+  }
+
+  return docs.length > 0;
 }
