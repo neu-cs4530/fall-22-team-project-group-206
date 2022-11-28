@@ -2,7 +2,7 @@ import express, { Express } from 'express';
 import {
   getLeaders,
   insertScore,
-  isTeamNameCurrentlyUsed,
+  isTeamNameAvailable,
 } from './LeaderboardService';
 import { ScoreModifyResponse, ScoreFindResponse, TeamNameInUseResponse } from './Types';
 import { ScoreModel } from '../types/CoveyTownSocket';
@@ -54,7 +54,7 @@ export default function scoreRoutes(app: Express) {
   app.get('/scores/team-names/:teamName', express.json(), async (req, resp) => {
     const buildResp: TeamNameInUseResponse = { status: 100, data: {} };
     try {
-      const inUse: boolean = await isTeamNameCurrentlyUsed(req.params.teamName);
+      const inUse: boolean = await isTeamNameAvailable(req.params.teamName);
       buildResp.status = 200;
       buildResp.data.inUse = inUse;
     } catch (e) {

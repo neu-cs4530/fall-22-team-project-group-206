@@ -1,3 +1,4 @@
+import { MongoServerError, MongoUnexpectedServerResponseError } from 'mongodb';
 import { ScoreModel } from '../types/CoveyTownSocket';
 import Score from './ScoreModel';
 
@@ -110,12 +111,12 @@ export async function getTodaysScores(): Promise<ScoreModel[]> {
  * Returns all the scores from today found within the database.
  * @returns A list of score models that each represent a score from the present day.
  */
-export async function isTeamNameInUse(teamName: string): Promise<boolean> {
-  // The database should do a reset every day but just in case this is in place
-  const docs = await Score.find({ teamName: { $eq: teamName } });
-  if (docs === null || docs === undefined) {
-    throw new Error('Error finding scores, database returned undefined');
+export async function numInstancesTeamNameUsed(teamName: string): Promise<number> {
+  // the database clears all scores daily, so this will only check team names created in the past day
+  const num = await Score.count({ teamName: { $eq: teamName } });
+  if (num === undefined) {
+    throw new Error('Error querying, database returned undefined');
   }
 
-  return docs.length > 0;
+  return num;
 }

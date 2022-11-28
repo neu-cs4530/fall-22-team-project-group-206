@@ -1,8 +1,9 @@
-import { addScore, removeScore, findScore, updateScore, getTodaysScores } from './LeaderboardDAO';
+import { addScore, getTodaysScores, numInstancesTeamNameUsed } from './LeaderboardDAO';
 
 import {
   getLeaders,
-  insertScore
+  insertScore,
+  isTeamNameAvailable
 } from './LeaderboardService';
 import { ScoreModel } from '../types/CoveyTownSocket';
 
@@ -12,10 +13,8 @@ jest.mock('./LeaderboardDAO', () => {
     __esModule: true,
     ...original,
     addScore: jest.fn(),
-    removeScore: jest.fn(),
-    findScore: jest.fn(),
-    updateScore: jest.fn(),
     getTodaysScores: jest.fn(),
+    numInstancesTeamNameUsed: jest.fn()
   };
 });
 
@@ -41,9 +40,7 @@ const testScoreModelBest: ScoreModel = {
 const TEST_LEADERBOARD: ScoreModel[] = [testScoreModel, testScoreModel2, testScoreModelBest];
 const addFunc = addScore as jest.Mock;
 const getTodaysScoresFunc = getTodaysScores as jest.Mock;
-const removeFunc = removeScore as jest.Mock;
-const findFunc = findScore as jest.Mock;
-const updateFunc = updateScore as jest.Mock;
+const timesNameUsedFunc = numInstancesTeamNameUsed as jest.Mock;
 
 describe('LeaderboardService', () => {
   beforeEach(() => {
@@ -101,4 +98,12 @@ describe('LeaderboardService', () => {
       }).rejects.toThrowError();
     });
   });
+
+  describe('isTeamNameCurrentlyUsed', () => {
+    it('returns false when amount of times used is over 0', async () => {
+      timesNameUsedFunc.mockImplementation(() => 1);
+      const nameUsed = await isTeamNameAvailable('name')
+      expect(nameUsed).toBeFalsy();
+    })
+  })
 });

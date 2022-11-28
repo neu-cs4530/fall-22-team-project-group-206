@@ -1,11 +1,9 @@
 import { ScoreModel } from '../types/CoveyTownSocket';
 import {
   addScore,
-  removeScore,
-  findScore,
   updateScore,
   getTodaysScores,
-  isTeamNameInUse,
+  numInstancesTeamNameUsed,
 } from './LeaderboardDAO';
 
 /**
@@ -39,26 +37,6 @@ export async function insertScore(newScore: ScoreModel): Promise<ScoreModel> {
 }
 
 /**
- * Removes a score from the leaderboard
- * @param teamName the name of the score that needs to be removed
- * @returns the removed Score
- */
-export async function removeScoreFromLeaderboard(teamName: string): Promise<ScoreModel> {
-  const score = await removeScore(teamName);
-  return score;
-}
-
-/**
- * Finds a score with the provided team name within the database
- * @param teamName the name of the team being queried
- * @returns a scoreModel representing the score found within the database
- */
-export async function findScoreByID(teamName: string): Promise<ScoreModel> {
-  const scoreFound = await findScore(teamName);
-  return scoreFound;
-}
-
-/**
  * Updates the score matching the team name of the provided score within the db
  * @param newScore the new score to replace the score currently in the db
  * @returns a scoreModel representing the old score no longer in the db
@@ -73,7 +51,7 @@ export async function updateScoreValue(newScore: ScoreModel): Promise<ScoreModel
  * @param teamName the name of the team being checked
  * @returns if the team name has been used toda
  */
-export async function isTeamNameCurrentlyUsed(teamName: string): Promise<boolean> {
-  const isUsed = await isTeamNameInUse(teamName);
-  return isUsed;
+export async function isTeamNameAvailable(teamName: string): Promise<boolean> {
+  const timesUsed = await numInstancesTeamNameUsed(teamName);
+  return timesUsed === 0;
 }

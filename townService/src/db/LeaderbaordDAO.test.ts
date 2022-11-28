@@ -7,7 +7,7 @@ import Score from './ScoreModel';
 const mockingoose = require('mockingoose');
 
 describe('LeaderboardDAO', () => {
-  const testScore = { teamName: 'name', score: 50, teamMembers: ['jaime'] };
+  const testScore = { teamName: 'name', score: 50, teamMembers: ['jaime'], usedHint: false };
   describe('findScore', () => {
     it('calls the findOne method in mongoose', async () => {
       mockingoose(Score).toReturn(testScore, 'findOne');
@@ -78,10 +78,16 @@ describe('LeaderboardDAO', () => {
   describe('addScore', () => {
     it('calls the save method in mongoose', async () => {
       mockingoose(Score).toReturn(testScore, 'save');
-      const returnedScore = await addScore(new Score(testScore));
-      expect(returnedScore?.teamName).toEqual(testScore.teamName);
-      expect(returnedScore?.teamMembers).toEqual(testScore.teamMembers);
-      expect(returnedScore?.score).toEqual(testScore.score);
+      const returnedScore = await addScore(testScore);
+      expect(returnedScore.teamName).toEqual(testScore.teamName);
+      expect(returnedScore.teamMembers).toEqual(testScore.teamMembers);
+      expect(returnedScore.score).toEqual(testScore.score);
+    });
+    it('throws an error when save returns undefined', async () => {
+      mockingoose(Score).toReturn(undefined, 'save');
+      await expect(async () => {
+        await addScore(testScore);
+      }).rejects.toThrowError();
     });
   });
 });
