@@ -1,5 +1,12 @@
 import { ScoreModel } from '../types/CoveyTownSocket';
-import { addScore, removeScore, findScore, updateScore, getTodaysScores, isTeamNameInUse } from './LeaderboardDAO';
+import {
+  addScore,
+  removeScore,
+  findScore,
+  updateScore,
+  getTodaysScores,
+  isTeamNameInUse,
+} from './LeaderboardDAO';
 
 /**
  * Returns the leaders for todays crossword puzzle.

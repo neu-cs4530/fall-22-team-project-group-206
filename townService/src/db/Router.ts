@@ -31,25 +31,25 @@ export default function scoreRoutes(app: Express) {
     resp.status(buildResp.status).send(buildResp.data);
   });
 
-    /*
+  /*
    * Find a new score
    */
-    app.get('/scores/:id', express.json(), async (req, resp) => {
-      const buildResp: ScoreModifyResponse = { status: 100, data: {} };
-      try {
-        const teamName: string = req.params.id;
-        const createdScore = await findScoreByID(teamName);
-        buildResp.status = 200;
-        buildResp.data.score = createdScore;
-      } catch (e) {
-        if (e instanceof Error) {
-          buildResp.status = 400;
-          buildResp.data.errorType = e.name;
-          buildResp.data.errorMessage = e.message;
-        }
+  app.get('/scores/:id', express.json(), async (req, resp) => {
+    const buildResp: ScoreModifyResponse = { status: 100, data: {} };
+    try {
+      const teamName: string = req.params.id;
+      const createdScore = await findScoreByID(teamName);
+      buildResp.status = 200;
+      buildResp.data.score = createdScore;
+    } catch (e) {
+      if (e instanceof Error) {
+        buildResp.status = 400;
+        buildResp.data.errorType = e.name;
+        buildResp.data.errorMessage = e.message;
       }
-      resp.status(buildResp.status).send(buildResp.data);
-    });
+    }
+    resp.status(buildResp.status).send(buildResp.data);
+  });
 
   /**
    * Delete a score
@@ -113,7 +113,7 @@ export default function scoreRoutes(app: Express) {
   /**
    * Get if the team name is in use
    */
-   app.get('/scores/inUse/:teamName', express.json(), async (req, resp) => {
+  app.get('/scores/inUse/:teamName', express.json(), async (req, resp) => {
     const buildResp: TeamNameInUseResponse = { status: 100, data: {} };
     try {
       const inUse: boolean = await teamNameCurrentlyUsed(req.params.teamName);
@@ -128,6 +128,4 @@ export default function scoreRoutes(app: Express) {
     }
     resp.status(buildResp.status).send(buildResp.data);
   });
-
-
 }

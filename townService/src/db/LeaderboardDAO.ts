@@ -116,9 +116,6 @@ export async function isTeamNameInUse(teamName: string): Promise<boolean> {
   if (docs === null || docs === undefined) {
     throw new Error('Error finding scores, database returned undefined');
   }
-  
+
   return docs.length > 0;
 }
-
-
-
