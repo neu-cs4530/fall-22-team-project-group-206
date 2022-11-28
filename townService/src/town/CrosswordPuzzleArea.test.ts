@@ -133,9 +133,9 @@ describe('PuzzleArea', () => {
         occupantsByID: [],
         isGameOver: true,
       };
-  
+
       testArea.updateModel(model);
-  
+
       expect(testArea.groupName).toEqual(model.groupName);
       expect(testArea.puzzle).toEqual(model.puzzle);
       expect(testArea.leaderboard).toEqual(model.leaderboard);
@@ -149,6 +149,8 @@ describe('PuzzleArea', () => {
         CrosswordPuzzleArea.prototype as any,
         '_setPuzzleModel',
       );
+      // Sets puzzle in impl
+      // eslint-disable-next-line
       setPuzzleMock.mockImplementation(() => (testArea.puzzle = testPuzzle));
 
       const undefinedPuzzleModel: CrosswordPuzzleAreaModel = {
