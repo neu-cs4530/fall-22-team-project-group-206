@@ -1,5 +1,5 @@
 import { ScoreModel } from '../types/CoveyTownSocket';
-import { addScore, removeScore, findScore, updateScore, getTodaysScores } from './LeaderboardDAO';
+import { addScore, removeScore, findScore, updateScore, getTodaysScores, isTeamNameInUse } from './LeaderboardDAO';
 
 /**
  * Returns the leaders for todays crossword puzzle.
@@ -59,4 +59,9 @@ export async function findScoreByID(teamName: string): Promise<ScoreModel> {
 export async function updateScoreValue(newScore: ScoreModel): Promise<ScoreModel> {
   const updatedScore = await updateScore(newScore);
   return updatedScore;
+}
+
+export async function teamNameCurrentlyUsed(teamName: string): Promise<boolean> {
+  const isUsed = await isTeamNameInUse(teamName);
+  return isUsed;
 }

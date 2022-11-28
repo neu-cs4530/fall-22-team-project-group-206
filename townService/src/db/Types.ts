@@ -7,7 +7,8 @@ export interface ScoreModifyResponse {
   status: number;
   data: {
     score?: ScoreModel;
-    error?: Error;
+    errorType?: string;
+    errorMessage?: string;
   };
 }
 
@@ -18,6 +19,19 @@ export interface ScoreFindResponse {
   status: number;
   data: {
     scores?: ScoreModel[];
-    error?: Error;
+    errorType?: string;
+    errorMessage?: string;
   };
+}
+
+/**
+ * 
+ */
+export interface TeamNameInUseResponse {
+  status: number;
+  data: {
+    inUse?: boolean;
+    errorType?: string;
+    errorMessage?: string;
+  }
 }

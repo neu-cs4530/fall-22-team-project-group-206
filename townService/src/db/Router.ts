@@ -1,11 +1,13 @@
 import express, { Express } from 'express';
 import {
+  findScoreByID,
   getLeaders,
   insertScore,
   removeScoreFromLeaderboard,
+  teamNameCurrentlyUsed,
   updateScoreValue,
 } from './LeaderboardService';
-import { ScoreModifyResponse, ScoreFindResponse } from './Types';
+import { ScoreModifyResponse, ScoreFindResponse, TeamNameInUseResponse } from './Types';
 import { ScoreModel } from '../types/CoveyTownSocket';
 
 export default function scoreRoutes(app: Express) {
@@ -22,11 +24,32 @@ export default function scoreRoutes(app: Express) {
     } catch (e) {
       if (e instanceof Error) {
         buildResp.status = 400;
-        buildResp.data.error = e;
+        buildResp.data.errorType = e.name;
+        buildResp.data.errorMessage = e.message;
       }
     }
     resp.status(buildResp.status).send(buildResp.data);
   });
+
+    /*
+   * Find a new score
+   */
+    app.get('/scores/:id', express.json(), async (req, resp) => {
+      const buildResp: ScoreModifyResponse = { status: 100, data: {} };
+      try {
+        const teamName: string = req.params.id;
+        const createdScore = await findScoreByID(teamName);
+        buildResp.status = 200;
+        buildResp.data.score = createdScore;
+      } catch (e) {
+        if (e instanceof Error) {
+          buildResp.status = 400;
+          buildResp.data.errorType = e.name;
+          buildResp.data.errorMessage = e.message;
+        }
+      }
+      resp.status(buildResp.status).send(buildResp.data);
+    });
 
   /**
    * Delete a score
@@ -40,7 +63,8 @@ export default function scoreRoutes(app: Express) {
     } catch (e) {
       if (e instanceof Error) {
         buildResp.status = 400;
-        buildResp.data.error = e;
+        buildResp.data.errorType = e.name;
+        buildResp.data.errorMessage = e.message;
       }
     }
     resp.status(buildResp.status).send(buildResp.data);
@@ -59,7 +83,8 @@ export default function scoreRoutes(app: Express) {
     } catch (e) {
       if (e instanceof Error) {
         buildResp.status = 400;
-        buildResp.data.error = e;
+        buildResp.data.errorType = e.name;
+        buildResp.data.errorMessage = e.message;
       }
     }
     resp.status(buildResp.status).send(buildResp.data);
@@ -68,7 +93,7 @@ export default function scoreRoutes(app: Express) {
   /**
    * Get Leaderboard
    */
-  app.get('/scores/:scoreNum', express.json(), async (req, resp) => {
+  app.get('/scores/amount/:scoreNum', express.json(), async (req, resp) => {
     const buildResp: ScoreFindResponse = { status: 100, data: {} };
     try {
       const numScores: number = parseInt(req.params.scoreNum, 10);
@@ -78,9 +103,31 @@ export default function scoreRoutes(app: Express) {
     } catch (e) {
       if (e instanceof Error) {
         buildResp.status = 400;
-        buildResp.data.error = e;
+        buildResp.data.errorType = e.name;
+        buildResp.data.errorMessage = e.message;
       }
     }
     resp.status(buildResp.status).send(buildResp.data);
   });
+
+  /**
+   * Get if the team name is in use
+   */
+   app.get('/scores/inUse/:teamName', express.json(), async (req, resp) => {
+    const buildResp: TeamNameInUseResponse = { status: 100, data: {} };
+    try {
+      const inUse: boolean = await teamNameCurrentlyUsed(req.params.teamName);
+      buildResp.status = 200;
+      buildResp.data.inUse = inUse;
+    } catch (e) {
+      if (e instanceof Error) {
+        buildResp.status = 400;
+        buildResp.data.errorType = e.name;
+        buildResp.data.errorMessage = e.message;
+      }
+    }
+    resp.status(buildResp.status).send(buildResp.data);
+  });
+
+
 }
