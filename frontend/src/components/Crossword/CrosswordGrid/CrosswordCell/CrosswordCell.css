@@ -9,6 +9,7 @@ input {
   height: inherit;
   text-align: center;
   border-style: hidden;
+  outline: none;
 }
 
 .filled {
@@ -16,7 +17,7 @@ input {
 }
 
 .circled input {
-  border: 1px solid #08133e;
+  border: 1px solid #8692c4;
   border-radius: 50%;
 }
 
