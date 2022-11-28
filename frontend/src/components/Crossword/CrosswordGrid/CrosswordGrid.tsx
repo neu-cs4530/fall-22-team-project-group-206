@@ -2,7 +2,11 @@ import { HStack, useToast } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import CrosswordPuzzleAreaController from '../../../classes/CrosswordPuzzleAreaController';
 import useTownController from '../../../hooks/useTownController';
-import { CellIndex, CrosswordPuzzleCell, CrosswordPuzzleModel } from '../../../types/CoveyTownSocket';
+import {
+  CellIndex,
+  CrosswordPuzzleCell,
+  CrosswordPuzzleModel,
+} from '../../../types/CoveyTownSocket';
 import { BLACK_CELL_STRING, Direction, getHighlightedCells } from '../CrosswordUtils';
 import CrosswordCell from './CrosswordCell/CrosswordCell';
 import CrosswordClues from './CrosswordClues/CrosswordClues';

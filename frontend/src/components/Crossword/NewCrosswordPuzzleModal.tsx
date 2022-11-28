@@ -13,38 +13,44 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useInteractable } from '../../classes/TownController';
-import { CrosswordPuzzleArea } from '../../generated/client';
+import { useCrosswordAreaPuzzleController } from '../../classes/TownController';
+import { CrosswordPuzzleArea as CrosswordPuzzleAreaModel } from '../../generated/client';
 import useTownController from '../../hooks/useTownController';
+import CrosswordPuzzleArea from '../Town/interactables/CrosswordPuzzleArea';
 
-export default function NewCrosswordPuzzleModal(): JSX.Element {
+export default function NewCrosswordPuzzleModal({
+  isOpen,
+  close,
+  crosswordPuzzleArea,
+}: {
+  isOpen: boolean;
+  close: () => void;
+  crosswordPuzzleArea: CrosswordPuzzleArea;
+}): JSX.Element {
   const coveyTownController = useTownController();
-  const newCrosswordPuzzle = useInteractable('crosswordPuzzleArea');
+  const crosswordPuzzleController = useCrosswordAreaPuzzleController(crosswordPuzzleArea.id);
 
   const [groupName, setGroupName] = useState<string>('');
 
-  const isOpen = newCrosswordPuzzle !== undefined;
-
   useEffect(() => {
-    if (newCrosswordPuzzle) {
+    if (isOpen) {
       coveyTownController.pause();
     } else {
       coveyTownController.unPause();
     }
-  }, [coveyTownController, newCrosswordPuzzle]);
+  }, [coveyTownController, isOpen]);
 
   const closeModal = useCallback(() => {
-    if (newCrosswordPuzzle) {
-      coveyTownController.interactEnd(newCrosswordPuzzle);
-    }
-  }, [coveyTownController, newCrosswordPuzzle]);
+    coveyTownController.unPause();
+    close();
+  }, [coveyTownController, close]);
 
   const toast = useToast();
 
   const createCrosswordPuzzle = useCallback(async () => {
-    if (newCrosswordPuzzle) {
-      const newCrosswordPuzzleToCreate: CrosswordPuzzleArea = {
-        id: newCrosswordPuzzle.id,
+    if (groupName && crosswordPuzzleController) {
+      const newCrosswordPuzzleToCreate: CrosswordPuzzleAreaModel = {
+        id: crosswordPuzzleArea.id,
         groupName: groupName,
         occupantsByID: [],
         isGameOver: false,
@@ -73,7 +79,14 @@ export default function NewCrosswordPuzzleModal(): JSX.Element {
         }
       }
     }
-  }, [groupName, coveyTownController, newCrosswordPuzzle, closeModal, toast]);
+  }, [
+    crosswordPuzzleArea,
+    groupName,
+    coveyTownController,
+    crosswordPuzzleController,
+    closeModal,
+    toast,
+  ]);
 
   return (
     <Modal

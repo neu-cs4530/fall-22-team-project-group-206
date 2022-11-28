@@ -66,7 +66,7 @@ export default class CrosswordPuzzleArea extends InteractableArea {
     super.remove(player);
     if (this._occupants.length === 0) {
       this.groupName = undefined;
-      this.puzzle = undefined;
+      this._setPuzzleModel();
       this._emitAreaChanged();
     }
   }

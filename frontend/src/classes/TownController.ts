@@ -447,11 +447,15 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
         );
         updatedViewingArea?.updateFrom(interactable);
       } else if (isCrosswordPuzzleArea(interactable)) {
+        console.log(interactable);
         const updatedCrosswordArea = this._crosswordPuzzleAreas.find(
           eachArea => eachArea.id === interactable.id,
         );
         if (updatedCrosswordArea) {
           updatedCrosswordArea.updateFrom(interactable, this._playersByIDs.bind(this));
+          if (updatedCrosswordArea.isEmpty()) {
+            this.emit('crosswordPuzzleAreasChanged', this._crosswordPuzzleAreas);
+          }
         }
       }
     });

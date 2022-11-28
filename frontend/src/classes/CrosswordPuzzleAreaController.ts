@@ -17,6 +17,7 @@ export type CrosswordPuzzleAreaEvents = {
   puzzleChange: (newPuzzle: CrosswordPuzzleModel | undefined) => void;
   occupantsChange: (newOccupants: PlayerController[]) => void;
   gameOverChange: (newIsGameOver: boolean) => void;
+  groupNameChange: (newGroupName: string | undefined) => void;
 };
 
 /**
@@ -35,6 +36,8 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
 
   private _isGameOver: boolean;
 
+  private _groupName?: string;
+
   /**
    * Create a new CrosswordPuzzleAreaController;
    * @param id
@@ -47,12 +50,14 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
     isGameOver: boolean,
     puzzle?: CrosswordPuzzleModel,
     leaderboard?: ScoreModel[],
+    groupName?: string,
   ) {
     super();
     this._id = id;
     this._puzzle = puzzle;
     this._leaderboard = leaderboard;
     this._isGameOver = isGameOver;
+    this._groupName = groupName;
   }
 
   /**
@@ -128,6 +133,21 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
   }
 
   /**
+   * The groupName in this crossword puzzle area. Changing the groupName
+   * will emit an groupNameChange event.
+   */
+  set groupName(newGroupName: string | undefined) {
+    if (newGroupName !== this.groupName) {
+      this._groupName = newGroupName;
+      this.emit('groupNameChange', newGroupName);
+    }
+  }
+
+  get groupName(): string | undefined {
+    return this._groupName;
+  }
+
+  /**
    * A crossword puzzle area is empty if there are no occupants in it.
    */
   public isEmpty(): boolean {
@@ -145,6 +165,7 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
       puzzle: this.puzzle,
       leaderboard: this.leaderboard,
       isGameOver: this.isGameOver,
+      groupName: this.groupName,
     };
   }
 
@@ -156,6 +177,7 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
     this.leaderboard = newCrosswordPuzzleAreaModel.leaderboard;
     this.isGameOver = newCrosswordPuzzleAreaModel.isGameOver;
     this.occupants = playerFinder(newCrosswordPuzzleAreaModel.occupantsByID);
+    this.groupName = newCrosswordPuzzleAreaModel.groupName;
   }
 
   /**
@@ -173,6 +195,7 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
       crosswordPuzzleAreaModel.isGameOver,
       crosswordPuzzleAreaModel.puzzle,
       crosswordPuzzleAreaModel.leaderboard,
+      crosswordPuzzleAreaModel.groupName,
     );
     ret.occupants = playerFinder(crosswordPuzzleAreaModel.occupantsByID);
     return ret;
