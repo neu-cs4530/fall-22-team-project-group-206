@@ -68,7 +68,12 @@ export async function updateScoreValue(newScore: ScoreModel): Promise<ScoreModel
   return updatedScore;
 }
 
-export async function teamNameCurrentlyUsed(teamName: string): Promise<boolean> {
+/**
+ * Evaluates if the team name is curreanly
+ * @param teamName the name of the team being checked
+ * @returns if the team name has been used toda
+ */
+export async function isTeamNameCurrentlyUsed(teamName: string): Promise<boolean> {
   const isUsed = await isTeamNameInUse(teamName);
   return isUsed;
 }

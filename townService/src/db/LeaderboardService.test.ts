@@ -2,10 +2,7 @@ import { addScore, removeScore, findScore, updateScore, getTodaysScores } from '
 
 import {
   getLeaders,
-  insertScore,
-  removeScoreFromLeaderboard,
-  updateScoreValue,
-  findScoreByID,
+  insertScore
 } from './LeaderboardService';
 import { ScoreModel } from '../types/CoveyTownSocket';
 
@@ -102,36 +99,6 @@ describe('LeaderboardService', () => {
       await expect(async () => {
         await getLeaders(11);
       }).rejects.toThrowError();
-    });
-  });
-
-  describe('removeFromLeaderboard', () => {
-    it('returns value from removeScore', async () => {
-      removeFunc.mockImplementation(() => testScoreModel);
-      const removedScore = await removeScoreFromLeaderboard('test');
-      expect(removeScore).toBeCalledTimes(1);
-      expect(removedScore.teamName).toEqual(testScoreModel.teamName);
-      expect(removedScore.teamMembers).toEqual(testScoreModel.teamMembers);
-    });
-  });
-
-  describe('findScoreByID', () => {
-    it('returns value from findScore', async () => {
-      findFunc.mockImplementation(() => testScoreModel);
-      const foundScore = await findScoreByID('test');
-      expect(findScore).toBeCalledTimes(1);
-      expect(foundScore.teamName).toEqual(testScoreModel.teamName);
-      expect(foundScore.teamMembers).toEqual(testScoreModel.teamMembers);
-    });
-  });
-
-  describe('updateScoreValue', () => {
-    it('returns value from UpdateScore', async () => {
-      updateFunc.mockImplementation(() => testScoreModel2);
-      const prevScore = await updateScoreValue(testScoreModel);
-      expect(updateScore).toBeCalledTimes(1);
-      expect(prevScore.teamName).toEqual(testScoreModel2.teamName);
-      expect(prevScore.teamMembers).toEqual(testScoreModel2.teamMembers);
     });
   });
 });

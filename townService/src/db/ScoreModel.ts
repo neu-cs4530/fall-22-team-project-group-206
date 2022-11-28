@@ -1,6 +1,9 @@
 import * as mongoose from 'mongoose';
 import { ScoreDoc } from './ScoreDoc';
 
+/**
+ * This schema represents rules implemented for new mongoose docs created. Breaking any of the rules results in an error.
+ */
 export const scoreSchema = new mongoose.Schema({
   teamName: { type: String, required: true, unique: true },
   date: { type: Date, required: false, default: new Date() },
