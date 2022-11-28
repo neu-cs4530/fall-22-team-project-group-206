@@ -9,9 +9,10 @@ import {
 import React, { useCallback, useEffect } from 'react';
 import { useCrosswordAreaPuzzleController, useInteractable } from '../../classes/TownController';
 import useTownController from '../../hooks/useTownController';
+import CrosswordPuzzleAreaInteractable from '../Town/interactables/CrosswordPuzzleArea';
 import './CrosswordGameModal.css';
 import CrosswordGrid from './CrosswordGrid/CrosswordGrid';
-import CrosswordPuzzleAreaInteractable from '../Town/interactables/CrosswordPuzzleArea';
+import NewCrosswordPuzzleModal from './NewCrosswordPuzzleModal';
 
 function CrosswordGameModal(props: {
   crosswordPuzzleArea: CrosswordPuzzleAreaInteractable;
@@ -21,7 +22,7 @@ function CrosswordGameModal(props: {
     props.crosswordPuzzleArea?.id,
   );
 
-  const isOpen = crosswordPuzzleAreaController !== undefined;
+  const isOpen = crosswordPuzzleAreaController.puzzle !== undefined;
 
   const closeModal = useCallback(() => {
     if (props.crosswordPuzzleArea) {
@@ -56,18 +57,7 @@ function CrosswordGameModal(props: {
       </Modal>
     );
   } else {
-    return (
-      <Modal isOpen={isOpen} onClose={() => onClose()} isCentered>
-        <ModalOverlay />
-        <ModalContent padding='15px'>
-          <ModalHeader>Crossword Puzzle</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <span>Crossword Puzzle Missing</span>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-    );
+    return <NewCrosswordPuzzleModal />;
   }
 }
 

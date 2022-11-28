@@ -726,21 +726,23 @@ describe('Town', () => {
         }),
       ).toEqual(false);
     });
-    it('Should return false if the requested puzzle is undefined', () => {
+    it('Should return false if the requested groupName is undefined', () => {
       expect(
         town.addCrosswordPuzzleArea({
           id: 'Pz1',
           puzzle: undefined,
+          groupName: undefined,
           occupantsByID: [],
           isGameOver: false,
         }),
       ).toEqual(false);
     });
-    it('Should return false if the area already has a puzzle', () => {
+    it('Should return false if the area already has a groupName', () => {
       expect(
         town.addCrosswordPuzzleArea({
           id: 'Pz1',
           puzzle: defaultPuzzle,
+          groupName: 'some group',
           occupantsByID: [],
           isGameOver: false,
         }),
@@ -773,6 +775,7 @@ describe('Town', () => {
         expect(
           town.addCrosswordPuzzleArea({
             id: 'Pz1',
+            groupName: 'some group',
             puzzle: newPuzzle,
             occupantsByID: [],
             isGameOver: false,
@@ -792,6 +795,7 @@ describe('Town', () => {
         expect(lastEmittedUpdate).toEqual({
           id: 'Pz1',
           puzzle: newPuzzle,
+          groupName: 'some group',
           occupantsByID: [player.id],
           isGameOver: false,
         });

@@ -4,7 +4,7 @@ import { BroadcastOperator } from 'socket.io';
 import IVideoClient from '../lib/IVideoClient';
 import Player from '../lib/Player';
 import TwilioVideo from '../lib/TwilioVideo';
-import { isViewingArea } from '../TestUtils';
+import { isCrosswordPuzzleArea, isViewingArea } from '../TestUtils';
 import {
   ChatMessage,
   ConversationArea as ConversationAreaModel,
@@ -142,8 +142,8 @@ export default class Town {
     });
 
     // Set up a listener to process updates to interactables.
-    // Currently only knows how to process updates for ViewingArea's, and
-    // ignores any other updates for any other kind of interactable.
+    // Currently only knows how to process updates for ViewingArea's and CrosswordPuzzleArea's, 
+    // and ignores any other updates for any other kind of interactable.
     // For ViewingArea's: dispatches an updateModel call to the viewingArea that
     // corresponds to the interactable being updated. Does not throw an error if
     // the specified viewing area does not exist.
@@ -155,6 +155,15 @@ export default class Town {
         );
         if (viewingArea) {
           (viewingArea as ViewingArea).updateModel(update);
+        }
+      }
+      if (isCrosswordPuzzleArea(update)) {
+        newPlayer.townEmitter.emit('interactableUpdate', update);
+        const crosswordPuzzleArea = this._interactables.find(
+          eachInteractable => eachInteractable.id === update.id,
+        );
+        if (crosswordPuzzleArea) {
+          (crosswordPuzzleArea as CrosswordPuzzleArea).updateModel(update);
         }
       }
     });
@@ -277,12 +286,10 @@ export default class Town {
       eachArea => eachArea.id === crosswordPuzzleArea.id,
     ) as CrosswordPuzzleArea;
 
-    if (!area || !crosswordPuzzleArea.puzzle || area.puzzle) {
+    if (!area || !crosswordPuzzleArea.groupName || area.groupName) {
       return false;
     }
-    area.puzzle = crosswordPuzzleArea.puzzle;
-    area.leaderboard = crosswordPuzzleArea.leaderboard;
-    area.groupName = crosswordPuzzleArea.groupName;
+    area.updateModel(crosswordPuzzleArea);
     area.addPlayersWithinBounds(this._players);
     this._broadcastEmitter.emit('interactableUpdate', area.toModel());
     return true;

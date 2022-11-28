@@ -115,12 +115,12 @@ export interface CrosswordPuzzleInfo {
 
 // clue type in CrosswordPuzzleModel
 export interface CrosswordPuzzleClues {
-  down: string[];
-  across: string[];
+  down: (string | null)[];
+  across: (string | null)[];
 }
 
 // crossword Puzzle's position representation
-export interface CrosswordPosition {
+export interface CellIndex {
   row: number; // row index
   col: number; // col index
 }

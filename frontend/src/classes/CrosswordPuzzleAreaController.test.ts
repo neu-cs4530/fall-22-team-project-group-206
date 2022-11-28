@@ -206,23 +206,6 @@ describe('CrosswordPuzzleArea', () => {
         occupantsByID: testArea.occupants.map(eachOccupant => eachOccupant.id),
       });
     });
-    it('emits the puzzleChange event and resets the puzzle if the new puzzle is undefined', () => {
-      const setPuzzleMock = jest.spyOn(
-        // Mocking a private method by creating a prototype as seen in
-        // https://stackoverflow.com/questions/43265944/is-there-any-way-to-mock-private-functions-with-jest
-        // eslint-disable-next-line
-        CrosswordPuzzleAreaController.prototype as any,
-        '_setPuzzleModel',
-      );
-      setPuzzleMock.mockImplementation(() => (testArea.puzzle = testPuzzle));
-
-      testArea.puzzle = testPuzzleAfterOneWord;
-      expect(testArea.puzzle).toEqual(testPuzzleAfterOneWord);
-
-      testArea.puzzle = undefined;
-      expect(setPuzzleMock).toHaveBeenCalled();
-      expect(testArea.puzzle).toEqual(testPuzzle);
-    });
   });
   describe('setting the isGameOver property', () => {
     it('does not emit isGameOver event if the game is not finished or reset', () => {

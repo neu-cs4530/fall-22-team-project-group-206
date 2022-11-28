@@ -1,20 +1,13 @@
-import axios from 'axios';
 import EventEmitter from 'events';
 import _ from 'lodash';
-import TypedEmitter from 'typed-emitter';
 import { useEffect, useState } from 'react';
+import TypedEmitter from 'typed-emitter';
 import {
-  CrosswordExternalModel,
-  CrosswordPosition,
   CrosswordPuzzleArea as CrosswordPuzzleAreaModel,
-  CrosswordPuzzleCell,
   CrosswordPuzzleModel,
   ScoreModel,
 } from '../types/CoveyTownSocket';
 import PlayerController from './PlayerController';
-
-const CROSSWORDPUZZLE_EXTERNAL_LINK =
-  'https://api.foracross.com/api/puzzle_list?page=0&pageSize=1&filter%5BnameOrTitleFilter%5D=Will%20Shortz&filter%5BsizeFilter%5D%5BMini%5D=false&filter%5BsizeFilter%5D%5BStandard%5D=true';
 
 /**
  * The events that the CrosswordPuzzleAreaController emits to subscribers. These events
@@ -27,9 +20,9 @@ export type CrosswordPuzzleAreaEvents = {
 };
 
 /**
- * A CrosswordPuzzleAreaController manages the local behavior of a conversation area in the frontend,
- * implementing the logic to bridge between the townService's interpretation of conversation areas and the
- * frontend's. The CrosswordPuzzleAreaController emits events when the conversation area changes.
+ * A CrosswordPuzzleAreaController manages the local behavior of a crossword puzzle area in the frontend,
+ * implementing the logic to bridge between the townService's interpretation of crossword puzzle areas and the
+ * frontend's. The CrosswordPuzzleAreaController emits events when the convecrossword puzzlersation area changes.
  */
 export default class CrosswordPuzzleAreaController extends (EventEmitter as new () => TypedEmitter<CrosswordPuzzleAreaEvents>) {
   private _occupants: PlayerController[] = [];
@@ -45,6 +38,7 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
   /**
    * Create a new CrosswordPuzzleAreaController;
    * @param id
+   * @param isGameOver
    * @param puzzle
    * @param leaderboard
    */
@@ -57,9 +51,6 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
     super();
     this._id = id;
     this._puzzle = puzzle;
-    if (!puzzle) {
-      this._setPuzzleModel();
-    }
     this._leaderboard = leaderboard;
     this._isGameOver = isGameOver;
   }
@@ -99,7 +90,6 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
       if (newPuzzle) {
         this._puzzle = newPuzzle;
       } else {
-        this._setPuzzleModel();
         this.isGameOver = false;
       }
     }
@@ -114,7 +104,8 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
    * will emit an puzzleChange event.
    */
   set leaderboard(newLeaderboard: ScoreModel[] | undefined) {
-    throw Error('Not implemented yet.');
+    // TODO – this might be deleted (Frank)
+    this._leaderboard = newLeaderboard;
   }
 
   get leaderboard(): ScoreModel[] | undefined {
@@ -157,6 +148,16 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
     };
   }
 
+  public updateFrom(
+    newCrosswordPuzzleAreaModel: CrosswordPuzzleAreaModel,
+    playerFinder: (playerIDs: string[]) => PlayerController[],
+  ): void {
+    this.puzzle = newCrosswordPuzzleAreaModel.puzzle;
+    this.leaderboard = newCrosswordPuzzleAreaModel.leaderboard;
+    this.isGameOver = newCrosswordPuzzleAreaModel.isGameOver;
+    this.occupants = playerFinder(newCrosswordPuzzleAreaModel.occupantsByID);
+  }
+
   /**
    * Create a new CrosswordPuzzleAreaController to match a given CrosswordPuzzleAreaModel
    * @param xwPuzzleAreaModel Crossword puzzle area to represent
@@ -175,76 +176,6 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
     );
     ret.occupants = playerFinder(crosswordPuzzleAreaModel.occupantsByID);
     return ret;
-  }
-
-  /**
-   * Method that sets daily puzzle to the CrosswordPuzzleArea
-   * @param externalLink the external api that is applied here to fetch puzzle
-   */
-  private async _setPuzzleModel(): Promise<void> {
-    await axios.get(CROSSWORDPUZZLE_EXTERNAL_LINK).then(response => {
-      try {
-        if (!response.data.puzzles[0].content) {
-          throw new Error('puzzle not fetched');
-        }
-        const rawPuzzleModel: CrosswordExternalModel = response.data.puzzles[0]
-          .content as CrosswordExternalModel;
-        const cellGrid: CrosswordPuzzleCell[][] = this._initializeFromGridToCell(
-          rawPuzzleModel.grid,
-          rawPuzzleModel.shades,
-          rawPuzzleModel.circles,
-        );
-        this.puzzle = {
-          grid: cellGrid,
-          info: rawPuzzleModel.info,
-          clues: rawPuzzleModel.clues,
-        };
-      } catch (err) {
-        throw new Error('There was an error when trying to fetch');
-      }
-    });
-  }
-
-  /**
-   * Helper method that convert raw data from thrid party api to gird in CrosswordPuzzleModel
-   * @param grid gird from thrid party api
-   * @param shadedCells tiles that is shaded
-   * @param circledCells tiles that is circled
-   * @returns 2D list of CrosswordPuzzleCell which is used for constructing CrosswordPuzzleModel
-   */
-  private _initializeFromGridToCell(
-    grid: string[][],
-    shadedCells: number[],
-    circledCells: number[],
-  ): CrosswordPuzzleCell[][] {
-    const cells: CrosswordPuzzleCell[][] = [];
-    for (let row = 0; row < grid.length; row++) {
-      cells.push([]);
-      for (let col = 0; col < grid[0].length; col++) {
-        const currentCell: CrosswordPuzzleCell = {
-          value: '',
-          solution: grid[row][col],
-          isCircled: circledCells.includes(
-            this._fromPositionToIndex({ row, col }, grid[row].length),
-          ),
-          isShaded: shadedCells.includes(this._fromPositionToIndex({ row, col }, grid[row].length)),
-          usedHint: false,
-        };
-        cells[row].push(currentCell);
-      }
-    }
-    return cells;
-  }
-
-  /**
-   * Helper methods that takes in position number and return the index array which is represented by [rowIndex, colIndex]
-   * @param row row index of the tile
-   * @param col column index of the tile
-   * @param rowSize length of the gird namly column size of the grid
-   * @returns number converted from a CrosswordPositioon
-   */
-  private _fromPositionToIndex({ row, col }: CrosswordPosition, rowSize: number): number {
-    return row * rowSize + col;
   }
 }
 

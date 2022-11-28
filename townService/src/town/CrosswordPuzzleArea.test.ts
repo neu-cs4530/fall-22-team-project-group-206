@@ -109,6 +109,7 @@ describe('PuzzleArea', () => {
       testArea.remove(newPlayer);
       const lastEmittedUpdate = getLastEmittedEvent(townEmitter, 'interactableUpdate');
       expect(lastEmittedUpdate).toEqual({
+        groupName: undefined,
         puzzle: undefined,
         id,
         occupantsByID: [],
@@ -118,7 +119,19 @@ describe('PuzzleArea', () => {
       expect(testArea.puzzle).toBeUndefined();
     });
   });
-  test('toModel sets the ID, groupName, puzzle and occupantsByID and sets no other properties', () => {
+  // TODO
+  // test('updateModel sets the ID, groupName, puzzle and occupantsByID and sets no other properties', () => {
+  //   const model = testArea.updateModel();
+  //   expect(model).toEqual({
+  //     id,
+  //     groupName,
+  //     puzzle,
+  //     occupantsByID: [newPlayer.id],
+  //     leaderboard,
+  //     isGameOver: false,
+  //   });
+  // });
+  test('toModel gets the ID, groupName, puzzle and occupantsByID and gets no other properties', () => {
     const model = testArea.toModel();
     expect(model).toEqual({
       id,

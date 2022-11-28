@@ -1,3 +1,4 @@
+import { VStack } from '@chakra-ui/react';
 import React from 'react';
 import './CrosswordClues.css';
 
@@ -27,7 +28,7 @@ function CrosswordClues(props: {
   const downCluesView = createClueViews(props.downClues);
 
   return (
-    <>
+    <VStack>
       <div className='clues-list'>
         <span>Across</span>
         <ul>{acrossCluesView}</ul>
@@ -36,7 +37,7 @@ function CrosswordClues(props: {
         <span>Down</span>
         <ul>{downCluesView}</ul>
       </div>
-    </>
+    </VStack>
   );
 }
 
