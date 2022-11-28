@@ -41,16 +41,29 @@ function CrosswordCell(props: {
   if (props.cellModel.solution === '.') {
     return <td className='filled'></td>;
   }
+
+  const styleClassNames = [];
+
+  if (props.isHighlighted) {
+    styleClassNames.push('highlighted');
+  }
+
+  if (props.isSelected) {
+    styleClassNames.push('selected');
+  }
+
+  if (props.cellModel.isCircled) {
+    styleClassNames.push('circled');
+  }
+
+  if (props.cellModel.isShaded) {
+    styleClassNames.push('shaded');
+  }
+
   if (props.cellModel.usedHint && props.cellModel.value === props.cellModel.solution) {
-    let styleClassName = 'checked_correct';
-    if (props.isSelected) {
-      styleClassName = `${styleClassName} selected`;
-    }
-    if (props.isHighlighted) {
-      styleClassName = `${styleClassName} highlighted`;
-    }
+    styleClassNames.push('checked_correct');
     return (
-      <td className={styleClassName}>
+      <td className={styleClassNames.join(' ')}>
         <span>{props.number}</span>
         <input
           style={{ fontSize: fontSize }}
@@ -62,79 +75,10 @@ function CrosswordCell(props: {
     );
   }
   if (props.cellModel.usedHint && props.cellModel.value !== props.cellModel.solution) {
-    let styleClassName = 'checked_incorrect';
-    if (props.isSelected) {
-      styleClassName = `${styleClassName} selected`;
-    }
-    if (props.isHighlighted) {
-      styleClassName = `${styleClassName} highlighted`;
-    }
-    return (
-      <td className={styleClassName}>
-        <span>{props.number}</span>
-        <input
-          style={{ fontSize: fontSize }}
-          value={props.cellModel.value}
-          onChange={e => handleCellChange(e.target.value)}
-          onClick={() => handleCellClick()}
-        />
-      </td>
-    );
-  }
-  if (props.cellModel.isCircled) {
-    return (
-      <td className='circled'>
-        <span>{props.number}</span>
-        <input
-          style={{ fontSize: fontSize }}
-          value={props.cellModel.value}
-          onChange={e => handleCellChange(e.target.value)}
-          onClick={() => handleCellClick()}
-        />
-      </td>
-    );
-  }
-  if (props.cellModel.isShaded) {
-    return (
-      <td className='shaded'>
-        <span>{props.number}</span>
-        <input
-          style={{ fontSize: fontSize }}
-          value={props.cellModel.value}
-          onChange={e => handleCellChange(e.target.value)}
-          onClick={() => handleCellClick()}
-        />
-      </td>
-    );
-  }
-  if (props.isHighlighted && !props.isSelected) {
-    return (
-      <td className='highlighted'>
-        <span>{props.number}</span>
-        <input
-          style={{ fontSize: fontSize }}
-          value={props.cellModel.value}
-          onChange={e => handleCellChange(e.target.value)}
-          onClick={() => handleCellClick()}
-        />
-      </td>
-    );
-  }
-  if (props.isSelected) {
-    return (
-      <td className='selected'>
-        <span>{props.number}</span>
-        <input
-          style={{ fontSize: fontSize }}
-          value={props.cellModel.value}
-          onChange={e => handleCellChange(e.target.value)}
-          onClick={() => handleCellClick()}
-        />
-      </td>
-    );
+    styleClassNames.push('checked_incorrect');
   }
   return (
-    <td>
+    <td className={styleClassNames.join(' ')}>
       <span>{props.number}</span>
       <input
         style={{ fontSize: fontSize }}
