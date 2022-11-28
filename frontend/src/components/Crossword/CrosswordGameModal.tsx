@@ -51,7 +51,6 @@ function CrosswordGameModal({
   }, [coveyTownController, crosswordPuzzleAreaController]);
 
   const isOpen = crosswordPuzzleAreaController.puzzle !== undefined;
-  console.log(crosswordPuzzleAreaController);
 
   const closeModal = useCallback(() => {
     if (crosswordPuzzleArea) {
