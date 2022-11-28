@@ -10,7 +10,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { nanoid } from 'nanoid';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { PlayerLocation } from '../../../../../../shared/types/CoveyTownSocket';
 import CrosswordPuzzleAreaController from '../../../../classes/CrosswordPuzzleAreaController';
 import PlayerController from '../../../../classes/PlayerController';
@@ -56,11 +56,19 @@ function CrosswordToolbar({
     ? controller.puzzle?.grid.length * CELL_WIDTH
     : 0;
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [timerPaused, setTimerPaused] = useState<boolean>(false);
+  useEffect(() => {
+    controller.addListener('gameOverChange', setTimerPaused);
+
+    return () => {
+      controller.removeListener('gameOverChange', setTimerPaused);
+    };
+  }, [controller]);
 
   return (
     <Flex gap={'2'} paddingBottom={'12px'}>
       <Box p='2' bg='gray.200' width={timerWidth} textAlign='center'>
-        <Timer startTime={controller.startTime ? controller.startTime : 0} />
+        <Timer startTime={controller.startTime ? controller.startTime : 0} isPaused={timerPaused} />
       </Box>
       <Menu>
         <MenuButton p='4' as={Button} colorScheme='gray'>
