@@ -448,6 +448,44 @@ describe('TownController', () => {
           eventListener(crosswordPuzzleArea);
           expect(listener).toBeCalledWith(crosswordPuzzleArea.puzzle);
         });
+        it('Emits a occupantChange event if occupants list changes', () => {
+          crosswordPuzzleArea.occupantsByID = [
+            townJoinResponse.userID,
+            townJoinResponse.currentPlayers[1].id,
+          ];
+
+          //Set up an occupantsChange listener
+          const occupantsChangeListener = jest.fn();
+          const xwAreaController = testController.crosswordPuzzleAreas.find(
+            eachArea => eachArea.id === crosswordPuzzleArea.id,
+          );
+          if (!xwAreaController) {
+            fail('Could not find crossword puzzle area controller');
+          }
+          xwAreaController.addListener('occupantsChange', occupantsChangeListener);
+
+          // Perform the update
+          eventListener = getEventListener(mockSocket, 'interactableUpdate');
+          eventListener(crosswordPuzzleArea);
+
+          expect(occupantsChangeListener).toBeCalledTimes(1);
+        });
+        it('Emits a gameOverChange event if isGameOver changes', () => {
+          const listener = jest.fn();
+          crosswordPuzzleAreaController.addListener('gameOverChange', listener);
+
+          crosswordPuzzleArea.isGameOver = !crosswordPuzzleArea.isGameOver;
+          eventListener(crosswordPuzzleArea);
+          expect(listener).toBeCalledWith(crosswordPuzzleArea.isGameOver);
+        });
+        it('Emits a groupNameChange event if groupName changes', () => {
+          const listener = jest.fn();
+          crosswordPuzzleAreaController.addListener('groupNameChange', listener);
+
+          crosswordPuzzleArea.groupName = 'new group name';
+          eventListener(crosswordPuzzleArea);
+          expect(listener).toBeCalledWith(crosswordPuzzleArea.groupName);
+        });
       });
     });
   });
