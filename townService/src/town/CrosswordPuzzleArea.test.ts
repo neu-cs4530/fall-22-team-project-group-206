@@ -1,8 +1,12 @@
 import { mock, mockClear } from 'jest-mock-extended';
 import { nanoid } from 'nanoid';
 import Player from '../lib/Player';
-import { getLastEmittedEvent } from '../TestUtils';
-import { TownEmitter, CrosswordPuzzleModel, CrosswordPuzzleArea as CrosswordPuzzleAreaModel } from '../types/CoveyTownSocket';
+import { getLastEmittedEvent, testPuzzle } from '../TestUtils';
+import {
+  TownEmitter,
+  CrosswordPuzzleModel,
+  CrosswordPuzzleArea as CrosswordPuzzleAreaModel,
+} from '../types/CoveyTownSocket';
 import CrosswordPuzzleArea from './CrosswordPuzzleArea';
 
 describe('PuzzleArea', () => {
@@ -119,33 +123,59 @@ describe('PuzzleArea', () => {
       expect(testArea.puzzle).toBeUndefined();
     });
   });
-  // TODO
-  test('updateModel sets the groupName, puzzle, leaderboard and isGameOver and sets no other properties', () => {
-    const model: CrosswordPuzzleAreaModel = {
-      id : nanoid(),
-      groupName: 'some new group name',
-      puzzle: [][0],
-      leaderboard: [],
-      occupantsByID: [],
-      isGameOver: true
-    };
+  describe('updateModel', () => {
+    it('sets the groupName, puzzle, leaderboard and isGameOver and sets no other properties', () => {
+      const model: CrosswordPuzzleAreaModel = {
+        id: nanoid(),
+        groupName: 'some new group name',
+        puzzle: testPuzzle,
+        leaderboard: [],
+        occupantsByID: [],
+        isGameOver: true,
+      };
+  
+      testArea.updateModel(model);
+  
+      expect(testArea.groupName).toEqual(model.groupName);
+      expect(testArea.puzzle).toEqual(model.puzzle);
+      expect(testArea.leaderboard).toEqual(model.leaderboard);
+      expect(testArea.isGameOver).toEqual(model.isGameOver);
+    });
+    it('gets puzzle from API if new puzzle is undefined', () => {
+      const setPuzzleMock = jest.spyOn(
+        // Mocking a private method by creating a prototype as seen in
+        // https://stackoverflow.com/questions/43265944/is-there-any-way-to-mock-private-functions-with-jest
+        // eslint-disable-next-line
+        CrosswordPuzzleArea.prototype as any,
+        '_setPuzzleModel',
+      );
+      setPuzzleMock.mockImplementation(() => (testArea.puzzle = testPuzzle));
 
-    testArea.updateModel(model);
+      const undefinedPuzzleModel: CrosswordPuzzleAreaModel = {
+        id: testArea.id,
+        groupName: testArea.groupName,
+        puzzle: undefined,
+        leaderboard: testArea.leaderboard,
+        occupantsByID: testArea.occupantsByID,
+        isGameOver: testArea.isGameOver,
+      };
 
-    expect(testArea.groupName).toEqual(model.groupName);
-    expect(testArea.puzzle).toEqual(model.puzzle);
-    expect(testArea.leaderboard).toEqual(model.leaderboard);
-    expect(testArea.isGameOver).toEqual(model.isGameOver);
+      testArea.updateModel(undefinedPuzzleModel);
+      expect(setPuzzleMock).toHaveBeenCalled();
+      expect(testArea.puzzle).toEqual(testPuzzle);
+    });
   });
-  test('toModel gets the ID, groupName, puzzle and occupantsByID, leaderboard, isGameOver and gets no other properties', () => {
-    const model = testArea.toModel();
-    expect(model).toEqual({
-      id,
-      groupName,
-      puzzle,
-      occupantsByID: [newPlayer.id],
-      leaderboard,
-      isGameOver: false,
+  describe('toModel', () => {
+    it('gets the ID, groupName, puzzle and occupantsByID, leaderboard, isGameOver and gets no other properties', () => {
+      const model = testArea.toModel();
+      expect(model).toEqual({
+        id,
+        groupName,
+        puzzle,
+        occupantsByID: [newPlayer.id],
+        leaderboard,
+        isGameOver: false,
+      });
     });
   });
   describe('fromMapObject', () => {
