@@ -25,7 +25,7 @@ export interface ScoreFindResponse {
 }
 
 /**
- * 
+ * The api response for seeing if a teamName is currently in use
  */
 export interface TeamNameInUseResponse {
   status: number;
@@ -33,5 +33,5 @@ export interface TeamNameInUseResponse {
     inUse?: boolean;
     errorType?: string;
     errorMessage?: string;
-  }
+  };
 }
