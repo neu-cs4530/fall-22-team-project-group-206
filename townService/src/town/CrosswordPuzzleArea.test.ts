@@ -95,32 +95,29 @@ describe('PuzzleArea', () => {
       const lastEmittedMovement = getLastEmittedEvent(townEmitter, 'playerMoved');
       expect(lastEmittedMovement.location.interactableID).toBeUndefined();
     });
-    it('Clears the group name of the puzzle area when the last occupant leaves', () => {
+    it('Clears group name and resets the puzzle of the puzzle area when the last occupant leaves', () => {
+      const setPuzzleMock = jest.spyOn(
+        // Mocking a private method by creating a prototype as seen in
+        // https://stackoverflow.com/questions/43265944/is-there-any-way-to-mock-private-functions-with-jest
+        // eslint-disable-next-line
+        CrosswordPuzzleArea.prototype as any,
+        '_setPuzzleModel',
+      );
+      // Sets puzzle in impl
+      // eslint-disable-next-line
+      setPuzzleMock.mockImplementation(() => (testArea.puzzle = testPuzzle));
+
       testArea.remove(newPlayer);
       const lastEmittedUpdate = getLastEmittedEvent(townEmitter, 'interactableUpdate');
       expect(lastEmittedUpdate).toEqual({
         groupName: undefined,
-        id,
-        occupantsByID: [],
-        leaderboard,
-        isGameOver: false,
-        puzzle: undefined,
-      });
-      expect(testArea.groupName).toBeUndefined();
-      expect(testArea.leaderboard).toEqual(leaderboard);
-    });
-    it('Clears the puzzle of the puzzle area when the last occupant leaves', () => {
-      testArea.remove(newPlayer);
-      const lastEmittedUpdate = getLastEmittedEvent(townEmitter, 'interactableUpdate');
-      expect(lastEmittedUpdate).toEqual({
-        groupName: undefined,
-        puzzle: undefined,
+        puzzle: testPuzzle,
         id,
         occupantsByID: [],
         leaderboard,
         isGameOver: false,
       });
-      expect(testArea.puzzle).toBeUndefined();
+      expect(testArea.groupName).toBeUndefined();
     });
   });
   describe('updateModel', () => {
