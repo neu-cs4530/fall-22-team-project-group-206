@@ -2,7 +2,7 @@ import { mock, mockClear } from 'jest-mock-extended';
 import { nanoid } from 'nanoid';
 import Player from '../lib/Player';
 import { getLastEmittedEvent } from '../TestUtils';
-import { TownEmitter, CrosswordPuzzleModel } from '../types/CoveyTownSocket';
+import { TownEmitter, CrosswordPuzzleModel, CrosswordPuzzleArea as CrosswordPuzzleAreaModel } from '../types/CoveyTownSocket';
 import CrosswordPuzzleArea from './CrosswordPuzzleArea';
 
 describe('PuzzleArea', () => {
@@ -120,18 +120,24 @@ describe('PuzzleArea', () => {
     });
   });
   // TODO
-  // test('updateModel sets the ID, groupName, puzzle and occupantsByID and sets no other properties', () => {
-  //   const model = testArea.updateModel();
-  //   expect(model).toEqual({
-  //     id,
-  //     groupName,
-  //     puzzle,
-  //     occupantsByID: [newPlayer.id],
-  //     leaderboard,
-  //     isGameOver: false,
-  //   });
-  // });
-  test('toModel gets the ID, groupName, puzzle and occupantsByID and gets no other properties', () => {
+  test('updateModel sets the groupName, puzzle, leaderboard and isGameOver and sets no other properties', () => {
+    const model: CrosswordPuzzleAreaModel = {
+      id : nanoid(),
+      groupName: 'some new group name',
+      puzzle: [][0],
+      leaderboard: [],
+      occupantsByID: [],
+      isGameOver: true
+    };
+
+    testArea.updateModel(model);
+
+    expect(testArea.groupName).toEqual(model.groupName);
+    expect(testArea.puzzle).toEqual(model.puzzle);
+    expect(testArea.leaderboard).toEqual(model.leaderboard);
+    expect(testArea.isGameOver).toEqual(model.isGameOver);
+  });
+  test('toModel gets the ID, groupName, puzzle and occupantsByID, leaderboard, isGameOver and gets no other properties', () => {
     const model = testArea.toModel();
     expect(model).toEqual({
       id,
