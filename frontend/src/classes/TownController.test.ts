@@ -7,17 +7,20 @@ import {
   getEventListener,
   mockTownControllerConnection,
   ReceivedEventParameter,
+  testPuzzle,
 } from '../TestUtils';
 import {
   ChatMessage,
   ConversationArea as ConversationAreaModel,
   CoveyTownSocket,
+  CrosswordPuzzleArea,
   Player as PlayerModel,
   PlayerLocation,
   ServerToClientEvents,
   TownJoinResponse,
 } from '../types/CoveyTownSocket';
-import { isConversationArea, isViewingArea } from '../types/TypeUtils';
+import { isConversationArea, isCrosswordPuzzleArea, isViewingArea } from '../types/TypeUtils';
+import CrosswordPuzzleAreaController from './CrosswordPuzzleAreaController';
 import PlayerController from './PlayerController';
 import TownController, { TownEvents } from './TownController';
 import ViewingAreaController from './ViewingAreaController';
@@ -400,6 +403,88 @@ describe('TownController', () => {
           viewingArea.video = nanoid();
           eventListener(viewingArea);
           expect(listener).toBeCalledWith(viewingArea.video);
+        });
+      });
+      describe('CrosswordPuzzleArea updates', () => {
+        function crosswordPuzzleAreaOnTown() {
+          return {
+            ...(townJoinResponse.interactables.find(eachInteractable =>
+              isCrosswordPuzzleArea(eachInteractable),
+            ) as CrosswordPuzzleArea),
+          };
+        }
+        let crosswordPuzzleArea: CrosswordPuzzleArea;
+        let crosswordPuzzleAreaController: CrosswordPuzzleAreaController;
+        let eventListener: (update: CrosswordPuzzleArea) => void;
+        beforeEach(() => {
+          crosswordPuzzleArea = crosswordPuzzleAreaOnTown();
+          const controller = testController.crosswordPuzzleAreas.find(
+            eachArea => eachArea.id === crosswordPuzzleArea.id,
+          );
+          if (!controller) {
+            fail(
+              `Could not find crossword puzzle area controller for crossword puzzle area ${crosswordPuzzleArea.id}`,
+            );
+          }
+          crosswordPuzzleAreaController = controller;
+          eventListener = getEventListener(mockSocket, 'interactableUpdate');
+        });
+        it('Updates the crossword puzzle area model', () => {
+          crosswordPuzzleArea.puzzle = testPuzzle;
+          crosswordPuzzleArea.leaderboard = [];
+          crosswordPuzzleArea.isGameOver = !crosswordPuzzleArea.isGameOver;
+
+          eventListener(crosswordPuzzleArea);
+
+          expect(crosswordPuzzleAreaController.toCrosswordPuzzleAreaModel()).toEqual(
+            crosswordPuzzleArea,
+          );
+        });
+        it('Emits a puzzleChange event if puzzle changes', () => {
+          const listener = jest.fn();
+          crosswordPuzzleAreaController.addListener('puzzleChange', listener);
+
+          crosswordPuzzleArea.puzzle = testPuzzle;
+          eventListener(crosswordPuzzleArea);
+          expect(listener).toBeCalledWith(crosswordPuzzleArea.puzzle);
+        });
+        it('Emits a occupantChange event if occupants list changes', () => {
+          crosswordPuzzleArea.occupantsByID = [
+            townJoinResponse.userID,
+            townJoinResponse.currentPlayers[1].id,
+          ];
+
+          //Set up an occupantsChange listener
+          const occupantsChangeListener = jest.fn();
+          const xwAreaController = testController.crosswordPuzzleAreas.find(
+            eachArea => eachArea.id === crosswordPuzzleArea.id,
+          );
+          if (!xwAreaController) {
+            fail('Could not find crossword puzzle area controller');
+          }
+          xwAreaController.addListener('occupantsChange', occupantsChangeListener);
+
+          // Perform the update
+          eventListener = getEventListener(mockSocket, 'interactableUpdate');
+          eventListener(crosswordPuzzleArea);
+
+          expect(occupantsChangeListener).toBeCalledTimes(1);
+        });
+        it('Emits a gameOverChange event if isGameOver changes', () => {
+          const listener = jest.fn();
+          crosswordPuzzleAreaController.addListener('gameOverChange', listener);
+
+          crosswordPuzzleArea.isGameOver = !crosswordPuzzleArea.isGameOver;
+          eventListener(crosswordPuzzleArea);
+          expect(listener).toBeCalledWith(crosswordPuzzleArea.isGameOver);
+        });
+        it('Emits a groupNameChange event if groupName changes', () => {
+          const listener = jest.fn();
+          crosswordPuzzleAreaController.addListener('groupNameChange', listener);
+
+          crosswordPuzzleArea.groupName = 'new group name';
+          eventListener(crosswordPuzzleArea);
+          expect(listener).toBeCalledWith(crosswordPuzzleArea.groupName);
         });
       });
     });

@@ -6,68 +6,100 @@ import {
   ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/react';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useCrosswordAreaPuzzleController, useInteractable } from '../../classes/TownController';
 import useTownController from '../../hooks/useTownController';
+import CrosswordPuzzleAreaInteractable from '../Town/interactables/CrosswordPuzzleArea';
 import './CrosswordGameModal.css';
 import CrosswordGrid from './CrosswordGrid/CrosswordGrid';
-import CrosswordPuzzleAreaInteractable from '../Town/interactables/CrosswordPuzzleArea';
+import NewCrosswordPuzzleModal from './NewCrosswordPuzzleModal';
 
-function CrosswordGameModal(props: {
+function CrosswordGameModal({
+  crosswordPuzzleArea,
+}: {
   crosswordPuzzleArea: CrosswordPuzzleAreaInteractable;
 }): JSX.Element {
   const coveyTownController = useTownController();
-  const crosswordPuzzleAreaController = useCrosswordAreaPuzzleController(
-    props.crosswordPuzzleArea?.id,
+  const crosswordPuzzleAreaController = useCrosswordAreaPuzzleController(crosswordPuzzleArea.id);
+  const [selectIsOpen, setSelectIsOpen] = useState(
+    crosswordPuzzleAreaController.groupName === undefined,
   );
+  const [groupName, setGroupName] = useState(crosswordPuzzleAreaController.groupName);
 
-  const isOpen = crosswordPuzzleAreaController !== undefined;
+  useEffect(() => {
+    const setGroup = (name: string | undefined) => {
+      if (!name) {
+        coveyTownController.interactableEmitter.emit(
+          'endIteraction',
+          crosswordPuzzleAreaController,
+        );
+      } else {
+        setGroupName(name);
+      }
+    };
+    crosswordPuzzleAreaController.addListener('groupNameChange', setGroup);
+
+    if (crosswordPuzzleAreaController.puzzle) {
+      coveyTownController.pause();
+    } else {
+      coveyTownController.unPause();
+    }
+
+    return () => {
+      crosswordPuzzleAreaController.removeListener('groupNameChange', setGroup);
+    };
+  }, [coveyTownController, crosswordPuzzleAreaController]);
+
+  const isOpen = crosswordPuzzleAreaController.puzzle !== undefined;
 
   const closeModal = useCallback(() => {
-    if (props.crosswordPuzzleArea) {
-      coveyTownController.interactEnd(props.crosswordPuzzleArea);
+    if (crosswordPuzzleArea) {
+      coveyTownController.interactEnd(crosswordPuzzleArea);
     }
-  }, [coveyTownController, props.crosswordPuzzleArea]);
+  }, [coveyTownController, crosswordPuzzleArea]);
 
   function onClose() {
     closeModal();
     coveyTownController.unPause();
   }
 
-  useEffect(() => {
-    if (crosswordPuzzleAreaController) {
-      coveyTownController.pause();
-    } else {
-      coveyTownController.unPause();
-    }
-  }, [coveyTownController, crosswordPuzzleAreaController]);
-
-  if (crosswordPuzzleAreaController.puzzle) {
+  if (!groupName) {
     return (
-      <Modal isOpen={isOpen} onClose={() => onClose()} size='6xl' isCentered>
-        <ModalOverlay />
-        <ModalContent padding='15px'>
-          <ModalHeader>{crosswordPuzzleAreaController.puzzle.info.title}</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <CrosswordGrid controller={crosswordPuzzleAreaController} />
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+      <NewCrosswordPuzzleModal
+        isOpen={selectIsOpen}
+        close={() => {
+          setSelectIsOpen(false);
+          coveyTownController.unPause();
+        }}
+        crosswordPuzzleArea={crosswordPuzzleArea}
+      />
     );
   } else {
-    return (
-      <Modal isOpen={isOpen} onClose={() => onClose()} isCentered>
-        <ModalOverlay />
-        <ModalContent padding='15px'>
-          <ModalHeader>Crossword Puzzle</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <span>Crossword Puzzle Missing</span>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-    );
+    if (crosswordPuzzleAreaController.puzzle) {
+      return (
+        <Modal isOpen={isOpen} onClose={() => onClose()} size='6xl' isCentered>
+          <ModalOverlay />
+          <ModalContent padding='15px'>
+            <ModalHeader>{crosswordPuzzleAreaController.puzzle.info.title}</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <CrosswordGrid controller={crosswordPuzzleAreaController} />
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+      );
+    } else {
+      return (
+        <Modal isOpen={isOpen} onClose={() => onClose()} size='6xl' isCentered>
+          <ModalOverlay />
+          <ModalContent padding='15px'>
+            <ModalHeader>Uh oh...</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>{`Crossword Missing :(`}</ModalBody>
+          </ModalContent>
+        </Modal>
+      );
+    }
   }
 }
 

@@ -1,10 +1,20 @@
+import { CrosswordPuzzleModel } from '../../../types/CoveyTownSocket';
 import Interactable, { KnownInteractableTypes } from '../Interactable';
 import TownGameScene from '../TownGameScene';
 
 export default class CrosswordPuzzleArea extends Interactable {
   private _labelText?: Phaser.GameObjects.Text;
 
+  private _defaultPuzzle?: CrosswordPuzzleModel;
+
   private _isInteracting = false;
+
+  public get defaultPuzzle() {
+    if (!this._defaultPuzzle) {
+      return undefined;
+    }
+    return this._defaultPuzzle;
+  }
 
   constructor(scene: TownGameScene) {
     super(scene);

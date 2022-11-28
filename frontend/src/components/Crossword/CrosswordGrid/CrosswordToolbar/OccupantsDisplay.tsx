@@ -1,7 +1,7 @@
 import { Flex } from '@chakra-ui/react';
 import React from 'react';
 import PlayerController from '../../../../classes/PlayerController';
-import OccupantModal from './OccupantModal';
+import OccupantModal from '../../Leaderboard/OccupantModal';
 const MAX_OCCUPANTS_DISPLAY = 3;
 export default function OccupantsDisplay(props: { players: PlayerController[] }): JSX.Element {
   // TODO: uncomment when multiplayer fixed
