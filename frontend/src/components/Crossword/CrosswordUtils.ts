@@ -1,6 +1,5 @@
-import { CrosswordPuzzleCell } from '../../types/CoveyTownSocket';
+import { CellIndex, CrosswordPuzzleCell } from '../../types/CoveyTownSocket';
 
-export type CellIndex = { row: number; col: number };
 export type Direction = 'across' | 'down';
 
 export const BLACK_CELL_STRING = '.';
