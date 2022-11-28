@@ -1,8 +1,12 @@
 import { mock, mockClear } from 'jest-mock-extended';
 import { nanoid } from 'nanoid';
 import Player from '../lib/Player';
-import { getLastEmittedEvent } from '../TestUtils';
-import { TownEmitter, CrosswordPuzzleModel } from '../types/CoveyTownSocket';
+import { getLastEmittedEvent, testPuzzle } from '../TestUtils';
+import {
+  TownEmitter,
+  CrosswordPuzzleModel,
+  CrosswordPuzzleArea as CrosswordPuzzleAreaModel,
+} from '../types/CoveyTownSocket';
 import CrosswordPuzzleArea from './CrosswordPuzzleArea';
 
 describe('PuzzleArea', () => {
@@ -91,42 +95,86 @@ describe('PuzzleArea', () => {
       const lastEmittedMovement = getLastEmittedEvent(townEmitter, 'playerMoved');
       expect(lastEmittedMovement.location.interactableID).toBeUndefined();
     });
-    it('Clears the group name of the puzzle area when the last occupant leaves', () => {
+    it('Clears group name and resets the puzzle of the puzzle area when the last occupant leaves', () => {
+      const setPuzzleMock = jest.spyOn(
+        // Mocking a private method by creating a prototype as seen in
+        // https://stackoverflow.com/questions/43265944/is-there-any-way-to-mock-private-functions-with-jest
+        // eslint-disable-next-line
+        CrosswordPuzzleArea.prototype as any,
+        '_setPuzzleModel',
+      );
+      // Sets puzzle in impl
+      // eslint-disable-next-line
+      setPuzzleMock.mockImplementation(() => (testArea.puzzle = testPuzzle));
+
       testArea.remove(newPlayer);
       const lastEmittedUpdate = getLastEmittedEvent(townEmitter, 'interactableUpdate');
       expect(lastEmittedUpdate).toEqual({
         groupName: undefined,
+        puzzle: testPuzzle,
         id,
         occupantsByID: [],
         leaderboard,
         isGameOver: false,
-        puzzle: undefined,
       });
       expect(testArea.groupName).toBeUndefined();
-      expect(testArea.leaderboard).toEqual(leaderboard);
     });
-    it('Clears the puzzle of the puzzle area when the last occupant leaves', () => {
-      testArea.remove(newPlayer);
-      const lastEmittedUpdate = getLastEmittedEvent(townEmitter, 'interactableUpdate');
-      expect(lastEmittedUpdate).toEqual({
-        puzzle: undefined,
-        id,
+  });
+  describe('updateModel', () => {
+    it('sets the groupName, puzzle, leaderboard and isGameOver and sets no other properties', () => {
+      const model: CrosswordPuzzleAreaModel = {
+        id: nanoid(),
+        groupName: 'some new group name',
+        puzzle: testPuzzle,
+        leaderboard: [],
         occupantsByID: [],
+        isGameOver: true,
+      };
+
+      testArea.updateModel(model);
+
+      expect(testArea.groupName).toEqual(model.groupName);
+      expect(testArea.puzzle).toEqual(model.puzzle);
+      expect(testArea.leaderboard).toEqual(model.leaderboard);
+      expect(testArea.isGameOver).toEqual(model.isGameOver);
+    });
+    it('gets puzzle from API if new puzzle is undefined', () => {
+      const setPuzzleMock = jest.spyOn(
+        // Mocking a private method by creating a prototype as seen in
+        // https://stackoverflow.com/questions/43265944/is-there-any-way-to-mock-private-functions-with-jest
+        // eslint-disable-next-line
+        CrosswordPuzzleArea.prototype as any,
+        '_setPuzzleModel',
+      );
+      // Sets puzzle in impl
+      // eslint-disable-next-line
+      setPuzzleMock.mockImplementation(() => (testArea.puzzle = testPuzzle));
+
+      const undefinedPuzzleModel: CrosswordPuzzleAreaModel = {
+        id: testArea.id,
+        groupName: testArea.groupName,
+        puzzle: undefined,
+        leaderboard: testArea.leaderboard,
+        occupantsByID: testArea.occupantsByID,
+        isGameOver: testArea.isGameOver,
+      };
+
+      testArea.updateModel(undefinedPuzzleModel);
+      expect(setPuzzleMock).toHaveBeenCalled();
+      expect(testArea.puzzle).toEqual(testPuzzle);
+    });
+  });
+  describe('toModel', () => {
+    it('gets the ID, groupName, puzzle and occupantsByID, leaderboard, isGameOver and gets no other properties', () => {
+      const model = testArea.toModel();
+      expect(model).toEqual({
+        id,
+        groupName,
+        puzzle,
+        occupantsByID: [newPlayer.id],
         leaderboard,
         isGameOver: false,
       });
-      expect(testArea.puzzle).toBeUndefined();
-    });
-  });
-  test('toModel sets the ID, groupName, puzzle and occupantsByID and sets no other properties', () => {
-    const model = testArea.toModel();
-    expect(model).toEqual({
-      id,
-      groupName,
-      puzzle,
-      occupantsByID: [newPlayer.id],
-      leaderboard,
-      isGameOver: false,
     });
   });
   describe('fromMapObject', () => {

@@ -233,3 +233,65 @@ export function isCrosswordPuzzleArea(
 ): interactable is CrosswordPuzzleArea {
   return 'isGameOver' in interactable;
 }
+
+export const testPuzzle: CrosswordPuzzleModel = {
+  grid: [
+    [
+      { value: '', solution: '.', isCircled: false, isShaded: false, usedHint: false },
+      { value: '', solution: '.', isCircled: false, isShaded: false, usedHint: false },
+      { value: '', solution: 'M', isCircled: false, isShaded: false, usedHint: false },
+      { value: '', solution: 'C', isCircled: false, isShaded: false, usedHint: false },
+      { value: '', solution: 'S', isCircled: false, isShaded: false, usedHint: false },
+    ],
+    [
+      { value: '', solution: '.', isCircled: false, isShaded: false, usedHint: false },
+      { value: '', solution: 'Y', isCircled: false, isShaded: false, usedHint: false },
+      { value: '', solution: 'A', isCircled: false, isShaded: false, usedHint: false },
+      { value: '', solution: 'L', isCircled: false, isShaded: false, usedHint: false },
+      { value: '', solution: 'L', isCircled: false, isShaded: false, usedHint: false },
+    ],
+    [
+      { value: '', solution: 'T', isCircled: false, isShaded: false, usedHint: false },
+      { value: '', solution: 'O', isCircled: false, isShaded: false, usedHint: false },
+      { value: '', solution: 'D', isCircled: false, isShaded: false, usedHint: false },
+      { value: '', solution: 'A', isCircled: false, isShaded: false, usedHint: false },
+      { value: '', solution: 'Y', isCircled: false, isShaded: false, usedHint: false },
+    ],
+    [
+      { value: '', solution: 'A', isCircled: false, isShaded: false, usedHint: false },
+      { value: '', solution: 'D', isCircled: false, isShaded: false, usedHint: false },
+      { value: '', solution: 'A', isCircled: false, isShaded: false, usedHint: false },
+      { value: '', solution: 'M', isCircled: false, isShaded: false, usedHint: false },
+      { value: '', solution: '.', isCircled: false, isShaded: false, usedHint: false },
+    ],
+    [
+      { value: '', solution: 'D', isCircled: false, isShaded: false, usedHint: false },
+      { value: '', solution: 'A', isCircled: false, isShaded: false, usedHint: false },
+      { value: '', solution: 'M', isCircled: false, isShaded: false, usedHint: false },
+      { value: '', solution: '.', isCircled: false, isShaded: false, usedHint: false },
+      { value: '', solution: '.', isCircled: false, isShaded: false, usedHint: false },
+    ],
+  ],
+  info: {
+    type: 'Mini',
+    title: 'NYT Mini Test',
+    author: 'Some Editor',
+    description: 'Words in boxes',
+  },
+  clues: {
+    across: [
+      'Show hosts, for short',
+      '"You people," more informally',
+      'Morning news show since 1952',
+      'Conover of comedy',
+      'Resevoir Structure',
+    ],
+    down: [
+      '_____ Vice President, title for Kamala Harris',
+      'Any animal in the class Bivalvia',
+      'Like a knowning wink',
+      'Oldest member of the Jedi Council',
+      'Tiny bit',
+    ],
+  },
+};

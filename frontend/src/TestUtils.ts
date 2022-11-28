@@ -6,7 +6,12 @@ import PlayerController from './classes/PlayerController';
 import TownController, { TownEvents } from './classes/TownController';
 import ViewingAreaController from './classes/ViewingAreaController';
 import { TownsService } from './generated/client';
-import { CoveyTownSocket, ServerToClientEvents, TownJoinResponse } from './types/CoveyTownSocket';
+import {
+  CoveyTownSocket,
+  CrosswordPuzzleModel,
+  ServerToClientEvents,
+  TownJoinResponse,
+} from './types/CoveyTownSocket';
 
 //These types copied from socket.io server library so that we don't have to depend on the whole thing to have type-safe tests.
 type SocketReservedEventsMap = {
@@ -183,6 +188,13 @@ export async function mockTownControllerConnection(
         elapsedTimeSec: 0,
         isPlaying: false,
       });
+      responseToSendController.interactables.push({
+        id: nanoid(),
+        occupantsByID: [playerID],
+        puzzle: undefined,
+        leaderboard: undefined,
+        isGameOver: false,
+      });
     }
   }
   mockSocket.on.mockImplementationOnce((eventName, eventListener) => {
@@ -223,3 +235,65 @@ export function getTownEventListener<Ev extends EventNames<TownEvents>>(
   }
   throw new Error(`No event listener found for event ${eventName}`);
 }
+
+export const testPuzzle: CrosswordPuzzleModel = {
+  grid: [
+    [
+      { value: '', solution: '.', isCircled: false, isShaded: false, usedHint: false },
+      { value: '', solution: '.', isCircled: false, isShaded: false, usedHint: false },
+      { value: '', solution: 'M', isCircled: false, isShaded: false, usedHint: false },
+      { value: '', solution: 'C', isCircled: false, isShaded: false, usedHint: false },
+      { value: '', solution: 'S', isCircled: false, isShaded: false, usedHint: false },
+    ],
+    [
+      { value: '', solution: '.', isCircled: false, isShaded: false, usedHint: false },
+      { value: '', solution: 'Y', isCircled: false, isShaded: false, usedHint: false },
+      { value: '', solution: 'A', isCircled: false, isShaded: false, usedHint: false },
+      { value: '', solution: 'L', isCircled: false, isShaded: false, usedHint: false },
+      { value: '', solution: 'L', isCircled: false, isShaded: false, usedHint: false },
+    ],
+    [
+      { value: '', solution: 'T', isCircled: false, isShaded: false, usedHint: false },
+      { value: '', solution: 'O', isCircled: false, isShaded: false, usedHint: false },
+      { value: '', solution: 'D', isCircled: false, isShaded: false, usedHint: false },
+      { value: '', solution: 'A', isCircled: false, isShaded: false, usedHint: false },
+      { value: '', solution: 'Y', isCircled: false, isShaded: false, usedHint: false },
+    ],
+    [
+      { value: '', solution: 'A', isCircled: false, isShaded: false, usedHint: false },
+      { value: '', solution: 'D', isCircled: false, isShaded: false, usedHint: false },
+      { value: '', solution: 'A', isCircled: false, isShaded: false, usedHint: false },
+      { value: '', solution: 'M', isCircled: false, isShaded: false, usedHint: false },
+      { value: '', solution: '.', isCircled: false, isShaded: false, usedHint: false },
+    ],
+    [
+      { value: '', solution: 'D', isCircled: false, isShaded: false, usedHint: false },
+      { value: '', solution: 'A', isCircled: false, isShaded: false, usedHint: false },
+      { value: '', solution: 'M', isCircled: false, isShaded: false, usedHint: false },
+      { value: '', solution: '.', isCircled: false, isShaded: false, usedHint: false },
+      { value: '', solution: '.', isCircled: false, isShaded: false, usedHint: false },
+    ],
+  ],
+  info: {
+    type: 'Mini',
+    title: 'NYT Mini Test',
+    author: 'Some Editor',
+    description: 'Words in boxes',
+  },
+  clues: {
+    across: [
+      'Show hosts, for short',
+      '"You people," more informally',
+      'Morning news show since 1952',
+      'Conover of comedy',
+      'Resevoir Structure',
+    ],
+    down: [
+      '_____ Vice President, title for Kamala Harris',
+      'Any animal in the class Bivalvia',
+      'Like a knowning wink',
+      'Oldest member of the Jedi Council',
+      'Tiny bit',
+    ],
+  },
+};

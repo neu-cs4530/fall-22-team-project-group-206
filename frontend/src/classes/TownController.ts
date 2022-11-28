@@ -427,7 +427,7 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
      * a conversationAreasChagned event to listeners of this TownController.
      *
      * If the update changes properties of the interactable, the interactable is also expected to emit its own
-     * events (@see ViewingAreaController and @see ConversationAreaController and @see CrosswordPuzzleAreaController)
+     * events (@see ViewingAreaController and @see ConversationAreaController and @see CrosswordPuzzleAreaController )
      */
     this._socket.on('interactableUpdate', interactable => {
       if (isConversationArea(interactable)) {
@@ -451,17 +451,9 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
           eachArea => eachArea.id === interactable.id,
         );
         if (updatedCrosswordArea) {
-          console.log('Updating...', updatedCrosswordArea);
-          const emptyNow = updatedCrosswordArea.isEmpty();
-          if (emptyNow) {
-            updatedCrosswordArea.puzzle = undefined;
-          } else {
-            updatedCrosswordArea.puzzle = interactable.puzzle;
-            updatedCrosswordArea.occupants = this._playersByIDs(interactable.occupantsByID);
-            const emptyAfterChange = updatedCrosswordArea.isEmpty();
-            if (emptyAfterChange) {
-              this.emit('crosswordPuzzleAreasChanged', this.crosswordPuzzleAreas);
-            }
+          updatedCrosswordArea.updateFrom(interactable, this._playersByIDs.bind(this));
+          if (updatedCrosswordArea.isEmpty()) {
+            this.emit('crosswordPuzzleAreasChanged', this._crosswordPuzzleAreas);
           }
         }
       }
@@ -661,7 +653,7 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
       const newController = new CrosswordPuzzleAreaController(
         crosswordPuzzleArea.name,
         false,
-        undefined,
+        crosswordPuzzleArea.defaultPuzzle,
         undefined,
       );
       this.crosswordPuzzleAreas.push(newController);
