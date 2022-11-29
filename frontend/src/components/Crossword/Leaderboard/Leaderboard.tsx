@@ -1,8 +1,10 @@
 import { Box, ListItem, List, Grid, GridItem, useDisclosure } from '@chakra-ui/react';
-import React, { useState } from 'react';
-
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { ScoreModel } from '../../../types/CoveyTownSocket';
 import LeaderboardModal from './ScoreModal';
+
+const LEADERBOARD_SIZE = 5;
 /**
  * List the scores for the player
  */
@@ -27,7 +29,10 @@ export default function Leaderboard(): JSX.Element {
     usedHint: true,
   };
 
-  const leaderboardExample: ScoreModel[] = [score1, score2, score3];
+  const [leaderboard, setLeaderboard] = useState<ScoreModel[]>([]);
+  console.log('test');
+
+  const leaderboardExample: ScoreModel[] = [];
   const [detailIndex, setDetailIndex] = useState<number>(0);
   const { onOpen, isOpen, onClose } = useDisclosure();
 
