@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 
 const INTERVAL = 1000;
-const HOUR_UNIT = 24;
-const MINUTE_UNIT = 60;
-const SECOND_UNIT = 60;
+const HH_INDEX = 11;
+const SS_INDEX = 19;
 export default function Timer({
   startTime,
   isPaused,
@@ -11,26 +10,16 @@ export default function Timer({
   startTime: number;
   isPaused: boolean;
 }): JSX.Element {
-  const [hours, setHours] = useState<number>(0);
-  const [minutes, setMinutes] = useState<number>(0);
-  const [second, setSecond] = useState<number>(0);
-
+  const [elapsedTimeMilliSecs, setElapsedTimeMilliSecs] = useState<number>(0);
   const getTime = () => {
-    const time = Date.now() - startTime;
+    const milliSecsElapsed = Date.now() - startTime;
 
-    setHours(
-      Math.floor(
-        (time % (INTERVAL * MINUTE_UNIT * SECOND_UNIT * HOUR_UNIT)) /
-          (INTERVAL * MINUTE_UNIT * SECOND_UNIT),
-      ),
-    );
-    setMinutes(
-      Math.floor((time % (INTERVAL * MINUTE_UNIT * SECOND_UNIT)) / (INTERVAL * MINUTE_UNIT)),
-    );
-    setSecond(Math.floor((time % (INTERVAL * SECOND_UNIT)) / INTERVAL));
+    setElapsedTimeMilliSecs(milliSecsElapsed);
   };
 
+  const getTimeInHHMMSS = () => {
+    return new Date(elapsedTimeMilliSecs).toISOString().slice(HH_INDEX, SS_INDEX);
+  };
   setInterval(() => getTime(), INTERVAL);
-
-  return <div>{!isPaused ? hours + ':' + minutes + ':' + second : `0:0:0`}</div>;
+  return <div>{!isPaused ? getTimeInHHMMSS() : '00:00:00'}</div>;
 }
