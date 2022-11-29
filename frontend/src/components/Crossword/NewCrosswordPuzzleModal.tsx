@@ -49,15 +49,18 @@ export default function NewCrosswordPuzzleModal({
   const toast = useToast();
 
   const createCrosswordPuzzle = useCallback(async () => {
-    let teamNameInvalid = true
+    let teamNameInvalid = true;
     if (groupName && crosswordPuzzleController) {
+      let url = '';
       try {
         if (process.env.REACT_APP_TOWNS_SERVICE_URL !== undefined) {
-          const url =
-            process.env.REACT_APP_TOWNS_SERVICE_URL.concat('/scores/inUse/').concat(groupName);
-          const inUseResp = await axios.get(url);
-          teamNameInvalid = inUseResp.data.inUse;
+          url = process.env.REACT_APP_TOWNS_SERVICE_URL.concat('/scores/inUse/').concat(groupName);
         }
+        if (process.env.PORT !== undefined) {
+          url = process.env.PORT.concat('/scores/inUse/').concat(groupName);
+        }
+        const inUseResp = await axios.get(url);
+        teamNameInvalid = inUseResp.data.inUse;
       } catch (e) {
         if (e instanceof Error) {
           toast({
@@ -79,10 +82,10 @@ export default function NewCrosswordPuzzleModal({
           occupantsByID: [],
           isGameOver: false,
           startTime: Date.now(),
-      };
+        };
         try {
           await coveyTownController.createCrosswordPuzzleArea(newCrosswordPuzzleToCreate);
-        toast({
+          toast({
             title: 'Crossword Created!',
             status: 'success',
           });

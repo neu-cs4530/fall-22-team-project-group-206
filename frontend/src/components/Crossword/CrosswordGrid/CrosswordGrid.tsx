@@ -12,6 +12,7 @@ import CrosswordCell from './CrosswordCell/CrosswordCell';
 import axios from 'axios';
 import CrosswordClues from './CrosswordClues/CrosswordClues';
 import CrosswordToolbar from './CrosswordToolbar/CrosswordToolbar';
+import { ScoreModel } from '../../../generated/client';
 
 type GameState = {
   selectedIndex: CellIndex;
@@ -54,7 +55,51 @@ function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaControll
     }
     return true;
   };
-
+  const hintUsed = (grid: CrosswordPuzzleCell[][]) => {
+    for (let row = 0; row < grid.length; row++) {
+      for (let col = 0; col < grid[0].length; col++) {
+        if (grid[row][col].usedHint) {
+          return true;
+        }
+      }
+    }
+    return false;
+  };
+  /**
+   * Makes api call to the database to insert a score provided a teamName and the time they started the given crossword.
+   * It also creates a toast notifying a user the score they aachieved.
+   * @param startTime the time the team started the crossword
+   * @param groupName the name of the team completing the crossword
+   * @param grid the crossword puzzle being completed
+   */
+  const insertScoreInDB = (startTime: number, groupName: string, grid: CrosswordPuzzleCell[][]) => {
+    const currScore = (Date.now() - startTime) / 1000;
+    try {
+      let url = '';
+      if (process.env.REACT_APP_TOWNS_SERVICE_URL !== undefined) {
+        url = process.env.REACT_APP_TOWNS_SERVICE_URL.concat('/score');
+      }
+      if (process.env.PORT !== undefined) {
+        url = process.env.PORT.concat('/score');
+      }
+      const newScore: ScoreModel = {
+        teamName: groupName,
+        score: currScore,
+        teamMembers: controller.occupants.map(person => person.userName),
+        usedHint: hintUsed(grid),
+      };
+      const scoreResp = axios.post(url, { scoreModel: newScore });
+      toast({
+        title: `Puzzle Finished!`,
+        description: `Your Team Score is ${currScore}`,
+        position: 'top',
+        status: 'success',
+        isClosable: true,
+      });
+    } catch (e) {
+      throw new Error('Unable to set Leaderboard');
+    }
+  };
   useEffect(() => {
     controller.addListener('puzzleChange', setPuzzle);
 
@@ -89,27 +134,9 @@ function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaControll
 
       if (isCompleted(updatedGrid)) {
         controller.isGameOver = true;
-        try {
-          if (process.env.REACT_APP_TOWNS_SERVICE_URL !== undefined) {
-            const newScore = {
-              teamName: controller.groupName,
-              score: 0,
-              teamMembers: controller.occupants.map((person) => person.userName),
-              usedHint: false
-            }
-            const url = process.env.REACT_APP_TOWNS_SERVICE_URL.concat('/score');
-            const scoreResp = axios.post(url, newScore);
-          }
-        } catch (e) {
-          throw new Error('Unable to set Leaderboard');
+        if (controller.startTime && controller.groupName) {
+          insertScoreInDB(controller.startTime, controller.groupName, updatedGrid);
         }
-        toast({
-          title: `Puzzle Finished!`,
-          description: 'Your Team Score is ...',
-          position: 'top',
-          status: 'success',
-          isClosable: true,
-        });
       }
 
       townController.emitCrosswordPuzzleAreaUpdate(controller);
@@ -225,13 +252,10 @@ function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaControll
 
       controller.puzzle = { grid: updatedGrid, info: puzzle.info, clues: puzzle.clues };
       controller.isGameOver = true;
-      toast({
-        title: `Puzzle Finished!`,
-        description: 'Your Team Score is ...',
-        position: 'top',
-        status: 'success',
-        isClosable: true,
-      });
+
+      if (controller.startTime && controller.groupName) {
+        insertScoreInDB(controller.startTime, controller.groupName, updatedGrid);
+      }
 
       townController.emitCrosswordPuzzleAreaUpdate(controller);
     };

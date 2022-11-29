@@ -9,37 +9,21 @@ const LEADERBOARD_SIZE = 5;
  * List the scores for the player
  */
 export default function Leaderboard(): JSX.Element {
-  //TODO: dummy data will be removed once leaderboard api is all set
-  const score1: ScoreModel = {
-    teamName: 'short name',
-    score: 100,
-    teamMembers: ['very long member name', 'very long member name'],
-    usedHint: true,
-  };
-  const score2: ScoreModel = {
-    teamName: 'long team name',
-    score: 10,
-    teamMembers: ['sn1', 'sn2'],
-    usedHint: false,
-  };
-  const score3: ScoreModel = {
-    teamName: 'very very very long team name',
-    score: 2,
-    teamMembers: ['long name', 'long name1', 'long name2', 'long name3'],
-    usedHint: true,
-  };
-
   const [leaderboard, setLeaderboard] = useState<ScoreModel[]>([]);
   useEffect(() => {
     async function retrieveLeaderboard() {
       try {
+        let url = '';
         if (process.env.REACT_APP_TOWNS_SERVICE_URL !== undefined) {
-          const url = process.env.REACT_APP_TOWNS_SERVICE_URL.concat('/scores/amount/').concat(
+          url = process.env.REACT_APP_TOWNS_SERVICE_URL.concat('/scores/amount/').concat(
             LEADERBOARD_SIZE.toString(10),
           );
-          const scoreResp = await axios.get(url);
-          setLeaderboard(scoreResp.data.scores);
         }
+        if (process.env.PORT !== undefined) {
+          url = process.env.PORT.concat('/scores/amount/').concat(LEADERBOARD_SIZE.toString(10));
+        }
+        const scoreResp = await axios.get(url);
+        setLeaderboard(scoreResp.data.scores);
       } catch (e) {
         throw new Error('Unable to set Leaderboard');
       }
@@ -47,7 +31,6 @@ export default function Leaderboard(): JSX.Element {
     retrieveLeaderboard();
   }, [leaderboard]);
 
-  const leaderboardExample: ScoreModel[] = [score1, score2, score3];
   const [detailIndex, setDetailIndex] = useState<number>(0);
   const { onOpen, isOpen, onClose } = useDisclosure();
 
@@ -101,26 +84,18 @@ export default function Leaderboard(): JSX.Element {
         </Grid>
       </div>
       <List margin='3px'>
-        {leaderboardExample.length != 0 ? orderedListView : <div>Leaderboard Empty</div>}
+        {leaderboard.length != 0 ? orderedListView : <div>Leaderboard Empty</div>}
       </List>
-      {leaderboardExample.length != 0 ? (
-        <LeaderboardModal
-          scoreModel={leaderboardExample[detailIndex]}
-          open={isOpen}
-          close={onClose}
-        />
+      {leaderboard.length != 0 ? (
+        <LeaderboardModal scoreModel={leaderboard[detailIndex]} open={isOpen} close={onClose} />
       ) : (
         <></>
       )}
       <List margin='3px'>
-        {leaderboardExample.length != 0 ? orderedListView : <div>Leaderboard Empty</div>}
+        {leaderboard.length != 0 ? orderedListView : <div>Leaderboard Empty</div>}
       </List>
-      {leaderboardExample.length != 0 ? (
-        <LeaderboardModal
-          scoreModel={leaderboardExample[detailIndex]}
-          open={isOpen}
-          close={onClose}
-        />
+      {leaderboard.length != 0 ? (
+        <LeaderboardModal scoreModel={leaderboard[detailIndex]} open={isOpen} close={onClose} />
       ) : (
         <></>
       )}
