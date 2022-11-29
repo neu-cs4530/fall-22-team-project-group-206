@@ -240,7 +240,7 @@ describe('CrosswordPuzzleArea', () => {
       expect(testArea.startTime).toBeUndefined();
       expect(mockListeners.startTimeChange).not.toBeCalled();
     });
-    it('emit groupName event if the groupName is changed', () => {
+    it('emit startTime event if the startTime is changed', () => {
       testArea.startTime = 1;
       expect(testArea.startTime).toEqual(1);
       expect(mockListeners.startTimeChange).toBeCalled();

@@ -79,7 +79,7 @@ export default class CrosswordPuzzleArea extends InteractableArea {
   /**
    * Updates the state of this CrosswordPuzzleArea, setting the groupName, puzzle, leaderboard and isGameOver properties
    *
-   * @param viewingArea updated model
+   * @param CrosswordPuzzleAreaModel updated model
    */
   public updateModel({
     groupName,
@@ -154,6 +154,7 @@ export default class CrosswordPuzzleArea extends InteractableArea {
           rawPuzzleModel.shades,
           rawPuzzleModel.circles,
         );
+
         this.puzzle = {
           grid: cellGrid,
           info: rawPuzzleModel.info,

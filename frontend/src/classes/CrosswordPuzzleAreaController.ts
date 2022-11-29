@@ -24,7 +24,7 @@ export type CrosswordPuzzleAreaEvents = {
 /**
  * A CrosswordPuzzleAreaController manages the local behavior of a crossword puzzle area in the frontend,
  * implementing the logic to bridge between the townService's interpretation of crossword puzzle areas and the
- * frontend's. The CrosswordPuzzleAreaController emits events when the convecrossword puzzlersation area changes.
+ * frontend's. The CrosswordPuzzleAreaController emits events when the ecrossword puzzle area changes.
  */
 export default class CrosswordPuzzleAreaController extends (EventEmitter as new () => TypedEmitter<CrosswordPuzzleAreaEvents>) {
   private _occupants: PlayerController[] = [];
@@ -199,6 +199,7 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
     this.isGameOver = newCrosswordPuzzleAreaModel.isGameOver;
     this.occupants = playerFinder(newCrosswordPuzzleAreaModel.occupantsByID);
     this.groupName = newCrosswordPuzzleAreaModel.groupName;
+    this.startTime = newCrosswordPuzzleAreaModel.startTime;
   }
 
   /**
