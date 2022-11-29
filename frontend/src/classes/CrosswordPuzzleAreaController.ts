@@ -23,7 +23,7 @@ export type CrosswordPuzzleAreaEvents = {
 /**
  * A CrosswordPuzzleAreaController manages the local behavior of a crossword puzzle area in the frontend,
  * implementing the logic to bridge between the townService's interpretation of crossword puzzle areas and the
- * frontend's. The CrosswordPuzzleAreaController emits events when the convecrossword puzzlersation area changes.
+ * frontend's. The CrosswordPuzzleAreaController emits events when the crossword puzzle area changes.
  */
 export default class CrosswordPuzzleAreaController extends (EventEmitter as new () => TypedEmitter<CrosswordPuzzleAreaEvents>) {
   private _occupants: PlayerController[] = [];
@@ -35,6 +35,8 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
   private _leaderboard?: ScoreModel[];
 
   private _isGameOver: boolean;
+
+  private _startTime?: number;
 
   private _groupName?: string;
 
@@ -50,6 +52,7 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
     isGameOver: boolean,
     puzzle?: CrosswordPuzzleModel,
     leaderboard?: ScoreModel[],
+    startTime?: number,
     groupName?: string,
   ) {
     super();
@@ -57,6 +60,7 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
     this._puzzle = puzzle;
     this._leaderboard = leaderboard;
     this._isGameOver = isGameOver;
+    this._startTime = startTime;
     this._groupName = groupName;
   }
 
@@ -105,7 +109,7 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
   }
 
   /**
-   * The puzzle in this crossword puzzle area. Changing the puzzle
+   * The leaderboard in this crossword puzzle area. Changing the leaderboard
    * will emit an puzzleChange event.
    */
   set leaderboard(newLeaderboard: ScoreModel[] | undefined) {
@@ -118,8 +122,8 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
   }
 
   /**
-   * The puzzle in this crossword puzzle area. Changing the puzzle
-   * will emit an puzzleChange event.
+   * The isGameOver in this crossword puzzle area. Changing the isGameOver
+   * will emit an gameOverChange event.
    */
   set isGameOver(isGameOver: boolean) {
     if (isGameOver !== this.isGameOver) {
@@ -133,11 +137,24 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
   }
 
   /**
-   * The groupName in this crossword puzzle area. Changing the groupName
+   * The start time in this crossword puzzle area.
+   */
+  set startTime(startTime: number | undefined) {
+    if (startTime !== this._startTime) {
+      this._startTime = startTime;
+    }
+  }
+
+  get startTime(): number | undefined {
+    return this._startTime;
+  }
+
+  /**
+   * The groupName in this crossword puzzle area. Changing the group name
    * will emit an groupNameChange event.
    */
   set groupName(newGroupName: string | undefined) {
-    if (newGroupName !== this.groupName) {
+    if (newGroupName !== this._groupName) {
       this._groupName = newGroupName;
       this.emit('groupNameChange', newGroupName);
     }
@@ -166,6 +183,7 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
       leaderboard: this.leaderboard,
       isGameOver: this.isGameOver,
       groupName: this.groupName,
+      startTime: this.startTime,
     };
   }
 
@@ -178,6 +196,7 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
     this.isGameOver = newCrosswordPuzzleAreaModel.isGameOver;
     this.occupants = playerFinder(newCrosswordPuzzleAreaModel.occupantsByID);
     this.groupName = newCrosswordPuzzleAreaModel.groupName;
+    this.startTime = newCrosswordPuzzleAreaModel.startTime;
   }
 
   /**
@@ -195,6 +214,7 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
       crosswordPuzzleAreaModel.isGameOver,
       crosswordPuzzleAreaModel.puzzle,
       crosswordPuzzleAreaModel.leaderboard,
+      crosswordPuzzleAreaModel.startTime,
       crosswordPuzzleAreaModel.groupName,
     );
     ret.occupants = playerFinder(crosswordPuzzleAreaModel.occupantsByID);

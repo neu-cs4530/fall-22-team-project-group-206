@@ -54,9 +54,11 @@ export default function NewCrosswordPuzzleModal({
         groupName: groupName,
         occupantsByID: [],
         isGameOver: false,
+        startTime: Date.now(),
       };
       try {
         await coveyTownController.createCrosswordPuzzleArea(newCrosswordPuzzleToCreate);
+
         toast({
           title: 'Crossword Created!',
           status: 'success',

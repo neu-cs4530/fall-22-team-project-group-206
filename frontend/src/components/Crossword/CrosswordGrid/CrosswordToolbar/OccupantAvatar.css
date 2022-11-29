@@ -1,0 +1,22 @@
+.display {
+    display: flex;
+    width: 40px;
+    height:40px;
+    border-radius: 50%;
+    border-width: 2px;
+    border-color:black;
+  }
+
+.text {
+  margin: auto;
+}
+
+.shift {
+  position:relative;
+  left:-15px;
+}
+
+.shift2 {
+  position:relative;
+  left:-30px;
+}

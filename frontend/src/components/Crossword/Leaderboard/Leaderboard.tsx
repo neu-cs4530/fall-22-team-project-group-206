@@ -7,27 +7,7 @@ import LeaderboardModal from './ScoreModal';
  * List the scores for the player
  */
 export default function Leaderboard(): JSX.Element {
-  //TODO: dummy data will be removed once leaderboard api is all set
-  const score1: ScoreModel = {
-    teamName: 'short name',
-    score: 100,
-    teamMembers: ['very long member name', 'very long member name'],
-    usedHint: true,
-  };
-  const score2: ScoreModel = {
-    teamName: 'long team name',
-    score: 10,
-    teamMembers: ['sn1', 'sn2'],
-    usedHint: false,
-  };
-  const score3: ScoreModel = {
-    teamName: 'very very very long team name',
-    score: 2,
-    teamMembers: ['long name', 'long name1', 'long name2', 'long name3'],
-    usedHint: true,
-  };
-
-  const leaderboardExample: ScoreModel[] = [score1, score2, score3];
+  const leaderboardExample: ScoreModel[] = [];
   const [detailIndex, setDetailIndex] = useState<number>(0);
   const { onOpen, isOpen, onClose } = useDisclosure();
 
@@ -80,12 +60,18 @@ export default function Leaderboard(): JSX.Element {
           </GridItem>
         </Grid>
       </div>
-      <List margin='3px'>{orderedListView}</List>
-      <LeaderboardModal
-        scoreModel={leaderboardExample[detailIndex]}
-        open={isOpen}
-        close={onClose}
-      />
+      <List margin='3px'>
+        {leaderboardExample.length != 0 ? orderedListView : <div>Leaderboard Empty</div>}
+      </List>
+      {leaderboardExample.length != 0 ? (
+        <LeaderboardModal
+          scoreModel={leaderboardExample[detailIndex]}
+          open={isOpen}
+          close={onClose}
+        />
+      ) : (
+        <></>
+      )}
     </Box>
   );
 }
