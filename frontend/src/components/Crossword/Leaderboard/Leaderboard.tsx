@@ -31,8 +31,26 @@ export default function Leaderboard(): JSX.Element {
 
   const [leaderboard, setLeaderboard] = useState<ScoreModel[]>([]);
   console.log('test');
+  useEffect(() => {
+    async function retrieveLeaderboard() {
+      console.log('test within method');
+      try {
+        if (process.env.REACT_APP_TOWNS_SERVICE_URL !== undefined) {
+          const url = process.env.REACT_APP_TOWNS_SERVICE_URL.concat('/scores/').concat(
+            LEADERBOARD_SIZE.toString(10),
+          );
+          console.log(url);
+          const scoreResp = await axios.get(url);
+          setLeaderboard(scoreResp.data.scores);
+        }
+      } catch (e) {
+        throw new Error('Unable to set Leaderboard');
+      }
+    }
+    retrieveLeaderboard();
+  }, [leaderboard]);
 
-  const leaderboardExample: ScoreModel[] = [];
+  const leaderboardExample: ScoreModel[] = [score1, score2, score3];
   const [detailIndex, setDetailIndex] = useState<number>(0);
   const { onOpen, isOpen, onClose } = useDisclosure();
 
@@ -41,10 +59,11 @@ export default function Leaderboard(): JSX.Element {
     onOpen();
   };
 
-  const orderedListView = leaderboardExample.map(score => (
+  console.log(leaderboard);
+  const orderedListView = leaderboard.map(score => (
     <ListItem
       key={score.teamName}
-      onClick={() => openDialog(leaderboardExample.indexOf(score))}
+      onClick={() => openDialog(leaderboard.indexOf(score))}
       backgroundColor='gray.100'
       borderRadius={10}
       margin='4px'
@@ -52,7 +71,7 @@ export default function Leaderboard(): JSX.Element {
       maxWidth='500px'>
       <Grid templateColumns='repeat(5, 1fr)' gap={6}>
         <GridItem colSpan={1} h='5' width='100%'>
-          {leaderboardExample.indexOf(score) + 1}
+          {leaderboard.indexOf(score) + 1}
         </GridItem>
         <GridItem
           colStart={2}
@@ -85,12 +104,8 @@ export default function Leaderboard(): JSX.Element {
           </GridItem>
         </Grid>
       </div>
-      <List margin='3px'>{orderedListView}</List>
-      <LeaderboardModal
-        scoreModel={leaderboardExample[detailIndex]}
-        open={isOpen}
-        close={onClose}
-      />
+      <List margin='3px'>{leaderboard.length != 0 ? orderedListView : <></>}</List>
+      <LeaderboardModal scoreModel={leaderboard[detailIndex]} open={isOpen} close={onClose} />
     </Box>
   );
 }
