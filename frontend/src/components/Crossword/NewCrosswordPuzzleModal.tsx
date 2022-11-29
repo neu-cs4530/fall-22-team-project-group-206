@@ -49,7 +49,7 @@ export default function NewCrosswordPuzzleModal({
   const toast = useToast();
 
   const createCrosswordPuzzle = useCallback(async () => {
-    let teamNameInvalid = true;
+    let teamNameInvalid = true
     if (groupName && crosswordPuzzleController) {
       try {
         if (process.env.REACT_APP_TOWNS_SERVICE_URL !== undefined) {
@@ -78,10 +78,11 @@ export default function NewCrosswordPuzzleModal({
           groupName: groupName,
           occupantsByID: [],
           isGameOver: false,
-        };
+          startTime: Date.now(),
+      };
         try {
           await coveyTownController.createCrosswordPuzzleArea(newCrosswordPuzzleToCreate);
-          toast({
+        toast({
             title: 'Crossword Created!',
             status: 'success',
           });
