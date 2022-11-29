@@ -30,16 +30,13 @@ export default function Leaderboard(): JSX.Element {
   };
 
   const [leaderboard, setLeaderboard] = useState<ScoreModel[]>([]);
-  console.log('test');
   useEffect(() => {
     async function retrieveLeaderboard() {
-      console.log('test within method');
       try {
         if (process.env.REACT_APP_TOWNS_SERVICE_URL !== undefined) {
-          const url = process.env.REACT_APP_TOWNS_SERVICE_URL.concat('/scores/').concat(
+          const url = process.env.REACT_APP_TOWNS_SERVICE_URL.concat('/scores/amount/').concat(
             LEADERBOARD_SIZE.toString(10),
           );
-          console.log(url);
           const scoreResp = await axios.get(url);
           setLeaderboard(scoreResp.data.scores);
         }
@@ -59,7 +56,6 @@ export default function Leaderboard(): JSX.Element {
     onOpen();
   };
 
-  console.log(leaderboard);
   const orderedListView = leaderboard.map(score => (
     <ListItem
       key={score.teamName}
@@ -104,8 +100,18 @@ export default function Leaderboard(): JSX.Element {
           </GridItem>
         </Grid>
       </div>
-      <List margin='3px'>{leaderboard.length != 0 ? orderedListView : <></>}</List>
-      <LeaderboardModal scoreModel={leaderboard[detailIndex]} open={isOpen} close={onClose} />
+      <List margin='3px'>
+        {leaderboardExample.length != 0 ? orderedListView : <div>Leaderboard Empty</div>}
+      </List>
+      {leaderboardExample.length != 0 ? (
+        <LeaderboardModal
+          scoreModel={leaderboardExample[detailIndex]}
+          open={isOpen}
+          close={onClose}
+        />
+      ) : (
+        <></>
+      )}
     </Box>
   );
 }

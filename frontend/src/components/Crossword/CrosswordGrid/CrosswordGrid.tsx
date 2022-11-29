@@ -9,6 +9,7 @@ import {
 } from '../../../types/CoveyTownSocket';
 import { BLACK_CELL_STRING, Direction, getHighlightedCells } from '../CrosswordUtils';
 import CrosswordCell from './CrosswordCell/CrosswordCell';
+import axios from 'axios';
 import CrosswordClues from './CrosswordClues/CrosswordClues';
 import CrosswordToolbar from './CrosswordToolbar/CrosswordToolbar';
 
@@ -88,6 +89,20 @@ function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaControll
 
       if (isCompleted(updatedGrid)) {
         controller.isGameOver = true;
+        try {
+          if (process.env.REACT_APP_TOWNS_SERVICE_URL !== undefined) {
+            const newScore = {
+              teamName: controller.groupName,
+              score: 0,
+              teamMembers: controller.occupants.map((person) => person.userName),
+              usedHint: false
+            }
+            const url = process.env.REACT_APP_TOWNS_SERVICE_URL.concat('/score');
+            const scoreResp = axios.post(url, newScore);
+          }
+        } catch (e) {
+          throw new Error('Unable to set Leaderboard');
+        }
         toast({
           title: `Puzzle Finished!`,
           description: 'Your Team Score is ...',
