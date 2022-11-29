@@ -27,7 +27,7 @@ export default function Leaderboard(): JSX.Element {
     usedHint: true,
   };
 
-  const leaderboardExample: ScoreModel[] = [score1, score2, score3];
+  const leaderboardExample: ScoreModel[] = [];
   const [detailIndex, setDetailIndex] = useState<number>(0);
   const { onOpen, isOpen, onClose } = useDisclosure();
 
@@ -80,12 +80,18 @@ export default function Leaderboard(): JSX.Element {
           </GridItem>
         </Grid>
       </div>
-      <List margin='3px'>{orderedListView}</List>
-      <LeaderboardModal
-        scoreModel={leaderboardExample[detailIndex]}
-        open={isOpen}
-        close={onClose}
-      />
+      <List margin='3px'>
+        {leaderboardExample.length != 0 ? orderedListView : <div>Leaderboard Empty</div>}
+      </List>
+      {leaderboardExample.length != 0 ? (
+        <LeaderboardModal
+          scoreModel={leaderboardExample[detailIndex]}
+          open={isOpen}
+          close={onClose}
+        />
+      ) : (
+        <></>
+      )}
     </Box>
   );
 }
