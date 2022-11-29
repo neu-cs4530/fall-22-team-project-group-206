@@ -409,7 +409,7 @@ const testingMaps: TestMapDict = {
     ],
   },
 };
-
+const TESTDATE = new Date('Nov 26, 2022 15:37:25').getTime();
 const defaultPuzzle: CrosswordPuzzleModel = {
   grid: [[]],
   info: {
@@ -723,6 +723,7 @@ describe('Town', () => {
           puzzle: defaultPuzzle,
           occupantsByID: [],
           isGameOver: false,
+          startTime: TESTDATE,
         }),
       ).toEqual(false);
     });
@@ -798,6 +799,7 @@ describe('Town', () => {
           groupName: 'some group',
           occupantsByID: [player.id],
           isGameOver: false,
+          startDate: undefined,
         });
       });
     });

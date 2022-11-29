@@ -40,10 +40,19 @@ describe('PuzzleArea', () => {
       completed: false,
     },
   ];
+  const testDate = new Date('Nov 26, 2022 15:37:25').getTime();
   beforeEach(() => {
     mockClear(townEmitter);
     testArea = new CrosswordPuzzleArea(
-      { groupName, id, occupantsByID: [], puzzle, leaderboard, isGameOver: false },
+      {
+        groupName,
+        id,
+        occupantsByID: [],
+        puzzle,
+        leaderboard,
+        isGameOver: false,
+        startTime: testDate,
+      },
       testAreaBox,
       townEmitter,
     );
@@ -62,6 +71,7 @@ describe('PuzzleArea', () => {
         puzzle,
         leaderboard,
         isGameOver: false,
+        startTime: testDate,
       });
     });
     it("Sets the player's PuzzleLabel and emits an update for their location", () => {
@@ -87,6 +97,7 @@ describe('PuzzleArea', () => {
         puzzle,
         leaderboard,
         isGameOver: false,
+        startTime: testDate,
       });
     });
     it("Clears the player's puzzleLabel and emits an update for their location", () => {
@@ -174,7 +185,20 @@ describe('PuzzleArea', () => {
         occupantsByID: [newPlayer.id],
         leaderboard,
         isGameOver: false,
+        startTime: testDate,
       });
+    });
+  });
+  test('toModel sets the ID, groupName, puzzle and occupantsByID and sets no other properties', () => {
+    const model = testArea.toModel();
+    expect(model).toEqual({
+      id,
+      groupName,
+      puzzle,
+      occupantsByID: [newPlayer.id],
+      leaderboard,
+      isGameOver: false,
+      startTime: testDate,
     });
   });
   describe('fromMapObject', () => {
@@ -228,6 +252,7 @@ describe('PuzzleArea', () => {
       expect(val.groupName).toBeUndefined();
       expect(val.puzzle).toBeUndefined();
       expect(val.occupantsByID).toEqual([]);
+      expect(val.startTime).toBeUndefined();
     });
   });
 });

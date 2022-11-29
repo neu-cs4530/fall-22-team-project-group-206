@@ -12,6 +12,7 @@ import {
   ModalOverlay,
   useToast,
 } from '@chakra-ui/react';
+import axios from 'axios';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useCrosswordAreaPuzzleController } from '../../classes/TownController';
 import { CrosswordPuzzleArea as CrosswordPuzzleAreaModel } from '../../generated/client';
@@ -48,34 +49,62 @@ export default function NewCrosswordPuzzleModal({
   const toast = useToast();
 
   const createCrosswordPuzzle = useCallback(async () => {
+    let teamNameInvalid = true;
     if (groupName && crosswordPuzzleController) {
-      const newCrosswordPuzzleToCreate: CrosswordPuzzleAreaModel = {
-        id: crosswordPuzzleArea.id,
-        groupName: groupName,
-        occupantsByID: [],
-        isGameOver: false,
-      };
+      let url = '';
       try {
-        await coveyTownController.createCrosswordPuzzleArea(newCrosswordPuzzleToCreate);
+        if (process.env.REACT_APP_TOWNS_SERVICE_URL !== undefined) {
+          url = process.env.REACT_APP_TOWNS_SERVICE_URL.concat('/scores/inUse/').concat(groupName);
+        }
+        if (process.env.PORT !== undefined) {
+          url = process.env.PORT.concat('/scores/inUse/').concat(groupName);
+        }
+        const inUseResp = await axios.get(url);
+        teamNameInvalid = inUseResp.data.inUse;
+      } catch (e) {
+        if (e instanceof Error) {
+          toast({
+            title: 'Unable to check validity of team name',
+            status: 'error',
+            description: e.toString(),
+          });
+        }
+      }
+      if (teamNameInvalid) {
         toast({
-          title: 'Crossword Created!',
-          status: 'success',
+          title: 'Team name already in use; Please select a different name',
+          status: 'error',
         });
-        coveyTownController.unPause();
-        closeModal();
-      } catch (err) {
-        if (err instanceof Error) {
+      } else {
+        const newCrosswordPuzzleToCreate: CrosswordPuzzleAreaModel = {
+          id: crosswordPuzzleArea.id,
+          groupName: groupName,
+          occupantsByID: [],
+          isGameOver: false,
+          startTime: Date.now(),
+        };
+        try {
+          await coveyTownController.createCrosswordPuzzleArea(newCrosswordPuzzleToCreate);
           toast({
-            title: 'Unable to create crossword puzzle',
-            description: err.toString(),
-            status: 'error',
+            title: 'Crossword Created!',
+            status: 'success',
           });
-        } else {
-          console.trace(err);
-          toast({
-            title: 'Unexpected Error',
-            status: 'error',
-          });
+          coveyTownController.unPause();
+          closeModal();
+        } catch (err) {
+          if (err instanceof Error) {
+            toast({
+              title: 'Unable to create crossword puzzle',
+              description: err.toString(),
+              status: 'error',
+            });
+          } else {
+            console.trace(err);
+            toast({
+              title: 'Unexpected Error',
+              status: 'error',
+            });
+          }
         }
       }
     }
