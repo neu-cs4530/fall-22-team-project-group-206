@@ -137,8 +137,7 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
   }
 
   /**
-   * The start time in this crossword puzzle area. Changing the start time
-   * will emit an startTimeChange event.
+   * The start time in this crossword puzzle area.
    */
   set startTime(startTime: number | undefined) {
     if (startTime !== this._startTime) {
