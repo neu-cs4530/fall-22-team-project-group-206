@@ -1,15 +1,15 @@
 import { Flex } from '@chakra-ui/react';
 import React from 'react';
 import PlayerController from '../../../../classes/PlayerController';
-import OccupantModal from './OccupantModal';
+import OccupantAvatar from './OccupantAvatar';
 const MAX_OCCUPANTS_DISPLAY = 3;
 export default function OccupantsDisplay(props: { players: PlayerController[] }): JSX.Element {
   return (
     <Flex>
-      <OccupantModal name={props.players[0].userName} />
+      <OccupantAvatar name={props.players[0].userName} />
       {props.players[1] ? (
         <div className='shift'>
-          <OccupantModal name={props.players[1].userName} />
+          <OccupantAvatar name={props.players[1].userName} />
         </div>
       ) : (
         <></>
@@ -18,11 +18,13 @@ export default function OccupantsDisplay(props: { players: PlayerController[] })
         <>
           {props.players.length === MAX_OCCUPANTS_DISPLAY ? (
             <div className='shift2'>
-              <OccupantModal name={props.players[2].userName} />{' '}
+              <OccupantAvatar name={props.players[2].userName} />{' '}
             </div>
           ) : (
             <div className='shift2'>
-              <OccupantModal name={(props.players.length - MAX_OCCUPANTS_DISPLAY + 1).toString()} />{' '}
+              <OccupantAvatar
+                name={(props.players.length - MAX_OCCUPANTS_DISPLAY + 1).toString()}
+              />{' '}
             </div>
           )}
         </>
