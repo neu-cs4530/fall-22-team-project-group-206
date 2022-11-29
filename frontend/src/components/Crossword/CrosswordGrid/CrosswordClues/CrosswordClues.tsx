@@ -28,7 +28,7 @@ function CrosswordClues(props: {
   const downCluesView = createClueViews(props.downClues);
 
   return (
-    <VStack>
+    <VStack alignContent={'flex-start'}>
       <div className='clues-list'>
         <span>Across</span>
         <ul>{acrossCluesView}</ul>

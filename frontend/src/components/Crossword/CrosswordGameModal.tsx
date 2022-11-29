@@ -1,12 +1,13 @@
+import { InfoOutlineIcon } from '@chakra-ui/icons';
 import {
+  Flex,
+  IconButton,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalHeader,
   ModalOverlay,
-  Button,
-  Flex,
 } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useCrosswordAreaPuzzleController, useInteractable } from '../../classes/TownController';
@@ -41,7 +42,7 @@ function CrosswordGameModal({
     };
     crosswordPuzzleAreaController.addListener('groupNameChange', setGroup);
 
-    if (crosswordPuzzleAreaController.puzzle) {
+    if (crosswordPuzzleAreaController) {
       coveyTownController.pause();
     } else {
       coveyTownController.unPause();
@@ -71,7 +72,6 @@ function CrosswordGameModal({
         isOpen={selectIsOpen}
         close={() => {
           setSelectIsOpen(false);
-          coveyTownController.unPause();
         }}
         crosswordPuzzleArea={crosswordPuzzleArea}
       />
@@ -85,21 +85,21 @@ function CrosswordGameModal({
             <ModalHeader>
               <Flex>
                 <div>{crosswordPuzzleAreaController.puzzle.info.title}</div>
-                <Button
+                <IconButton
+                  icon={<InfoOutlineIcon />}
+                  aria-label='Help'
+                  variant='unstyled'
                   marginLeft='10px'
                   colorScheme='gray'
-                  variant='solid'
                   onClick={() =>
                     window.open(
                       'https://www.nytimes.com/guides/crosswords/how-to-solve-a-crossword-puzzle',
                       '_blank',
                     )
-                  }>
-                  Help
-                </Button>
+                  }
+                />
               </Flex>
             </ModalHeader>
-
             <ModalCloseButton />
             <ModalBody>
               <CrosswordGrid controller={crosswordPuzzleAreaController} />
@@ -127,8 +127,9 @@ function CrosswordGameModal({
  * will activate only if the player begins interacting with a crossword puzzle area.
  */
 export default function CrosswordPuzzleAreaWrapper(): JSX.Element {
-  const crosswordPuzzleArea =
-    useInteractable<CrosswordPuzzleAreaInteractable>('crosswordPuzzleArea');
+  const crosswordPuzzleArea = useInteractable<CrosswordPuzzleAreaInteractable>(
+    'crosswordPuzzleArea',
+  );
   if (crosswordPuzzleArea) {
     return <CrosswordGameModal crosswordPuzzleArea={crosswordPuzzleArea} />;
   }

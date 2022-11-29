@@ -41,9 +41,8 @@ export default function NewCrosswordPuzzleModal({
   }, [coveyTownController, isOpen]);
 
   const closeModal = useCallback(() => {
-    coveyTownController.unPause();
     close();
-  }, [coveyTownController, close]);
+  }, [close]);
 
   const toast = useToast();
 
@@ -63,7 +62,6 @@ export default function NewCrosswordPuzzleModal({
           title: 'Crossword Created!',
           status: 'success',
         });
-        coveyTownController.unPause();
         closeModal();
       } catch (err) {
         if (err instanceof Error) {

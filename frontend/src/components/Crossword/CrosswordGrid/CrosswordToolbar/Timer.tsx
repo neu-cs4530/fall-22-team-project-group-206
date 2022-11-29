@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const INTERVAL = 1000;
 const HH_INDEX = 11;
@@ -20,6 +20,10 @@ export default function Timer({
   const getTimeInHHMMSS = () => {
     return new Date(elapsedTimeMilliSecs).toISOString().slice(HH_INDEX, SS_INDEX);
   };
-  setInterval(() => getTime(), INTERVAL);
+
+  useEffect(() => {
+    setInterval(() => getTime(), INTERVAL);
+  });
+
   return <div>{!isPaused ? getTimeInHHMMSS() : '00:00:00'}</div>;
 }
