@@ -150,10 +150,10 @@ describe('CrosswordPuzzleArea', () => {
     mockClear(mockListeners.puzzleChange);
     mockClear(mockListeners.gameOverChange);
     mockClear(mockListeners.groupNameChange);
-    mockClear(mockListeners.startTimeChange);
+
     testArea.addListener('gameOverChange', mockListeners.gameOverChange);
     testArea.addListener('groupNameChange', mockListeners.groupNameChange);
-    testArea.addListener('startTimeChange', mockListeners.startTimeChange);
+
     testArea.addListener('occupantsChange', mockListeners.occupantsChange);
     testArea.addListener('puzzleChange', mockListeners.puzzleChange);
   });
@@ -235,15 +235,13 @@ describe('CrosswordPuzzleArea', () => {
     });
   });
   describe('setting the startTime property', () => {
-    it('does not emit startTime event if start time is unchanged', () => {
+    it('does not change start time if start time is unchanged', () => {
       testArea.startTime = undefined;
       expect(testArea.startTime).toBeUndefined();
-      expect(mockListeners.startTimeChange).not.toBeCalled();
     });
-    it('emit startTime event if the startTime is changed', () => {
+    it('shoul change the start time if given differemt value changed', () => {
       testArea.startTime = 1;
       expect(testArea.startTime).toEqual(1);
-      expect(mockListeners.startTimeChange).toBeCalled();
     });
   });
   describe('setting the leaderboard property', () => {

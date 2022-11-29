@@ -18,13 +18,12 @@ export type CrosswordPuzzleAreaEvents = {
   occupantsChange: (newOccupants: PlayerController[]) => void;
   gameOverChange: (newIsGameOver: boolean) => void;
   groupNameChange: (newGroupName: string | undefined) => void;
-  startTimeChange: (newStartTime: number | undefined) => void;
 };
 
 /**
  * A CrosswordPuzzleAreaController manages the local behavior of a crossword puzzle area in the frontend,
  * implementing the logic to bridge between the townService's interpretation of crossword puzzle areas and the
- * frontend's. The CrosswordPuzzleAreaController emits events when the ecrossword puzzle area changes.
+ * frontend's. The CrosswordPuzzleAreaController emits events when the crossword puzzle area changes.
  */
 export default class CrosswordPuzzleAreaController extends (EventEmitter as new () => TypedEmitter<CrosswordPuzzleAreaEvents>) {
   private _occupants: PlayerController[] = [];
@@ -138,13 +137,12 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
   }
 
   /**
-   * The puzzle in this crossword puzzle area. Changing the start time
-   * will emit an puzzleChange event.
+   * The start time in this crossword puzzle area. Changing the start time
+   * will emit an startTimeChange event.
    */
   set startTime(startTime: number | undefined) {
     if (startTime !== this._startTime) {
       this._startTime = startTime;
-      this.emit('startTimeChange', startTime);
     }
   }
 
@@ -156,10 +154,10 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
    * The groupName in this crossword puzzle area. Changing the group name
    * will emit an groupNameChange event.
    */
-  set groupName(groupName: string | undefined) {
-    if (groupName !== this._groupName) {
-      this._groupName = groupName;
-      this.emit('groupNameChange', groupName);
+  set groupName(newGroupName: string | undefined) {
+    if (newGroupName !== this._groupName) {
+      this._groupName = newGroupName;
+      this.emit('groupNameChange', newGroupName);
     }
   }
 

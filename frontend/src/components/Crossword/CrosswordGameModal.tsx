@@ -5,6 +5,8 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  Button,
+  Flex,
 } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useCrosswordAreaPuzzleController, useInteractable } from '../../classes/TownController';
@@ -80,7 +82,24 @@ function CrosswordGameModal({
         <Modal isOpen={isOpen} onClose={() => onClose()} size='6xl' isCentered>
           <ModalOverlay />
           <ModalContent padding='15px'>
-            <ModalHeader>{crosswordPuzzleAreaController.puzzle.info.title}</ModalHeader>
+            <ModalHeader>
+              <Flex>
+                <div>{crosswordPuzzleAreaController.puzzle.info.title}</div>
+                <Button
+                  marginLeft='10px'
+                  colorScheme='gray'
+                  variant='solid'
+                  onClick={() =>
+                    window.open(
+                      'https://www.nytimes.com/guides/crosswords/how-to-solve-a-crossword-puzzle',
+                      '_blank',
+                    )
+                  }>
+                  Help
+                </Button>
+              </Flex>
+            </ModalHeader>
+
             <ModalCloseButton />
             <ModalBody>
               <CrosswordGrid controller={crosswordPuzzleAreaController} />

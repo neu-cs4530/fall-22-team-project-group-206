@@ -1,7 +1,7 @@
 import { Flex } from '@chakra-ui/react';
 import React from 'react';
 import PlayerController from '../../../../classes/PlayerController';
-import OccupantModal from '../../Leaderboard/OccupantModal';
+import OccupantModal from './OccupantModal';
 const MAX_OCCUPANTS_DISPLAY = 3;
 export default function OccupantsDisplay(props: { players: PlayerController[] }): JSX.Element {
   return (

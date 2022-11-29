@@ -42,7 +42,7 @@ function CrosswordToolbar({
     ? controller.puzzle?.grid.length * CELL_WIDTH
     : 0;
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [timerPaused, setTimerPaused] = useState<boolean>(false);
+  const [timerPaused, setTimerPaused] = useState<boolean>(controller.isGameOver);
   useEffect(() => {
     controller.addListener('gameOverChange', setTimerPaused);
     controller.addListener('occupantsChange', setOccupants);
@@ -77,18 +77,6 @@ function CrosswordToolbar({
         colorScheme={handleRebusProps.isRebus ? 'purple' : 'gray'}
         onClick={() => handleRebusProps.handleRebus()}>
         Rebus
-      </Button>
-
-      <Button
-        colorScheme='gray'
-        variant='solid'
-        onClick={() =>
-          window.open(
-            'https://www.nytimes.com/guides/crosswords/how-to-solve-a-crossword-puzzle',
-            '_blank',
-          )
-        }>
-        Help
       </Button>
       <OccupantsDisplay players={occupants} />
 
