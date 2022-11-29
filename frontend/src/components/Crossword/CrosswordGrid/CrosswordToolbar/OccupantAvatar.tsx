@@ -1,6 +1,6 @@
 import { Box } from '@chakra-ui/react';
 import React from 'react';
-import './OccupantDisplay.css';
+import './OccupantAvatar.css';
 
 export default function OccupantAvatar(props: { name: string }): JSX.Element {
   return (
