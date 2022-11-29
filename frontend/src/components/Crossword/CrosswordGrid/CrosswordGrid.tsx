@@ -55,6 +55,11 @@ function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaControll
     }
     return true;
   };
+  /**
+   * Checks if a hint was used throughout the crossword
+   * @param grid the crossword puzzle
+   * @returns if a hint was used for any elements within the crossword
+   */
   const hintUsed = (grid: CrosswordPuzzleCell[][]) => {
     for (let row = 0; row < grid.length; row++) {
       for (let col = 0; col < grid[0].length; col++) {
@@ -88,7 +93,7 @@ function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaControll
         teamMembers: controller.occupants.map(person => person.userName),
         usedHint: hintUsed(grid),
       };
-      const scoreResp = axios.post(url, { scoreModel: newScore });
+      axios.post(url, { scoreModel: newScore });
       toast({
         title: `Puzzle Finished!`,
         description: `Your Team Score is ${currScore}`,
@@ -136,6 +141,8 @@ function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaControll
         controller.isGameOver = true;
         if (controller.startTime && controller.groupName) {
           insertScoreInDB(controller.startTime, controller.groupName, updatedGrid);
+        } else {
+          throw new Error('Start time or group name undefined');
         }
       }
 
@@ -255,6 +262,8 @@ function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaControll
 
       if (controller.startTime && controller.groupName) {
         insertScoreInDB(controller.startTime, controller.groupName, updatedGrid);
+      } else {
+        throw new Error('Start time or group name undefined');
       }
 
       townController.emitCrosswordPuzzleAreaUpdate(controller);
