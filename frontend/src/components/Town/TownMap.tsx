@@ -5,7 +5,7 @@ import useTownController from '../../hooks/useTownController';
 import SocialSidebar from '../SocialSidebar/SocialSidebar';
 import NewConversationModal from './interactables/NewCoversationModal';
 import TownGameScene from './TownGameScene';
-import CrosswordGameModal from '../Crossword/CrosswordGameModal';
+import CrosswordGameModal from './interactables/Crossword/CrosswordGameModal';
 
 export default function TownMap(): JSX.Element {
   const coveyTownController = useTownController();
