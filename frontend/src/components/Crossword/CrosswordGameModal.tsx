@@ -10,11 +10,14 @@ import {
   ModalOverlay,
 } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useCrosswordAreaPuzzleController, useInteractable } from '../../classes/TownController';
+import {
+  useCrosswordAreaPuzzleController,
+  useInteractable,
+} from '../../classes/TownController';
 import useTownController from '../../hooks/useTownController';
 import CrosswordPuzzleAreaInteractable from '../Town/interactables/CrosswordPuzzleArea';
 import './CrosswordGameModal.css';
-import CrosswordGrid from './CrosswordGrid/CrosswordGrid';
+import CrosswordPuzzleGame from './CrosswordPuzzleGame/CrosswordPuzzleGame';
 import NewCrosswordPuzzleModal from './NewCrosswordPuzzleModal';
 
 function CrosswordGameModal({
@@ -102,7 +105,7 @@ function CrosswordGameModal({
             </ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              <CrosswordGrid controller={crosswordPuzzleAreaController} />
+              <CrosswordPuzzleGame controller={crosswordPuzzleAreaController} />
             </ModalBody>
           </ModalContent>
         </Modal>

@@ -26,7 +26,7 @@ export default class Transporter extends Interactable {
     const targetObjectID = this.getData('target') as number;
     const target = this._scene.map.findObject(
       'Objects',
-      obj => (obj as unknown as Phaser.Types.Tilemaps.TiledObject).id == targetObjectID,
+      obj => ((obj as unknown) as Phaser.Types.Tilemaps.TiledObject).id == targetObjectID,
     );
     if (!target) {
       throw new Error(

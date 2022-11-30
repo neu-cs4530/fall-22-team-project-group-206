@@ -1,13 +1,13 @@
-import { UseDisclosureReturn, ChakraProvider } from '@chakra-ui/react';
-import React from 'react';
+import { ChakraProvider, UseDisclosureReturn } from '@chakra-ui/react';
 import '@testing-library/jest-dom';
 import { fireEvent, render, RenderResult, waitFor } from '@testing-library/react';
-import { nanoid } from 'nanoid';
-import TownSettings from './TownSettings';
-import TownController from '../../classes/TownController';
 import { mock, mockClear, MockProxy } from 'jest-mock-extended';
-import { mockTownController } from '../../TestUtils';
+import { nanoid } from 'nanoid';
+import React from 'react';
+import TownController from '../../classes/TownController';
 import TownControllerContext from '../../contexts/TownControllerContext';
+import { mockTownController } from '../../TestUtils';
+import TownSettings from './TownSettings';
 
 const mockToast = jest.fn();
 const mockUseDisclosure = mock<UseDisclosureReturn>();

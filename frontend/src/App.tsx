@@ -5,6 +5,7 @@ import React, { useCallback, useState } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import './App.css';
 import TownController from './classes/TownController';
+import TownMap from './components/Town/TownMap';
 import { ChatProvider } from './components/VideoCall/VideoFrontend/components/ChatProvider';
 import ErrorDialog from './components/VideoCall/VideoFrontend/components/ErrorDialog/ErrorDialog';
 import PreJoinScreens from './components/VideoCall/VideoFrontend/components/PreJoinScreens/PreJoinScreens';
@@ -14,9 +15,8 @@ import AppStateProvider, { useAppState } from './components/VideoCall/VideoFront
 import theme from './components/VideoCall/VideoFrontend/theme';
 import useConnectionOptions from './components/VideoCall/VideoFrontend/utils/useConnectionOptions/useConnectionOptions';
 import VideoOverlay from './components/VideoCall/VideoOverlay/VideoOverlay';
-import TownMap from './components/Town/TownMap';
-import TownControllerContext from './contexts/TownControllerContext';
 import LoginControllerContext from './contexts/LoginControllerContext';
+import TownControllerContext from './contexts/TownControllerContext';
 import { TownsServiceClient } from './generated/client';
 
 function App() {

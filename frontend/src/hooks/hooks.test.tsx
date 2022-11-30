@@ -37,7 +37,7 @@ describe('[T3] TownController-Dependent Hooks', () => {
         `Expected to find exactly one removeListener call for ${eventName}, but found ${listeners.length}`,
       );
     }
-    return listeners[0][1] as unknown as TownEvents[Ev];
+    return (listeners[0][1] as unknown) as TownEvents[Ev];
   }
   function getSingleListenerAdded<Ev extends EventNames<TownEvents>>(
     eventName: Ev,
@@ -49,7 +49,7 @@ describe('[T3] TownController-Dependent Hooks', () => {
         `Expected to find exactly one addListener call for ${eventName}, but found ${listeners.length}`,
       );
     }
-    return listeners[0][1] as unknown as TownEvents[Ev];
+    return (listeners[0][1] as unknown) as TownEvents[Ev];
   }
   describe('[T3] usePlayers', () => {
     let friendlyName: string;
@@ -345,7 +345,7 @@ describe('ConversationAreaController hooks', () => {
         `Expected to find exactly one addListener call for ${eventName} but found ${addedListeners.length}`,
       );
     }
-    return addedListeners[0][1] as unknown as ConversationAreaEvents[Ev];
+    return (addedListeners[0][1] as unknown) as ConversationAreaEvents[Ev];
   }
   function getSingleListenerRemoved<Ev extends EventNames<ConversationAreaEvents>>(
     eventName: Ev,
@@ -358,7 +358,7 @@ describe('ConversationAreaController hooks', () => {
         `Expected to find exactly one removeListeners call for ${eventName} but found ${removedListeners.length}`,
       );
     }
-    return removedListeners[0][1] as unknown as ConversationAreaEvents[Ev];
+    return (removedListeners[0][1] as unknown) as ConversationAreaEvents[Ev];
   }
   describe('[T3] useConversationAreaOccupants', () => {
     let hookReturnValue: PlayerController[];

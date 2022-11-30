@@ -19,6 +19,9 @@ import { CrosswordPuzzleArea as CrosswordPuzzleAreaModel } from '../../generated
 import useTownController from '../../hooks/useTownController';
 import CrosswordPuzzleArea from '../Town/interactables/CrosswordPuzzleArea';
 
+/*
+Modal to select new group name and start new crossword.
+*/
 export default function NewCrosswordPuzzleModal({
   isOpen,
   close,
@@ -36,8 +39,6 @@ export default function NewCrosswordPuzzleModal({
   useEffect(() => {
     if (isOpen) {
       coveyTownController.pause();
-    } else {
-      coveyTownController.unPause();
     }
   }, [coveyTownController, isOpen]);
 
@@ -88,7 +89,6 @@ export default function NewCrosswordPuzzleModal({
             title: 'Crossword Created!',
             status: 'success',
           });
-          coveyTownController.unPause();
           closeModal();
         } catch (err) {
           if (err instanceof Error) {

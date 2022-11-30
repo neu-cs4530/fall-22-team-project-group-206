@@ -1,8 +1,8 @@
 import {
   ConversationArea,
+  CrosswordPuzzleArea,
   Interactable,
   ViewingArea,
-  CrosswordPuzzleArea,
 } from './CoveyTownSocket';
 
 /**
