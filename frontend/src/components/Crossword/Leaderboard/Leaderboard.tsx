@@ -91,14 +91,6 @@ export default function Leaderboard(): JSX.Element {
       ) : (
         <></>
       )}
-      <List margin='3px'>
-        {leaderboard.length != 0 ? orderedListView : <div>Leaderboard Empty</div>}
-      </List>
-      {leaderboard.length != 0 ? (
-        <LeaderboardModal scoreModel={leaderboard[detailIndex]} open={isOpen} close={onClose} />
-      ) : (
-        <></>
-      )}
     </Box>
   );
 }
