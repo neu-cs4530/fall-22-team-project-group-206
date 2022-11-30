@@ -1,5 +1,5 @@
 {
- "include": ["src/**/*"],
+ "include": ["src/**/*", "../shared/types/Types.ts"],
     "exclude": ["node_modules", "jest.config.ts"],
     "compilerOptions": {
         /* Visit https://aka.ms/tsconfig.json to read more about this file */

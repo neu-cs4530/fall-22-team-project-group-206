@@ -6,6 +6,7 @@ import {
   CellIndex,
   CrosswordPuzzleCell,
   CrosswordPuzzleModel,
+  InsertScoreRequestBody,
   ScoreModel,
 } from '../../../types/CoveyTownSocket';
 import {
@@ -101,7 +102,8 @@ function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaControll
         teamMembers: controller.occupants.map(person => person.userName),
         usedHint: hintUsed(grid),
       };
-      axios.post(url, { scoreModel: newScore });
+      const requestBody: InsertScoreRequestBody = { scoreModel: newScore };
+      axios.post(url, requestBody);
       toast({
         title: `Puzzle Finished!`,
         description: `Your Team Score is ${getTimeInHHMMSS(currScore)}`,

@@ -1,12 +1,6 @@
-import { addScore, removeScore, findScore, updateScore, getTodaysScores } from './LeaderboardDAO';
+import { addScore, getTodaysScores, numInstancesTeamNameUsed } from './LeaderboardDAO';
 
-import {
-  getLeaders,
-  insertScore,
-  removeScoreFromLeaderboard,
-  updateScoreValue,
-  findScoreByID,
-} from './LeaderboardService';
+import { getLeaders, insertScore, isTeamNameUsed } from './LeaderboardService';
 import { ScoreModel } from '../types/CoveyTownSocket';
 
 jest.mock('./LeaderboardDAO', () => {
@@ -15,10 +9,8 @@ jest.mock('./LeaderboardDAO', () => {
     __esModule: true,
     ...original,
     addScore: jest.fn(),
-    removeScore: jest.fn(),
-    findScore: jest.fn(),
-    updateScore: jest.fn(),
     getTodaysScores: jest.fn(),
+    numInstancesTeamNameUsed: jest.fn(),
   };
 });
 
@@ -36,7 +28,7 @@ const testScoreModel2: ScoreModel = {
 };
 const testScoreModelBest: ScoreModel = {
   teamName: 'test',
-  score: 10,
+  score: 70,
   teamMembers: ['player1', 'player2'],
   usedHint: false,
 };
@@ -44,9 +36,7 @@ const testScoreModelBest: ScoreModel = {
 const TEST_LEADERBOARD: ScoreModel[] = [testScoreModel, testScoreModel2, testScoreModelBest];
 const addFunc = addScore as jest.Mock;
 const getTodaysScoresFunc = getTodaysScores as jest.Mock;
-const removeFunc = removeScore as jest.Mock;
-const findFunc = findScore as jest.Mock;
-const updateFunc = updateScore as jest.Mock;
+const timesNameUsedFunc = numInstancesTeamNameUsed as jest.Mock;
 
 describe('LeaderboardService', () => {
   beforeEach(() => {
@@ -105,33 +95,16 @@ describe('LeaderboardService', () => {
     });
   });
 
-  describe('removeFromLeaderboard', () => {
-    it('returns value from removeScore', async () => {
-      removeFunc.mockImplementation(() => testScoreModel);
-      const removedScore = await removeScoreFromLeaderboard('test');
-      expect(removeScore).toBeCalledTimes(1);
-      expect(removedScore.teamName).toEqual(testScoreModel.teamName);
-      expect(removedScore.teamMembers).toEqual(testScoreModel.teamMembers);
+  describe('isTeamNameCurrentlyUsed', () => {
+    it('returns false when amount of times used is over 0', async () => {
+      timesNameUsedFunc.mockImplementation(() => 1);
+      const nameUsed = await isTeamNameUsed('name');
+      expect(nameUsed).toBeTruthy();
     });
-  });
-
-  describe('findScoreByID', () => {
-    it('returns value from findScore', async () => {
-      findFunc.mockImplementation(() => testScoreModel);
-      const foundScore = await findScoreByID('test');
-      expect(findScore).toBeCalledTimes(1);
-      expect(foundScore.teamName).toEqual(testScoreModel.teamName);
-      expect(foundScore.teamMembers).toEqual(testScoreModel.teamMembers);
-    });
-  });
-
-  describe('updateScoreValue', () => {
-    it('returns value from UpdateScore', async () => {
-      updateFunc.mockImplementation(() => testScoreModel2);
-      const prevScore = await updateScoreValue(testScoreModel);
-      expect(updateScore).toBeCalledTimes(1);
-      expect(prevScore.teamName).toEqual(testScoreModel2.teamName);
-      expect(prevScore.teamMembers).toEqual(testScoreModel2.teamMembers);
+    it('returns true when amount of times used is 0', async () => {
+      timesNameUsedFunc.mockImplementation(() => 0);
+      const nameUsed = await isTeamNameUsed('name');
+      expect(nameUsed).toBeFalsy();
     });
   });
 });
