@@ -2,6 +2,9 @@ import { VStack } from '@chakra-ui/react';
 import React from 'react';
 import './CrosswordClues.css';
 
+/*
+ React component to represent the list of crossword clues.
+ */
 function ClueView(props: { clueNumber: number; clue: string }): JSX.Element {
   return (
     <li>
@@ -28,7 +31,7 @@ function CrosswordClues(props: {
   const downCluesView = createClueViews(props.downClues);
 
   return (
-    <VStack>
+    <VStack alignContent={'flex-start'}>
       <div className='clues-list'>
         <span>Across</span>
         <ul>{acrossCluesView}</ul>

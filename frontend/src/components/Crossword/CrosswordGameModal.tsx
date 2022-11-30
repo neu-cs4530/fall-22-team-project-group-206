@@ -16,6 +16,10 @@ import './CrosswordGameModal.css';
 import CrosswordGrid from './CrosswordGrid/CrosswordGrid';
 import NewCrosswordPuzzleModal from './NewCrosswordPuzzleModal';
 
+/*
+React modal representing the CrosswordGame. If groupname is set, render CrosswordGame, else,
+render NewCrosswordPuzzle to select a new groupname.
+*/
 function CrosswordGameModal({
   crosswordPuzzleArea,
 }: {
@@ -41,7 +45,7 @@ function CrosswordGameModal({
     };
     crosswordPuzzleAreaController.addListener('groupNameChange', setGroup);
 
-    if (crosswordPuzzleAreaController.puzzle) {
+    if (crosswordPuzzleAreaController) {
       coveyTownController.pause();
     } else {
       coveyTownController.unPause();
@@ -71,7 +75,6 @@ function CrosswordGameModal({
         isOpen={selectIsOpen}
         close={() => {
           setSelectIsOpen(false);
-          coveyTownController.unPause();
         }}
         crosswordPuzzleArea={crosswordPuzzleArea}
       />

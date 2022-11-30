@@ -19,6 +19,10 @@ import { CrosswordPuzzleArea as CrosswordPuzzleAreaModel } from '../../generated
 import useTownController from '../../hooks/useTownController';
 import CrosswordPuzzleArea from '../Town/interactables/CrosswordPuzzleArea';
 
+
+ /*
+ Modal to select new group name and start new crossword.
+ */
 export default function NewCrosswordPuzzleModal({
   isOpen,
   close,
@@ -39,12 +43,12 @@ export default function NewCrosswordPuzzleModal({
     } else {
       coveyTownController.unPause();
     }
-  }, [coveyTownController, isOpen]);
+  }, [isOpen]);
 
   const closeModal = useCallback(() => {
     coveyTownController.unPause();
     close();
-  }, [coveyTownController, close]);
+  }, [close]);
 
   const toast = useToast();
 

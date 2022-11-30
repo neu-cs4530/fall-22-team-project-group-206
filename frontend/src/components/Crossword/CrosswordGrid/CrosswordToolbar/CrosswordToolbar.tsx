@@ -42,13 +42,10 @@ function CrosswordToolbar({
     ? controller.puzzle?.grid.length * CELL_WIDTH
     : 0;
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [timerPaused, setTimerPaused] = useState<boolean>(controller.isGameOver);
   useEffect(() => {
-    controller.addListener('gameOverChange', setTimerPaused);
     controller.addListener('occupantsChange', setOccupants);
 
     return () => {
-      controller.removeListener('gameOverChange', setTimerPaused);
       controller.removeListener('occupantsChange', setOccupants);
     };
   }, [controller]);
@@ -57,8 +54,7 @@ function CrosswordToolbar({
     <Flex gap={'2'} paddingBottom={'12px'}>
       <Box p='2' bg='gray.200' width={timerWidth} textAlign='center'>
         <Timer
-          startTime={controller.startTime ? controller.startTime : Date.now()}
-          isPaused={timerPaused}
+          controller={controller}
         />
       </Box>
       <Menu>
