@@ -1,0 +1,417 @@
+{
+    "components": {
+        "examples": {},
+        "headers": {},
+        "parameters": {},
+        "requestBodies": {},
+        "responses": {},
+        "schemas": {
+            "ScoreModel": {
+                "description": "This schema represents rules implemented for new mongoose docs created. Breaking any of the rules results in an error.",
+                "properties": {
+                    "teamName": {
+                        "type": "string",
+                        "description": "The name users input when first joining the crossword puzzle area. Must be unique."
+                    },
+                    "score": {
+                        "type": "number",
+                        "format": "integer",
+                        "description": "The time it takes the team to complete the crossword puzzle"
+                    },
+                    "teamMembers": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "The players that were in the crossword puzzle area when the game was finished"
+                    },
+                    "usedHint": {
+                        "type": "boolean",
+                        "description": "States if the team used a hint or not when completing the puzzle"
+                    }
+                },
+                "required": [
+                    "teamName",
+                    "score",
+                    "teamMembers",
+                    "usedHint"
+                ],
+                "type": "object",
+                "unique": [
+                    "teamName"
+                ],
+                "additionalProperties": false
+            },
+            "ScoreModifyResponse": {
+                "description": "Payload that is sent back to a client upon getting a new score",
+                "properties": {
+                    "status": {
+                        "type": "number",
+                        "format": "integer",
+                        "description": "The HTTP status code of the operation."
+                    },
+                    "data": {
+                        "type": "object",
+                        "properties": {
+                            "score": {
+                                "type": "object",
+                                "properties": {
+                                    "teamName": {
+                                        "type": "string",
+                                        "description": "The name users input when first joining the crossword puzzle area. Must be unique."
+                                    },
+                                    "score": {
+                                        "type": "number",
+                                        "format": "integer",
+                                        "description": "The time it takes the team to complete the crossword puzzle"
+                                    },
+                                    "teamMembers": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "description": "The players that were in the crossword puzzle area when the game was finished"
+                                    },
+                                    "usedHint": {
+                                        "type": "boolean",
+                                        "description": "States if the team used a hint or not when completing the puzzle"
+                                    }
+                                }
+                            },
+                            "errorType": {
+                                "type": "string",
+                                "description": "If there is an error, records the type of error"
+                            },
+                            "errorMessage": {
+                                "type": "string",
+                                "description": "If there is an error, records the message of error"
+                            }
+                        },
+                        "description": "The data contained within the response"
+                    }
+                },
+                "required": [
+                    "status",
+                    "data"
+                ],
+                "additionalProperties": false
+            },
+            "ScoreFindResponse": {
+                "description": "Payload that is sent back to a client upon finding scores",
+                "properties": {
+                    "status": {
+                        "type": "number",
+                        "format": "integer",
+                        "description": "The HTTP status code of the operation."
+                    },
+                    "data": {
+                        "type": "object",
+                        "properties": {
+                            "scores": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "teamName": {
+                                            "type": "string",
+                                            "description": "The name users input when first joining the crossword puzzle area. Must be unique."
+                                        },
+                                        "score": {
+                                            "type": "number",
+                                            "format": "integer",
+                                            "description": "The time it takes the team to complete the crossword puzzle"
+                                        },
+                                        "teamMembers": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            },
+                                            "description": "The players that were in the crossword puzzle area when the game was finished"
+                                        },
+                                        "usedHint": {
+                                            "type": "boolean",
+                                            "description": "States if the team used a hint or not when completing the puzzle"
+                                        }
+                                    }
+                                }
+                            },
+                            "errorType": {
+                                "type": "string",
+                                "description": "If there is an error, records the type of error"
+                            },
+                            "errorMessage": {
+                                "type": "string",
+                                "description": "If there is an error, records the message of error"
+                            }
+                        },
+                        "description": "The data contained within the response"
+                    }
+                },
+                "required": [
+                    "status", "data"
+                ],
+                "additionalProperties": false
+            },
+            "TeamNameInUseResponse": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "number",
+                        "format": "integer",
+                        "description": "The HTTP status code of the operation."
+                    },
+                    "data": {
+                        "type": "object",
+                        "properties": {
+                            "inUse": {
+                                "type": "boolean",
+                                "description": "Describes if the team name is currenlty in use "
+                            },
+                            "errorType": {
+                                "type": "string",
+                                "description": "If there is an error, records the type of error"
+                            },
+                            "errorMessage": {
+                                "type": "string",
+                                "description": "If there is an error, records the message of error"
+                            }
+                        }
+                    }
+                },
+                "description": "The data contained within the response",
+                "required": [
+                    "status",
+                    "data"
+                ],
+                "additionalProperties": false
+            },
+            "InsertScoreRequestBody": {
+                "type": "object",
+                "properties": {
+                    "scoreModel": {
+                        "type": "object",
+                        "properties": {
+                            "teamName": {
+                                "type": "string",
+                                "description": "The name users input when first joining the crossword puzzle area. Must be unique."
+                            },
+                            "score": {
+                                "type": "number",
+                                "format": "integer",
+                                "description": "The time it takes the team to complete the crossword puzzle"
+                            },
+                            "teamMembers": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "usedHint": {
+                                "type": "boolean",
+                                "description": "States if the team used a hint or not when completing the puzzle"
+                            }
+                        },
+                        "description": "The scores in the leaderboard"
+                    }
+                },
+                "required": [
+                    "scoreModel"
+                ],
+                "additionalProperties": false
+            },
+            "securitySchemes": {}
+        }
+    },
+    "info": {
+        "title": "covey-town-leaderboardService",
+        "version": "1.0.0",
+        "description": "DB service for processing Covey.Town town leaderboard requests",
+        "license": {
+            "name": "BSD-3-Clause"
+        },
+        "contact": {
+            "name": "Francis Isaacson"
+        }
+    },
+    "openapi": "3.0.0",
+    "paths": {
+        "/towns/score": {
+            "post": {
+                "operationId": "insertScore",
+                "responses": {
+                    "201": {
+                        "description": "succesfully inserted scoremodel, returns result",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ScoreModifyResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ScoreModifyResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Insert a new Score into the database",
+                "tags": [
+                    "towns"
+                ],
+                "security": [],
+                "parameters": [],
+                "requestBody": {
+                    "description": "The score being inserted in the database",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/InsertScoreRequestBody"
+                            },
+                            "example": {
+                                "scoreModel": {
+                                    "teamName": "test",
+                                    "score": 50,
+                                    "teamMembers": [
+                                        "jaime",
+                                        "frank"
+                                    ],
+                                    "usedHint": true
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/towns/scores/teams/{teamName}": {
+            "get": {
+                "operationId": "inUse",
+                "responses": {
+                    "200": {
+                        "description": "checks if the teamName is in use or not",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TeamNameInUseResponse",
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error finding team",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TeamNameInUseResponse",
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TeamNameInUseResponse",
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "If the given teamName is in use or not",
+                "tags": [
+                    "towns"
+                ],
+                "security": [],
+                "parameters": [
+                    {
+                        "description": "team name being checked",
+                        "in": "path",
+                        "name": "teamName",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ]
+            }
+        },
+        "/towns/scores/{scoreNum}": {
+            "get": {
+                "operationId": "Leaderboard",
+                "responses": {
+                    "200": {
+                        "description": "returns the leaderboard of scoreNum amount",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ScoreFindResponse",
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "teams not found error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ScoreFindResponse",
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "invalid request error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ScoreFindResponse",
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "returns the leaderboard of scoreNum amount",
+                "tags": [
+                    "towns"
+                ],
+                "security": [],
+                "parameters": [
+                    {
+                        "description": "amount of scores to return",
+                        "in": "path",
+                        "name": "scoreNum",
+                        "required": true,
+                        "schema": {
+                            "type": "number",
+                            "format": "integer"
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "servers": [
+        {
+            "url": "/"
+        }
+    ],
+    "tags": [
+        {
+            "name": "town"
+        }
+    ]
+}

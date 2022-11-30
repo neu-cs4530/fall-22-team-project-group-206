@@ -57,10 +57,13 @@ export default function NewCrosswordPuzzleModal({
       let url = '';
       try {
         if (process.env.REACT_APP_TOWNS_SERVICE_URL !== undefined) {
-          url = process.env.REACT_APP_TOWNS_SERVICE_URL.concat('/scores/teams/').concat(groupName);
+          url =
+            process.env.REACT_APP_TOWNS_SERVICE_URL.concat('/towns/scores/teams/').concat(
+              groupName,
+            );
         }
         if (process.env.PORT !== undefined) {
-          url = process.env.PORT.concat('/scores/teams/').concat(groupName);
+          url = process.env.PORT.concat('/towns/scores/teams/').concat(groupName);
         }
         const isTeamNameAvailable: TeamNameInUseResponse = await axios.get(url);
         if (isTeamNameAvailable.data.inUse !== undefined) {

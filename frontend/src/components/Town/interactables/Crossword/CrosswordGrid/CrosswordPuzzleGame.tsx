@@ -91,10 +91,10 @@ function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaControll
     try {
       let url = '';
       if (process.env.REACT_APP_TOWNS_SERVICE_URL !== undefined) {
-        url = process.env.REACT_APP_TOWNS_SERVICE_URL.concat('/score');
+        url = process.env.REACT_APP_TOWNS_SERVICE_URL.concat('/towns/score');
       }
       if (process.env.PORT !== undefined) {
-        url = process.env.PORT.concat('/score');
+        url = process.env.PORT.concat('/towns/score');
       }
       const newScore: ScoreModel = {
         teamName: groupName,
