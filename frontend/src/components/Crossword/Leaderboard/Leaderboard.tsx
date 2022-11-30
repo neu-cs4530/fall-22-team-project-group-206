@@ -6,7 +6,7 @@ import LeaderboardModal from './ScoreModal';
 
 const LEADERBOARD_SIZE = 5;
 /**
- * List the scores for the player
+ * List the scores for the players
  */
 export default function Leaderboard(): JSX.Element {
   const [leaderboard, setLeaderboard] = useState<ScoreModel[]>([]);
@@ -89,14 +89,6 @@ export default function Leaderboard(): JSX.Element {
           </GridItem>
         </Grid>
       </div>
-      <List margin='3px'>
-        {leaderboard.length != 0 ? orderedListView : <div>Leaderboard Empty</div>}
-      </List>
-      {leaderboard.length != 0 ? (
-        <LeaderboardModal scoreModel={leaderboard[detailIndex]} open={isOpen} close={onClose} />
-      ) : (
-        <></>
-      )}
       <List margin='3px'>
         {leaderboard.length != 0 ? orderedListView : <div>Leaderboard Empty</div>}
       </List>

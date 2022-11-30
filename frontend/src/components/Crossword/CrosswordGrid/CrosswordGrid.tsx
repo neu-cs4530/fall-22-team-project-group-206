@@ -7,13 +7,13 @@ import {
   CrosswordPuzzleCell,
   CrosswordPuzzleModel,
   InsertScoreRequestBody,
+  ScoreModel,
 } from '../../../types/CoveyTownSocket';
 import { BLACK_CELL_STRING, Direction, getHighlightedCells } from '../CrosswordUtils';
 import CrosswordCell from './CrosswordCell/CrosswordCell';
 import axios from 'axios';
 import CrosswordClues from './CrosswordClues/CrosswordClues';
 import CrosswordToolbar from './CrosswordToolbar/CrosswordToolbar';
-import { ScoreModel } from '../../../generated/client';
 
 type GameState = {
   selectedIndex: CellIndex;

@@ -62,7 +62,6 @@ export function createCrosswordPuzzleForTesting(params?: {
     groupName: params?.groupName || nanoid(),
     puzzle: params?.crosswordPuzzle || undefined,
     isGameOver: false,
-    leaderboard: params?.leaderboard || undefined,
   };
 }
 

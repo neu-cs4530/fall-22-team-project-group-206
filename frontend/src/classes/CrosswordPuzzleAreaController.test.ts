@@ -184,7 +184,6 @@ describe('CrosswordPuzzleArea', () => {
         id: testArea.id,
         isGameOver: testArea.isGameOver,
         puzzle: testArea.puzzle,
-        leaderboard: testArea.leaderboard,
         occupantsByID: testArea.occupants.map(eachOccupant => eachOccupant.id),
       });
     });
@@ -205,7 +204,6 @@ describe('CrosswordPuzzleArea', () => {
         id: testArea.id,
         isGameOver: testArea.isGameOver,
         puzzle: testArea.puzzle,
-        leaderboard: testArea.leaderboard,
         occupantsByID: testArea.occupants.map(eachOccupant => eachOccupant.id),
       });
     });
@@ -239,12 +237,9 @@ describe('CrosswordPuzzleArea', () => {
       testArea.startTime = undefined;
       expect(testArea.startTime).toBeUndefined();
     });
-    it('shoul change the start time if given differemt value changed', () => {
+    it('should change the start time if given different value', () => {
       testArea.startTime = 1;
       expect(testArea.startTime).toEqual(1);
     });
-  });
-  describe('setting the leaderboard property', () => {
-    // TODO - add when leaderboard backend is complete (Frank)
   });
 });

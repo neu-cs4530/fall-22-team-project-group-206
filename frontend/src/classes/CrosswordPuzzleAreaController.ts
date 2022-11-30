@@ -5,7 +5,6 @@ import TypedEmitter from 'typed-emitter';
 import {
   CrosswordPuzzleArea as CrosswordPuzzleAreaModel,
   CrosswordPuzzleModel,
-  ScoreModel,
 } from '../types/CoveyTownSocket';
 import PlayerController from './PlayerController';
 
@@ -32,8 +31,6 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
 
   private _puzzle?: CrosswordPuzzleModel;
 
-  private _leaderboard?: ScoreModel[];
-
   private _isGameOver: boolean;
 
   private _startTime?: number;
@@ -45,20 +42,19 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
    * @param id
    * @param isGameOver
    * @param puzzle
-   * @param leaderboard
+   * @param startTime
+   * @param groupName
    */
   constructor(
     id: string,
     isGameOver: boolean,
     puzzle?: CrosswordPuzzleModel,
-    leaderboard?: ScoreModel[],
     startTime?: number,
     groupName?: string,
   ) {
     super();
     this._id = id;
     this._puzzle = puzzle;
-    this._leaderboard = leaderboard;
     this._isGameOver = isGameOver;
     this._startTime = startTime;
     this._groupName = groupName;
@@ -106,19 +102,6 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
 
   get puzzle(): CrosswordPuzzleModel | undefined {
     return this._puzzle;
-  }
-
-  /**
-   * The leaderboard in this crossword puzzle area. Changing the leaderboard
-   * will emit an puzzleChange event.
-   */
-  set leaderboard(newLeaderboard: ScoreModel[] | undefined) {
-    // TODO – this might be deleted (Frank)
-    this._leaderboard = newLeaderboard;
-  }
-
-  get leaderboard(): ScoreModel[] | undefined {
-    return this._leaderboard;
   }
 
   /**
@@ -180,7 +163,6 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
       id: this.id,
       occupantsByID: this.occupants.map(player => player.id),
       puzzle: this.puzzle,
-      leaderboard: this.leaderboard,
       isGameOver: this.isGameOver,
       groupName: this.groupName,
       startTime: this.startTime,
@@ -192,7 +174,6 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
     playerFinder: (playerIDs: string[]) => PlayerController[],
   ): void {
     this.puzzle = newCrosswordPuzzleAreaModel.puzzle;
-    this.leaderboard = newCrosswordPuzzleAreaModel.leaderboard;
     this.isGameOver = newCrosswordPuzzleAreaModel.isGameOver;
     this.occupants = playerFinder(newCrosswordPuzzleAreaModel.occupantsByID);
     this.groupName = newCrosswordPuzzleAreaModel.groupName;
@@ -213,7 +194,6 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
       crosswordPuzzleAreaModel.id,
       crosswordPuzzleAreaModel.isGameOver,
       crosswordPuzzleAreaModel.puzzle,
-      crosswordPuzzleAreaModel.leaderboard,
       crosswordPuzzleAreaModel.startTime,
       crosswordPuzzleAreaModel.groupName,
     );
