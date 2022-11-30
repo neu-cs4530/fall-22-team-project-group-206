@@ -109,11 +109,9 @@ export default class CrosswordPuzzleAreaController extends (EventEmitter as new 
   }
 
   /**
-   * The leaderboard in this crossword puzzle area. Changing the leaderboard
-   * will emit an puzzleChange event.
+   * The leaderboard in this crossword puzzle area.
    */
   set leaderboard(newLeaderboard: ScoreModel[] | undefined) {
-    // TODO – this might be deleted (Frank)
     this._leaderboard = newLeaderboard;
   }
 

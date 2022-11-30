@@ -37,7 +37,7 @@ export default class CrosswordPuzzleArea extends InteractableArea {
    * Creates a new PuzzleArea
    *
    * @param CrosswordPuzzleModel model containing this area's current group name and its ID
-   * @param coordinates  the bounding box that defines this conversation area
+   * @param coordinates  the bounding box that defines this crossword puzzle area
    * @param townEmitter a broadcast emitter that can be used to emit updates to players
    */
   public constructor(
@@ -116,7 +116,7 @@ export default class CrosswordPuzzleArea extends InteractableArea {
   }
 
   /**
-   * Creates a new PuzzleArea object that will represent a Puzzle Area object in the town map.
+   * Creates a new CrosswordPuzzleArea object that will represent a CrosswordPuzzleArea object in the town map.
    * @param mapObject An ITiledMapObject that represents a rectangle in which this puzzle area exists
    * @param broadcastEmitter An emitter that can be used by this puzzle area to broadcast updates
    * @returns

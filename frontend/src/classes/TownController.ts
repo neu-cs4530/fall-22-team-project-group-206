@@ -636,7 +636,7 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
   }
 
   /**
-   * Retrieve the crossword puzzle area controller that corresponds to a viewingAreaModel, creating one if necessary
+   * Retrieve the crossword puzzle area controller that corresponds to a CrosswordPuzzleAreaModel, creating one if necessary
    *
    * @param crosswordPuzzleArea
    * @returns

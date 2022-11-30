@@ -239,12 +239,21 @@ describe('CrosswordPuzzleArea', () => {
       testArea.startTime = undefined;
       expect(testArea.startTime).toBeUndefined();
     });
-    it('shoul change the start time if given differemt value changed', () => {
+    it('should change the start time if given differnt value', () => {
       testArea.startTime = 1;
       expect(testArea.startTime).toEqual(1);
     });
   });
   describe('setting the leaderboard property', () => {
-    // TODO - add when leaderboard backend is complete (Frank)
+    describe('setting the leaderboard property', () => {
+      it('does not change leaderboard if leaderboard is unchanged', () => {
+        testArea.leaderboard = undefined;
+        expect(testArea.leaderboard).toBeUndefined();
+      });
+      it('should change the leader board if given different value', () => {
+        testArea.leaderboard = [];
+        expect(testArea.startTime).toEqual([]);
+      });
+    });
   });
 });

@@ -45,3 +45,28 @@ Create a `.env` file in the `frontend` directory, with the line: `REACT_APP_TOWN
 
 In the `frontend` directory, run `npm start` (again, you'll need to run `npm install` the very first time). After several moments (or minutes, depending on the speed of your machine), a browser will open with the frontend running locally.
 The frontend will automatically re-compile and reload in your browser if you change any files in the `frontend/src` directory.
+
+
+## Manual Testing For Frontend
+
+| Action      | Expected Behaviour |
+| ----------- | ----------- |
+|   Player  enter crossword puzzle area  | instruction of entering the area should pop up --- press `space` to enter the area      |
+| Player press `space` when entered crossword puzzle area   | A modal should pop up requesting `groupName`      |
+|  Player enter a unique `groupName`  | Another modal should pop up which contains title of current crossword puzzle, crossword puzzle grid and a toolbar with timer, check button, rebus button, leaderboard button and avatar for current player in area. A toast `Crossword Created!` would pop up.  |
+| Player enter a duplicate `groupName` |  An error toast `Team name already in use; Please select a different name` would pop up |
+| When Crossword Puzzle Grid Modal is open `Timer`| timer should start ticking|
+| When Crossword Puzzle Grid Modal is open `Timer`| time display should be the same for all players|
+| When Crossword Puzzle Grid Modal is open `OccupantsDisplay`| player avatart should be dynamic with first letter of their user name -- when one player leave, its avatar should disappear|
+| When Crossword Puzzle Grid Modal is open `OccupantsDisplay`| when the number of player exceed 3, the last avatar would show the number of players that are not displayer|
+| When Crossword Puzzle Grid Modal is open | clues with `down` and `across` will be next to the crossword grid|
+| When `Help` button is clicked | a new tab would open with the information on how to complete the crossword puzzle|
+| Click `Leaderboard` button | leaderboard modal would pop up with either `the leaderboard is empty `|
+| Click an entry in `leaderboard` | a score modal would pop up with team members name and `disabled` checkbox for `usedHint`|
+| Fill cells in the grid | the grid would be updated to everyone in the area|
+| Click on the cell | the clicked cell would be highlighted yellow and the according word would be highlighted blue |
+| Double-Click on the cell | the highlighted word would switch between `across` and `down` |
+| Exit the area | `startTime`, `puzzle` would be cleared and the game would not be saved |
+| Finish and complete the crossword puzzle  | a toast with the time will pop up, `timer` would freeze |
+| Check a letter/word/puzzle | the cell that is checked will highlighted red |
+| Close the crossword puzzle modal | the game will keep going on unless everyone exit the area |
