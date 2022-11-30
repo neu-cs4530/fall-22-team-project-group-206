@@ -6,6 +6,7 @@ import {
   CellIndex,
   CrosswordPuzzleCell,
   CrosswordPuzzleModel,
+  InsertScoreRequestBody,
 } from '../../../types/CoveyTownSocket';
 import { BLACK_CELL_STRING, Direction, getHighlightedCells } from '../CrosswordUtils';
 import CrosswordCell from './CrosswordCell/CrosswordCell';
@@ -93,7 +94,8 @@ function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaControll
         teamMembers: controller.occupants.map(person => person.userName),
         usedHint: hintUsed(grid),
       };
-      axios.post(url, { scoreModel: newScore });
+      const requestBody: InsertScoreRequestBody = { scoreModel: newScore };
+      axios.post(url, requestBody);
       toast({
         title: `Puzzle Finished!`,
         description: `Your Team Score is ${currScore}`,

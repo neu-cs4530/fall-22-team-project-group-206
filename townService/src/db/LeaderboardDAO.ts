@@ -1,6 +1,7 @@
 import { ScoreModel } from '../types/CoveyTownSocket';
 import Score from './ScoreModel';
-import { NotFoundError, UndefinedError } from './DatabaseErrors';
+import NotFoundError from './DatabaseErrors/NotFoundError';
+import UndefinedError from './DatabaseErrors/UndefinedError';
 
 /**
  * Adds a new score to the database
@@ -8,21 +9,21 @@ import { NotFoundError, UndefinedError } from './DatabaseErrors';
  * @returns a scoremodel representing the added score
  */
 export async function addScore(newScore: ScoreModel): Promise<ScoreModel> {
-    const doc = await Score.create(newScore);
-    if (doc === undefined) {
-      throw new UndefinedError('Error creating message, database returned undefined.');
-    }
-    if (doc === null) {
-      throw new NotFoundError('Error creating message, database returned null');
-    }
-    const createdScore: ScoreModel = {
-      teamName: doc.teamName,
-      score: doc.score,
-      teamMembers: doc.teamMembers,
-      usedHint: doc.usedHint,
-    };
-    return createdScore;
+  const doc = await Score.create(newScore);
+  if (doc === undefined) {
+    throw new UndefinedError('Error creating message, database returned undefined.');
   }
+  if (doc === null) {
+    throw new NotFoundError('Error creating message, database returned null');
+  }
+  const createdScore: ScoreModel = {
+    teamName: doc.teamName,
+    score: doc.score,
+    teamMembers: doc.teamMembers,
+    usedHint: doc.usedHint,
+  };
+  return createdScore;
+}
 
 /**
  * Returns all the scores from today found within the database.
@@ -31,12 +32,12 @@ export async function addScore(newScore: ScoreModel): Promise<ScoreModel> {
 export async function getTodaysScores(): Promise<ScoreModel[]> {
   const now = new Date();
   const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-      // The database should do a reset every day but just in case this is in place
+  // The database should do a reset every day but just in case this is in place
   const docs = await Score.find({ date: { $gte: startOfToday } });
   if (docs === null) {
     throw new UndefinedError('Error finding scores, database returned null');
   }
-  if (docs === undefined ){
+  if (docs === undefined) {
     throw new NotFoundError('Error finding scores, database returned undefined');
   }
   const scoreModels: ScoreModel[] = [];

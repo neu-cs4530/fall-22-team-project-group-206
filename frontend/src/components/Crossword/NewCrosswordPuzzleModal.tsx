@@ -17,6 +17,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useCrosswordAreaPuzzleController } from '../../classes/TownController';
 import { CrosswordPuzzleArea as CrosswordPuzzleAreaModel } from '../../generated/client';
 import useTownController from '../../hooks/useTownController';
+import { TeamNameInUseResponse } from '../../types/CoveyTownSocket';
 import CrosswordPuzzleArea from '../Town/interactables/CrosswordPuzzleArea';
 
 export default function NewCrosswordPuzzleModal({
@@ -54,13 +55,17 @@ export default function NewCrosswordPuzzleModal({
       let url = '';
       try {
         if (process.env.REACT_APP_TOWNS_SERVICE_URL !== undefined) {
-          url = process.env.REACT_APP_TOWNS_SERVICE_URL.concat('/scores/inUse/').concat(groupName);
+          url = process.env.REACT_APP_TOWNS_SERVICE_URL.concat('/scores/teams/').concat(groupName);
         }
         if (process.env.PORT !== undefined) {
-          url = process.env.PORT.concat('/scores/inUse/').concat(groupName);
+          url = process.env.PORT.concat('/scores/teams/').concat(groupName);
         }
-        const inUseResp = await axios.get(url);
-        teamNameInvalid = inUseResp.data.inUse;
+        const isTeamNameAvailable: TeamNameInUseResponse = await axios.get(url);
+        if (isTeamNameAvailable.data.inUse !== undefined) {
+          teamNameInvalid = !isTeamNameAvailable.data.inUse;
+        } else {
+          throw new Error(isTeamNameAvailable.data.errorMessage);
+        }
       } catch (e) {
         if (e instanceof Error) {
           toast({

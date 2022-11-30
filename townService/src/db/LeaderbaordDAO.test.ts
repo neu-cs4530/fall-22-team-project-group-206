@@ -1,11 +1,11 @@
 import { addScore, getTodaysScores, numInstancesTeamNameUsed } from './LeaderboardDAO';
 import Score from './ScoreModel';
-
-
+/* eslint-disable */
 describe('LeaderboardDAO', () => {
   const testScore = { teamName: 'name', score: 50, teamMembers: ['jaime'], usedHint: false };
   describe('getScores', () => {
     it('calls the find method in mongoose', async () => {
+      //eslint
       jest.spyOn(Score, 'find').mockReturnValueOnce([testScore] as any);
       const returnedScores = await getTodaysScores();
       expect(returnedScores).not.toBeUndefined();
@@ -51,18 +51,18 @@ describe('LeaderboardDAO', () => {
     it('calls the count method in mongoose', async () => {
       jest.spyOn(Score, 'count').mockReturnValueOnce(0 as any);
       const returnedNum = await numInstancesTeamNameUsed(testScore.teamName);
-      expect(returnedNum).toEqual(0)
+      expect(returnedNum).toEqual(0);
     });
     it('calls the count method in mongoose', async () => {
       jest.spyOn(Score, 'count').mockReturnValueOnce(5 as any);
       const returnedNum = await numInstancesTeamNameUsed(testScore.teamName);
-      expect(returnedNum).toEqual(5)
+      expect(returnedNum).toEqual(5);
     });
     it('throws an error when count returns undefined', async () => {
       jest.spyOn(Score, 'count').mockReturnValueOnce(undefined as any);
       await expect(async () => {
         await numInstancesTeamNameUsed(testScore.teamName);
-      }).rejects.toThrowError(); 
+      }).rejects.toThrowError();
     });
   });
 });

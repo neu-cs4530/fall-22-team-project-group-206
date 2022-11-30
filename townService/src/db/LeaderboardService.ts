@@ -1,10 +1,6 @@
 import InvalidParametersError from '../lib/InvalidParametersError';
 import { ScoreModel } from '../types/CoveyTownSocket';
-import {
-  addScore,
-  getTodaysScores,
-  numInstancesTeamNameUsed,
-} from './LeaderboardDAO';
+import { addScore, getTodaysScores, numInstancesTeamNameUsed } from './LeaderboardDAO';
 
 /**
  * Returns the leaders for todays crossword puzzle.
@@ -35,7 +31,6 @@ export async function insertScore(newScore: ScoreModel): Promise<ScoreModel> {
   const createdScore = await addScore(newScore);
   return createdScore;
 }
-
 
 /**
  * Evaluates if the team name is curreanly
