@@ -13,9 +13,9 @@ import React, { useCallback, useEffect, useState } from 'react';
 import {
   useCrosswordAreaPuzzleController,
   useInteractable,
-} from '../../classes/TownController';
-import useTownController from '../../hooks/useTownController';
-import CrosswordPuzzleAreaInteractable from '../Town/interactables/CrosswordPuzzleArea';
+} from '../../../../classes/TownController';
+import useTownController from '../../../../hooks/useTownController';
+import CrosswordPuzzleAreaInteractable from '../CrosswordPuzzleArea';
 import './CrosswordGameModal.css';
 import CrosswordPuzzleGame from './CrosswordPuzzleGame/CrosswordPuzzleGame';
 import NewCrosswordPuzzleModal from './NewCrosswordPuzzleModal';

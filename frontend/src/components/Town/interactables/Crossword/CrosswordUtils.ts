@@ -1,4 +1,4 @@
-import { CellIndex, CrosswordPuzzleCell } from '../../types/CoveyTownSocket';
+import { CellIndex, CrosswordPuzzleCell } from '../../../../types/CoveyTownSocket';
 
 export type Direction = 'across' | 'down';
 

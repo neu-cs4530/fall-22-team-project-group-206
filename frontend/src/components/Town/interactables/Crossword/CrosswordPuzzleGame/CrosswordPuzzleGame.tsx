@@ -1,15 +1,14 @@
 import { HStack, useToast } from '@chakra-ui/react';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import CrosswordPuzzleAreaController from '../../../classes/CrosswordPuzzleAreaController';
-import { ScoreModel } from '../../../generated/client';
-import useTownController from '../../../hooks/useTownController';
+import CrosswordPuzzleAreaController from '../../../../../classes/CrosswordPuzzleAreaController';
+import { ScoreModel } from '../../../../../generated/client';
+import useTownController from '../../../../../hooks/useTownController';
 import {
   CellIndex,
   CrosswordPuzzleCell,
   CrosswordPuzzleModel,
-  ScoreModel,
-} from '../../../types/CoveyTownSocket';
+} from '../../../../../types/CoveyTownSocket';
 import {
   BLACK_CELL_STRING,
   Direction,

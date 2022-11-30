@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import React, { useEffect } from 'react';
 import useTownController from '../../hooks/useTownController';
 import SocialSidebar from '../SocialSidebar/SocialSidebar';
-import CrosswordGameModal from '../Crossword/CrosswordGameModal';
+import CrosswordGameModal from './interactables/Crossword/CrosswordGameModal';
 import NewConversationModal from './interactables/NewCoversationModal';
 import TownGameScene from './TownGameScene';
 

@@ -14,10 +14,10 @@ import {
 } from '@chakra-ui/react';
 import axios from 'axios';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useCrosswordAreaPuzzleController } from '../../classes/TownController';
-import { CrosswordPuzzleArea as CrosswordPuzzleAreaModel } from '../../generated/client';
-import useTownController from '../../hooks/useTownController';
-import CrosswordPuzzleArea from '../Town/interactables/CrosswordPuzzleArea';
+import { useCrosswordAreaPuzzleController } from '../../../../classes/TownController';
+import { CrosswordPuzzleArea as CrosswordPuzzleAreaModel } from '../../../../generated/client';
+import useTownController from '../../../../hooks/useTownController';
+import CrosswordPuzzleArea from '../CrosswordPuzzleArea';
 
 /*
 Modal to select new group name and start new crossword.
