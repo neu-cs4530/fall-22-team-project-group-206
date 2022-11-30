@@ -12,7 +12,7 @@ import { ClientToServerEvents, ServerToClientEvents } from './types/CoveyTownSoc
 import { TownsController } from './town/TownsController';
 import { logError } from './Utils';
 import createConnection from './db/DatabaseConnection';
-import scoreRoutes from './db/Router';
+import scoreRoutes from './db/Router/Router';
 
 // Create the server instances
 const app = Express();

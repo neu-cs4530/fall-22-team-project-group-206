@@ -1,7 +1,7 @@
 import { Box, ListItem, List, Grid, GridItem, useDisclosure } from '@chakra-ui/react';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { ScoreModel } from '../../../types/CoveyTownSocket';
+import { ScoreFindResponse, ScoreModel } from '../../../types/CoveyTownSocket';
 import LeaderboardModal from './ScoreModal';
 
 const LEADERBOARD_SIZE = 5;
@@ -22,10 +22,16 @@ export default function Leaderboard(): JSX.Element {
         if (process.env.PORT !== undefined) {
           url = process.env.PORT.concat('/scores/amount/').concat(LEADERBOARD_SIZE.toString(10));
         }
-        const scoreResp = await axios.get(url);
-        setLeaderboard(scoreResp.data.scores);
+        const scoreResp: ScoreFindResponse = await axios.get(url);
+        if (scoreResp.data.scores !== undefined) {
+          setLeaderboard(scoreResp.data.scores);
+        } else {
+          throw new Error(scoreResp.data.errorMessage);
+        }
       } catch (e) {
-        throw new Error('Unable to set Leaderboard');
+        if (e instanceof Error) {
+          throw new Error(e.message);
+        }
       }
     }
     retrieveLeaderboard();
