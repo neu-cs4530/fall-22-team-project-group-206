@@ -62,7 +62,7 @@ export default function NewCrosswordPuzzleModal({
         }
         const isTeamNameAvailable: TeamNameInUseResponse = await axios.get(url);
         if (isTeamNameAvailable.data.inUse !== undefined) {
-          teamNameInvalid = !isTeamNameAvailable.data.inUse;
+          teamNameInvalid = isTeamNameAvailable.data.inUse;
         } else {
           throw new Error(isTeamNameAvailable.data.errorMessage);
         }

@@ -1,6 +1,6 @@
 import { addScore, getTodaysScores, numInstancesTeamNameUsed } from './LeaderboardDAO';
 
-import { getLeaders, insertScore, isTeamNameAvailable } from './LeaderboardService';
+import { getLeaders, insertScore, isTeamNameUsed } from './LeaderboardService';
 import { ScoreModel } from '../types/CoveyTownSocket';
 
 jest.mock('./LeaderboardDAO', () => {
@@ -98,13 +98,13 @@ describe('LeaderboardService', () => {
   describe('isTeamNameCurrentlyUsed', () => {
     it('returns false when amount of times used is over 0', async () => {
       timesNameUsedFunc.mockImplementation(() => 1);
-      const nameUsed = await isTeamNameAvailable('name');
-      expect(nameUsed).toBeFalsy();
+      const nameUsed = await isTeamNameUsed('name');
+      expect(nameUsed).toBeTruthy();
     });
     it('returns true when amount of times used is 0', async () => {
       timesNameUsedFunc.mockImplementation(() => 0);
-      const nameUsed = await isTeamNameAvailable('name');
-      expect(nameUsed).toBeTruthy();
+      const nameUsed = await isTeamNameUsed('name');
+      expect(nameUsed).toBeFalsy();
     });
   });
 });

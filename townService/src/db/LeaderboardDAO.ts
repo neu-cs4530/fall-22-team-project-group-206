@@ -35,10 +35,10 @@ export async function getTodaysScores(): Promise<ScoreModel[]> {
   // The database should do a reset every day but just in case this is in place
   const docs = await Score.find({ date: { $gte: startOfToday } });
   if (docs === null) {
-    throw new UndefinedError('Error finding scores, database returned null');
+    throw new NotFoundError('Error finding scores, database returned null');
   }
   if (docs === undefined) {
-    throw new NotFoundError('Error finding scores, database returned undefined');
+    throw new UndefinedError('Error finding scores, database returned undefined');
   }
   const scoreModels: ScoreModel[] = [];
   docs.forEach(doc => {
@@ -62,6 +62,5 @@ export async function numInstancesTeamNameUsed(teamName: string): Promise<number
   if (num === undefined) {
     throw new UndefinedError('Error parsing number of teams, database returned undefined');
   }
-
   return num;
 }

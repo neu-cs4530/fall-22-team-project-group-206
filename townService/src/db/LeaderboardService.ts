@@ -10,7 +10,9 @@ import { addScore, getTodaysScores, numInstancesTeamNameUsed } from './Leaderboa
 export async function getLeaders(numResults: number): Promise<ScoreModel[]> {
   const scores: ScoreModel[] = await getTodaysScores();
   if (numResults > 10 || numResults < 1) {
-    throw new InvalidParametersError('Invalid number of results inputted for leaderboard');
+    throw new InvalidParametersError(
+      'Invalid number of results inputted for leaderboard, must be between 1 and 10 (inclusive)',
+    );
   }
   const sortedScores = scores.sort((a: ScoreModel, b: ScoreModel): number => {
     if (a.score - b.score !== 0) {
@@ -37,7 +39,7 @@ export async function insertScore(newScore: ScoreModel): Promise<ScoreModel> {
  * @param teamName the name of the team being checked
  * @returns if the team name has been used toda
  */
-export async function isTeamNameAvailable(teamName: string): Promise<boolean> {
+export async function isTeamNameUsed(teamName: string): Promise<boolean> {
   const timesUsed = await numInstancesTeamNameUsed(teamName);
-  return timesUsed === 0;
+  return timesUsed !== 0;
 }

@@ -1,14 +1,14 @@
 import express, { Express } from 'express';
-import { getLeaders, insertScore, isTeamNameAvailable } from './LeaderboardService';
+import { getLeaders, insertScore, isTeamNameUsed } from '../LeaderboardService';
 import {
   ScoreModifyResponse,
   ScoreFindResponse,
   TeamNameInUseResponse,
   ScoreModel,
-} from '../types/CoveyTownSocket';
-import InvalidParametersError from '../lib/InvalidParametersError';
-import NotFoundError from './DatabaseErrors/NotFoundError';
-import UndefinedError from './DatabaseErrors/UndefinedError';
+} from '../../types/CoveyTownSocket';
+import InvalidParametersError from '../../lib/InvalidParametersError';
+import NotFoundError from '../DatabaseErrors/NotFoundError';
+import UndefinedError from '../DatabaseErrors/UndefinedError';
 
 export default function scoreRoutes(app: Express) {
   function buildErrorResp(
@@ -34,7 +34,7 @@ export default function scoreRoutes(app: Express) {
       const newScore: ScoreModel = req.body.scoreModel;
       if (!newScore) {
         throw new InvalidParametersError(
-          'Could not find scoreModel within request. Request body must be of type InsertScoreRequestBody',
+          `Could not find scoreModel within request. Request body must be of type InsertScoreRequestBody`,
         );
       }
       const createdScore = await insertScore(newScore);
@@ -77,7 +77,7 @@ export default function scoreRoutes(app: Express) {
   app.get('/scores/teams/:teamName', express.json(), async (req, resp) => {
     const buildResp: TeamNameInUseResponse = { status: 100, data: {} };
     try {
-      const inUse: boolean = await isTeamNameAvailable(req.params.teamName);
+      const inUse: boolean = await isTeamNameUsed(req.params.teamName);
       buildResp.status = 200;
       buildResp.data.inUse = inUse;
     } catch (err) {
