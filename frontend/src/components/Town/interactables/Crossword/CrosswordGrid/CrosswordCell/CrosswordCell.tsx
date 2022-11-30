@@ -1,10 +1,13 @@
 import React from 'react';
-import { CrosswordPuzzleCell } from '../../../../types/CoveyTownSocket';
+import { CrosswordPuzzleCell } from '../../../../../../types/CoveyTownSocket';
 import './CrosswordCell.css';
 
 const FONT_SIZE = '1rem';
 const REBUS_FONT_SIZE = '0.5rem';
 
+/*
+ React component to represent the crossword cell.
+ */
 function CrosswordCell(props: {
   cellID: string;
   number: number | undefined;

@@ -14,12 +14,15 @@ import {
 } from '@chakra-ui/react';
 import axios from 'axios';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useCrosswordAreaPuzzleController } from '../../classes/TownController';
-import { CrosswordPuzzleArea as CrosswordPuzzleAreaModel } from '../../generated/client';
-import useTownController from '../../hooks/useTownController';
-import { TeamNameInUseResponse } from '../../types/CoveyTownSocket';
-import CrosswordPuzzleArea from '../Town/interactables/CrosswordPuzzleArea';
+import { useCrosswordAreaPuzzleController } from '../../../../classes/TownController';
+import { CrosswordPuzzleArea as CrosswordPuzzleAreaModel } from '../../../../generated/client';
+import useTownController from '../../../../hooks/useTownController';
+import { TeamNameInUseResponse } from '../../../../types/CoveyTownSocket';
+import CrosswordPuzzleArea from '../CrosswordPuzzleArea';
 
+/*
+ Modal to select new group name and start new crossword.
+ */
 export default function NewCrosswordPuzzleModal({
   isOpen,
   close,
@@ -43,9 +46,8 @@ export default function NewCrosswordPuzzleModal({
   }, [coveyTownController, isOpen]);
 
   const closeModal = useCallback(() => {
-    coveyTownController.unPause();
     close();
-  }, [coveyTownController, close]);
+  }, [close]);
 
   const toast = useToast();
 
@@ -94,7 +96,6 @@ export default function NewCrosswordPuzzleModal({
             title: 'Crossword Created!',
             status: 'success',
           });
-          coveyTownController.unPause();
           closeModal();
         } catch (err) {
           if (err instanceof Error) {

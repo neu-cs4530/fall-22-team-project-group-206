@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 
-import { ScoreModel } from '../../../types/CoveyTownSocket';
+import { ScoreModel } from '../../../../../types/CoveyTownSocket';
 /**
  * Detail for score
  */

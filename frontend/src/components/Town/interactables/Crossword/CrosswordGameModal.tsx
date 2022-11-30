@@ -5,17 +5,23 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
-  Button,
   Flex,
 } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useCrosswordAreaPuzzleController, useInteractable } from '../../classes/TownController';
-import useTownController from '../../hooks/useTownController';
-import CrosswordPuzzleAreaInteractable from '../Town/interactables/CrosswordPuzzleArea';
+import {
+  useCrosswordAreaPuzzleController,
+  useInteractable,
+} from '../../../../classes/TownController';
+import useTownController from '../../../../hooks/useTownController';
+import CrosswordPuzzleAreaInteractable from '../CrosswordPuzzleArea';
 import './CrosswordGameModal.css';
-import CrosswordGrid from './CrosswordGrid/CrosswordGrid';
+import CrosswordPuzzleGame from './CrosswordGrid/CrosswordPuzzleGame';
 import NewCrosswordPuzzleModal from './NewCrosswordPuzzleModal';
 
+/*
+React modal representing the CrosswordGame. If groupname is set, render CrosswordGame, else,
+render NewCrosswordPuzzle to select a new groupname.
+*/
 function CrosswordGameModal({
   crosswordPuzzleArea,
 }: {
@@ -41,7 +47,7 @@ function CrosswordGameModal({
     };
     crosswordPuzzleAreaController.addListener('groupNameChange', setGroup);
 
-    if (crosswordPuzzleAreaController.puzzle) {
+    if (crosswordPuzzleAreaController) {
       coveyTownController.pause();
     } else {
       coveyTownController.unPause();
@@ -71,7 +77,6 @@ function CrosswordGameModal({
         isOpen={selectIsOpen}
         close={() => {
           setSelectIsOpen(false);
-          coveyTownController.unPause();
         }}
         crosswordPuzzleArea={crosswordPuzzleArea}
       />
@@ -85,24 +90,12 @@ function CrosswordGameModal({
             <ModalHeader>
               <Flex>
                 <div>{crosswordPuzzleAreaController.puzzle.info.title}</div>
-                <Button
-                  marginLeft='10px'
-                  colorScheme='gray'
-                  variant='solid'
-                  onClick={() =>
-                    window.open(
-                      'https://www.nytimes.com/guides/crosswords/how-to-solve-a-crossword-puzzle',
-                      '_blank',
-                    )
-                  }>
-                  Help
-                </Button>
               </Flex>
             </ModalHeader>
 
             <ModalCloseButton />
             <ModalBody>
-              <CrosswordGrid controller={crosswordPuzzleAreaController} />
+              <CrosswordPuzzleGame controller={crosswordPuzzleAreaController} />
             </ModalBody>
           </ModalContent>
         </Modal>

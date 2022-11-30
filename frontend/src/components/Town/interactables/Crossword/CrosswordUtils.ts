@@ -1,8 +1,10 @@
-import { CellIndex, CrosswordPuzzleCell } from '../../types/CoveyTownSocket';
+import { CellIndex, CrosswordPuzzleCell } from '../../../../types/CoveyTownSocket';
 
 export type Direction = 'across' | 'down';
 
 export const BLACK_CELL_STRING = '.';
+const HH_INDEX = 11;
+const SS_INDEX = 19;
 
 function isOutsideGridOrBlackCell(cell: CrosswordPuzzleCell): boolean {
   return cell === undefined || cell.solution == BLACK_CELL_STRING;
@@ -79,4 +81,8 @@ export function getHighlightedCells(
     ...getLeadingCells(selectedIndex, dir, grid),
     ...getTrailingCells(selectedIndex, dir, grid),
   ];
+}
+
+export function getTimeInHHMMSS(milliSeconds: number): string {
+  return new Date(milliSeconds).toISOString().slice(HH_INDEX, SS_INDEX);
 }

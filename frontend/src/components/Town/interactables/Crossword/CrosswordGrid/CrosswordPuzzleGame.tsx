@@ -1,15 +1,20 @@
 import { HStack, useToast } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
-import CrosswordPuzzleAreaController from '../../../classes/CrosswordPuzzleAreaController';
-import useTownController from '../../../hooks/useTownController';
+import CrosswordPuzzleAreaController from '../../../../../classes/CrosswordPuzzleAreaController';
+import useTownController from '../../../../../hooks/useTownController';
 import {
   CellIndex,
   CrosswordPuzzleCell,
   CrosswordPuzzleModel,
   InsertScoreRequestBody,
   ScoreModel,
-} from '../../../types/CoveyTownSocket';
-import { BLACK_CELL_STRING, Direction, getHighlightedCells } from '../CrosswordUtils';
+} from '../../../../../types/CoveyTownSocket';
+import {
+  BLACK_CELL_STRING,
+  Direction,
+  getHighlightedCells,
+  getTimeInHHMMSS,
+} from '../CrosswordUtils';
 import CrosswordCell from './CrosswordCell/CrosswordCell';
 import axios from 'axios';
 import CrosswordClues from './CrosswordClues/CrosswordClues';
@@ -21,6 +26,9 @@ type GameState = {
   highlightedCells: CellIndex[];
 };
 
+/*
+ React component to represent the crossword puzzle including the grid, clues, and toolbar.
+ */
 function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaController }): JSX.Element {
   const toast = useToast();
   const townController = useTownController();
@@ -79,7 +87,7 @@ function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaControll
    * @param grid the crossword puzzle being completed
    */
   const insertScoreInDB = (startTime: number, groupName: string, grid: CrosswordPuzzleCell[][]) => {
-    const currScore = (Date.now() - startTime) / 1000;
+    const currScore = Date.now() - startTime;
     try {
       let url = '';
       if (process.env.REACT_APP_TOWNS_SERVICE_URL !== undefined) {
@@ -98,7 +106,7 @@ function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaControll
       axios.post(url, requestBody);
       toast({
         title: `Puzzle Finished!`,
-        description: `Your Team Score is ${currScore}`,
+        description: `Your Team Score is ${getTimeInHHMMSS(currScore)}`,
         position: 'top',
         status: 'success',
         isClosable: true,
@@ -121,6 +129,9 @@ function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaControll
     };
 
     const handleCellChange = (rowIndex: number, columnIndex: number, newValue: string) => {
+      if (isCompleted(puzzle.grid)) {
+        return;
+      }
       const updatedGrid: CrosswordPuzzleCell[][] = puzzle.grid.map((row, i) => {
         return row.map((cell, j) => {
           if (i === rowIndex && j === columnIndex) {
@@ -187,6 +198,9 @@ function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaControll
     };
 
     const handleCheckCell = () => {
+      if (isCompleted(puzzle.grid)) {
+        return;
+      }
       const updatedGrid: CrosswordPuzzleCell[][] = puzzle.grid.map((row, i) => {
         return row.map((cell, j) => {
           if (isSelected({ row: i, col: j })) {
@@ -208,6 +222,9 @@ function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaControll
     };
 
     const handleCheckWord = () => {
+      if (isCompleted(puzzle.grid)) {
+        return;
+      }
       const updatedGrid: CrosswordPuzzleCell[][] = puzzle.grid.map((row, i) => {
         return row.map((cell, j) => {
           if (isSelected({ row: i, col: j }) || isHighlighted({ row: i, col: j })) {
@@ -229,6 +246,9 @@ function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaControll
     };
 
     const handleCheckPuzzle = () => {
+      if (isCompleted(puzzle.grid)) {
+        return;
+      }
       const updatedGrid: CrosswordPuzzleCell[][] = puzzle.grid.map(row => {
         return row.map(cell => {
           return {
@@ -246,6 +266,9 @@ function CrosswordGrid({ controller }: { controller: CrosswordPuzzleAreaControll
     };
 
     const handleRevealPuzzle = () => {
+      if (isCompleted(puzzle.grid)) {
+        return;
+      }
       const updatedGrid: CrosswordPuzzleCell[][] = puzzle.grid.map(row => {
         return row.map(cell => {
           const newValue = cell.solution;
