@@ -1,0 +1,22 @@
+.clues-list {
+  color: rgb(3, 0, 27);
+  font-size: 1em;
+  font-weight: 400;
+  padding-left: 16px;
+  width: -webkit-fill-available;
+}
+
+.clues-list span {
+  font-weight: 800;
+  padding: 15px 0;
+}
+
+.clues-list ul {
+  height: 200px;
+  overflow: scroll;
+}
+
+.clues-list li {
+  list-style-type: none;
+  list-style-position: outside;
+}
