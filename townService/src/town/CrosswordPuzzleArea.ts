@@ -12,9 +12,8 @@ import {
 } from '../types/CoveyTownSocket';
 import InteractableArea from './InteractableArea';
 
-const year = new Date(Date.now()).getFullYear();
-const CROSSWORDPUZZLE_EXTERNAL_LINK =
-  `https://api.foracross.com/api/puzzle_list?page=0&pageSize=1&filter%5BnameOrTitleFilter%5D=Will%20Shortz%20${year}&filter%5BsizeFilter%5D%5BMini%5D=false&filter%5BsizeFilter%5D%5BStandard%5D=true`;
+const CURRENT_YEAR = new Date(Date.now()).getFullYear();
+const CROSSWORDPUZZLE_EXTERNAL_LINK = `https://api.foracross.com/api/puzzle_list?page=0&pageSize=1&filter%5BnameOrTitleFilter%5D=Will%20Shortz%20${CURRENT_YEAR}&filter%5BsizeFilter%5D%5BMini%5D=false&filter%5BsizeFilter%5D%5BStandard%5D=true`;
 
 export default class CrosswordPuzzleArea extends InteractableArea {
   /* The name of the group, undefined if no one is in the area */
