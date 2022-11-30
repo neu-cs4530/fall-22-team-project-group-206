@@ -11,6 +11,12 @@ import NotFoundError from '../DatabaseErrors/NotFoundError';
 import UndefinedError from '../DatabaseErrors/UndefinedError';
 
 export default function scoreRoutes(app: Express) {
+  /**
+   * Checks the errors returned by the database and adjusts the status and name accordingly. The design decision made was to
+   * default to a 400 bad request error, as those were predominantly the issue within this workflow.
+   * @param err the error that occured
+   * @param buildResp the response being modified
+   */
   function buildErrorResp(
     err: Error,
     buildResp: TeamNameInUseResponse | ScoreFindResponse | ScoreModifyResponse,

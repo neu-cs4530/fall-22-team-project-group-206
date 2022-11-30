@@ -1,6 +1,7 @@
 import { addScore, getTodaysScores, numInstancesTeamNameUsed } from './LeaderboardDAO';
 import Score from './ScoreModel';
 
+// mockReturnValueOnce only works with the any casting, that is why eslint-disable next line is used commonly in this doc
 describe('LeaderboardDAO', () => {
   const testScore = { teamName: 'name', score: 50, teamMembers: ['jaime'], usedHint: false };
   describe('getScores', () => {
