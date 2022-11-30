@@ -184,7 +184,6 @@ describe('CrosswordPuzzleArea', () => {
         id: testArea.id,
         isGameOver: testArea.isGameOver,
         puzzle: testArea.puzzle,
-        leaderboard: testArea.leaderboard,
         occupantsByID: testArea.occupants.map(eachOccupant => eachOccupant.id),
       });
     });
@@ -205,7 +204,6 @@ describe('CrosswordPuzzleArea', () => {
         id: testArea.id,
         isGameOver: testArea.isGameOver,
         puzzle: testArea.puzzle,
-        leaderboard: testArea.leaderboard,
         occupantsByID: testArea.occupants.map(eachOccupant => eachOccupant.id),
       });
     });

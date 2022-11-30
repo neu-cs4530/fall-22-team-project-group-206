@@ -6,7 +6,6 @@ import {
   CrosswordPuzzleArea as CrosswordPuzzleAreaModel,
   TownEmitter,
   CrosswordPuzzleModel,
-  ScoreModel,
   CrosswordPuzzleCell,
   CellIndex,
   CrosswordExternalModel,
@@ -21,8 +20,6 @@ export default class CrosswordPuzzleArea extends InteractableArea {
   public groupName?: string;
 
   public puzzle?: CrosswordPuzzleModel;
-
-  public leaderboard?: ScoreModel[];
 
   public isGameOver: boolean;
 
@@ -41,7 +38,7 @@ export default class CrosswordPuzzleArea extends InteractableArea {
    * @param townEmitter a broadcast emitter that can be used to emit updates to players
    */
   public constructor(
-    { id, groupName, puzzle, leaderboard, isGameOver, startTime }: CrosswordPuzzleAreaModel,
+    { id, groupName, puzzle, isGameOver, startTime }: CrosswordPuzzleAreaModel,
     coordinates: BoundingBox,
     townEmitter: TownEmitter,
   ) {
@@ -52,7 +49,6 @@ export default class CrosswordPuzzleArea extends InteractableArea {
     } else {
       this.puzzle = puzzle;
     }
-    this.leaderboard = leaderboard;
     this.isGameOver = isGameOver;
     this.startTime = startTime;
   }
@@ -77,24 +73,17 @@ export default class CrosswordPuzzleArea extends InteractableArea {
   }
 
   /**
-   * Updates the state of this CrosswordPuzzleArea, setting the groupName, puzzle, leaderboard and isGameOver properties
+   * Updates the state of this CrosswordPuzzleArea, setting the groupName, puzzle, and isGameOver properties
    *
    * @param CrosswordPuzzleAreaModel updated model
    */
-  public updateModel({
-    groupName,
-    puzzle,
-    leaderboard,
-    isGameOver,
-    startTime,
-  }: CrosswordPuzzleAreaModel) {
+  public updateModel({ groupName, puzzle, isGameOver, startTime }: CrosswordPuzzleAreaModel) {
     if (!puzzle) {
       this._setPuzzleModel();
     } else {
       this.puzzle = puzzle;
     }
     this.groupName = groupName;
-    this.leaderboard = leaderboard;
     this.isGameOver = isGameOver;
     this.startTime = startTime;
   }
@@ -109,7 +98,6 @@ export default class CrosswordPuzzleArea extends InteractableArea {
       occupantsByID: this.occupantsByID,
       groupName: this.groupName,
       puzzle: this.puzzle,
-      leaderboard: this.leaderboard,
       isGameOver: this.isGameOver,
       startTime: this.startTime,
     };
