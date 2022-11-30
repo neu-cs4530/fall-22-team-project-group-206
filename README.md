@@ -37,6 +37,26 @@ To create an account and configure your local environment:
 Once your backend is configured, you can start it by running `npm start` in the `townService` directory (the first time you run it, you will also need to run `npm install`).
 The backend will automatically restart if you change any of the files in the `townService/src` directory.
 
+## Manual Testing for backend
+
+To manually test the endpoints, simply start up the server and visit PORT/endpoints. Then you will be able to see all the swagger doc and can do the following testing actions. Do these in order to ensure reproducible results. The best way to gaurantee this is if you spin up the service locally, that way a fresh database is gauranteed. If you insert enough uniquely named teams, then send a request along the lines of /towns/scores/5, the results should be a status 200 and list of the 5 highest scores without using a hint (if there are less than 5 that did not use a hint, than some with a hint might be shown). Regardless of time, if a team uses a hint, they are bumped below a team that did not.
+
+| Endpoint                                    | Expected Behaviour                                                                |
+| ------------------------------------------- | --------------------------------------------------------------------------------- |
+| /towns/scores/5                             | returns ScoreFindResponse with status 200 and an empty list                       |
+| /towns/scores/0                             | returns ScoreFindResponse with status 400 and an invalid parameter error          |
+| /towns/scores/11                            | returns ScoreFindResponse with status 400 and an invalid parameter error          |
+| /towns/scores/zero                          | returns ScoreFindResponse with status 400 and an invalid parameter error          |
+| /towns/scores/teams/test                    | returns TeamInUseResponse with status 200 and boolean value of false              |
+| /towns/score (with preset example for body) | returns ScoreModifyResponse with status 201 and scoreModel that matches the input |
+| /towns/scores/teams/test                    | returns TeamInUseResponse with status 200 and boolean value of true               |
+| /towns/scores/teams/test1                   | returns TeamInUseResponse with status 200 and boolean value of false              |
+
+| /towns/scores/5 | returns ScoreFindResponse with status 200 and a list populated solely by the inserted score |
+| /towns/score (with preset example for body) | returns ScoreModifyResponse with status 400 and MongoServerError error with message that reads along the lines of "name already exists"|
+| /towns/score (change name of preset to test1) | returns ScoreModifyResponse with status 201 and scoreModel that matches the input |
+| /towns/scores/5 | returns ScoreFindResponse with status 200 and a list with score models that have the names "test" and "test1" |
+
 ### Configuring the frontend
 
 Create a `.env` file in the `frontend` directory, with the line: `REACT_APP_TOWNS_SERVICE_URL=http://localhost:8081` (if you deploy the towns service to another location, put that location here instead)
@@ -46,27 +66,26 @@ Create a `.env` file in the `frontend` directory, with the line: `REACT_APP_TOWN
 In the `frontend` directory, run `npm start` (again, you'll need to run `npm install` the very first time). After several moments (or minutes, depending on the speed of your machine), a browser will open with the frontend running locally.
 The frontend will automatically re-compile and reload in your browser if you change any files in the `frontend/src` directory.
 
-
 ## Manual Testing For Frontend
 
-| Action      | Expected Behaviour |
-| ----------- | ----------- |
-|   Player  enter crossword puzzle area  | instruction of entering the area should pop up --- press `space` to enter the area      |
-| Player press `space` when entered crossword puzzle area   | A modal should pop up requesting `groupName`      |
-|  Player enter a unique `groupName`  | Another modal should pop up which contains title of current crossword puzzle, crossword puzzle grid and a toolbar with timer, check button, rebus button, leaderboard button and avatar for current player in area. A toast `Crossword Created!` would pop up.  |
-| Player enter a duplicate `groupName` |  An error toast `Team name already in use; Please select a different name` would pop up |
-| When Crossword Puzzle Grid Modal is open `Timer`| timer should start ticking|
-| When Crossword Puzzle Grid Modal is open `Timer`| time display should be the same for all players|
-| When Crossword Puzzle Grid Modal is open `OccupantsDisplay`| player avatart should be dynamic with first letter of their user name -- when one player leave, its avatar should disappear|
-| When Crossword Puzzle Grid Modal is open `OccupantsDisplay`| when the number of player exceed 3, the last avatar would show the number of players that are not displayer|
-| When Crossword Puzzle Grid Modal is open | clues with `down` and `across` will be next to the crossword grid|
-| When `Help` button is clicked | a new tab would open with the information on how to complete the crossword puzzle|
-| Click `Leaderboard` button | leaderboard modal would pop up with either `the leaderboard is empty `|
-| Click an entry in `leaderboard` | a score modal would pop up with team members name and `disabled` checkbox for `usedHint`|
-| Fill cells in the grid | the grid would be updated to everyone in the area|
-| Click on the cell | the clicked cell would be highlighted yellow and the according word would be highlighted blue |
-| Double-Click on the cell | the highlighted word would switch between `across` and `down` |
-| Exit the area | `startTime`, `puzzle` would be cleared and the game would not be saved |
-| Finish and complete the crossword puzzle  | a toast with the time will pop up, `timer` would freeze |
-| Check a letter/word/puzzle | the cell that is checked will highlighted red |
-| Close the crossword puzzle modal | the game will keep going on unless everyone exit the area |
+| Action                                                      | Expected Behaviour                                                                                                                                                                                                                                             |
+| ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Player enter crossword puzzle area                          | instruction of entering the area should pop up --- press `space` to enter the area                                                                                                                                                                             |
+| Player press `space` when entered crossword puzzle area     | A modal should pop up requesting `groupName`                                                                                                                                                                                                                   |
+| Player enter a unique `groupName`                           | Another modal should pop up which contains title of current crossword puzzle, crossword puzzle grid and a toolbar with timer, check button, rebus button, leaderboard button and avatar for current player in area. A toast `Crossword Created!` would pop up. |
+| Player enter a duplicate `groupName`                        | An error toast `Team name already in use; Please select a different name` would pop up                                                                                                                                                                         |
+| When Crossword Puzzle Grid Modal is open `Timer`            | timer should start ticking                                                                                                                                                                                                                                     |
+| When Crossword Puzzle Grid Modal is open `Timer`            | time display should be the same for all players                                                                                                                                                                                                                |
+| When Crossword Puzzle Grid Modal is open `OccupantsDisplay` | player avatart should be dynamic with first letter of their user name -- when one player leave, its avatar should disappear                                                                                                                                    |
+| When Crossword Puzzle Grid Modal is open `OccupantsDisplay` | when the number of player exceed 3, the last avatar would show the number of players that are not displayer                                                                                                                                                    |
+| When Crossword Puzzle Grid Modal is open                    | clues with `down` and `across` will be next to the crossword grid                                                                                                                                                                                              |
+| When `Help` button is clicked                               | a new tab would open with the information on how to complete the crossword puzzle                                                                                                                                                                              |
+| Click `Leaderboard` button                                  | leaderboard modal would pop up with either `the leaderboard is empty `                                                                                                                                                                                         |
+| Click an entry in `leaderboard`                             | a score modal would pop up with team members name and `disabled` checkbox for `usedHint`                                                                                                                                                                       |
+| Fill cells in the grid                                      | the grid would be updated to everyone in the area                                                                                                                                                                                                              |
+| Click on the cell                                           | the clicked cell would be highlighted yellow and the according word would be highlighted blue                                                                                                                                                                  |
+| Double-Click on the cell                                    | the highlighted word would switch between `across` and `down`                                                                                                                                                                                                  |
+| Exit the area                                               | `startTime`, `puzzle` would be cleared and the game would not be saved                                                                                                                                                                                         |
+| Finish and complete the crossword puzzle                    | a toast with the time will pop up, `timer` would freeze                                                                                                                                                                                                        |
+| Check a letter/word/puzzle                                  | the cell that is checked will highlighted red                                                                                                                                                                                                                  |
+| Close the crossword puzzle modal                            | the game will keep going on unless everyone exit the area                                                                                                                                                                                                      |

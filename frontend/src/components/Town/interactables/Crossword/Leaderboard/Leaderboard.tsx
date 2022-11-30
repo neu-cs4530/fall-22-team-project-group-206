@@ -16,12 +16,12 @@ export default function Leaderboard(): JSX.Element {
       try {
         let url = '';
         if (process.env.REACT_APP_TOWNS_SERVICE_URL !== undefined) {
-          url = process.env.REACT_APP_TOWNS_SERVICE_URL.concat('/scores/amount/').concat(
+          url = process.env.REACT_APP_TOWNS_SERVICE_URL.concat('/towns/scores/').concat(
             LEADERBOARD_SIZE.toString(10),
           );
         }
         if (process.env.PORT !== undefined) {
-          url = process.env.PORT.concat('/scores/amount/').concat(LEADERBOARD_SIZE.toString(10));
+          url = process.env.PORT.concat('towns/scores/').concat(LEADERBOARD_SIZE.toString(10));
         }
         const scoreResp: ScoreFindResponse = await axios.get(url);
         if (scoreResp.data.scores !== undefined) {

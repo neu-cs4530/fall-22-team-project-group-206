@@ -42,6 +42,12 @@ app.use('/docs', swaggerUi.serve, async (_req: Express.Request, res: Express.Res
   return res.send(swaggerUi.generateHTML(JSON.parse(swaggerSpec)));
 });
 
+// Add a /endpoints endpoint that will display swagger auto-generated documentation
+app.use('/endpoints', swaggerUi.serve, async (_req: Express.Request, res: Express.Response) => {
+  const swaggerSpec = await fs.readFile('../townService/src/db/Router/swaggerdb.json', 'utf-8');
+  return res.send(swaggerUi.generateHTML(JSON.parse(swaggerSpec)));
+});
+
 // Register the TownsController routes with the express server
 RegisterRoutes(app);
 // Register the REST routes with the express server
