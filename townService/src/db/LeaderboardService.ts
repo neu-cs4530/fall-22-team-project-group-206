@@ -1,7 +1,6 @@
 import { ScoreModel } from '../types/CoveyTownSocket';
 import {
   addScore,
-  updateScore,
   getTodaysScores,
   numInstancesTeamNameUsed,
 } from './LeaderboardDAO';
@@ -36,15 +35,6 @@ export async function insertScore(newScore: ScoreModel): Promise<ScoreModel> {
   return createdScore;
 }
 
-/**
- * Updates the score matching the team name of the provided score within the db
- * @param newScore the new score to replace the score currently in the db
- * @returns a scoreModel representing the old score no longer in the db
- */
-export async function updateScoreValue(newScore: ScoreModel): Promise<ScoreModel> {
-  const updatedScore = await updateScore(newScore);
-  return updatedScore;
-}
 
 /**
  * Evaluates if the team name is curreanly

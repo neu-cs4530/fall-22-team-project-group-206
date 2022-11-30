@@ -105,5 +105,10 @@ describe('LeaderboardService', () => {
       const nameUsed = await isTeamNameAvailable('name')
       expect(nameUsed).toBeFalsy();
     })
+    it('returns true when amount of times used is 0', async () => {
+      timesNameUsedFunc.mockImplementation(() => 0);
+      const nameUsed = await isTeamNameAvailable('name')
+      expect(nameUsed).toBeTruthy();
+    })
   })
 });
