@@ -4,12 +4,9 @@ import {
   insertScore,
   isTeamNameAvailable,
 } from './LeaderboardService';
-import { ScoreModifyResponse, ScoreFindResponse, TeamNameInUseResponse } from './Types';
+import { ScoreModifyResponse, ScoreFindResponse, TeamNameInUseResponse } from '../../../shared/types/CoveyTownSocket';
 import { ScoreModel } from '../types/CoveyTownSocket';
-import { ValidateError } from 'tsoa';
 import InvalidParametersError from '../lib/InvalidParametersError';
-import { MongoServerError } from 'mongodb';
-import mongoose from 'mongoose';
 import { NotFoundError, UndefinedError } from './DatabaseErrors';
 
 export default function scoreRoutes(app: Express) {
@@ -71,11 +68,6 @@ export default function scoreRoutes(app: Express) {
   function buildErrorResp(err: any, buildResp: TeamNameInUseResponse | ScoreFindResponse | ScoreModifyResponse) {
     if (err instanceof NotFoundError || err instanceof UndefinedError) {
       buildResp.status = 404;
-      buildResp.data.errorType = err.name;
-      buildResp.data.errorMessage = err.message;
-    }
-    else if (err instanceof MongoServerError) {
-      buildResp.status = 409;
       buildResp.data.errorType = err.name;
       buildResp.data.errorMessage = err.message;
     }

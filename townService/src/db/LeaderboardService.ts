@@ -1,3 +1,4 @@
+import InvalidParametersError from '../lib/InvalidParametersError';
 import { ScoreModel } from '../types/CoveyTownSocket';
 import {
   addScore,
@@ -13,7 +14,7 @@ import {
 export async function getLeaders(numResults: number): Promise<ScoreModel[]> {
   const scores: ScoreModel[] = await getTodaysScores();
   if (numResults > 10 || numResults < 1) {
-    throw new Error('Invalid number of results inputted for leaderboard');
+    throw new InvalidParametersError('Invalid number of results inputted for leaderboard');
   }
   const sortedScores = scores.sort((a: ScoreModel, b: ScoreModel): number => {
     if (a.score - b.score !== 0) {
