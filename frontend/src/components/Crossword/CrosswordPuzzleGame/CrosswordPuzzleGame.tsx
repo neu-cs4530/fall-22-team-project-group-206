@@ -8,6 +8,7 @@ import {
   CellIndex,
   CrosswordPuzzleCell,
   CrosswordPuzzleModel,
+  ScoreModel,
 } from '../../../types/CoveyTownSocket';
 import {
   BLACK_CELL_STRING,

@@ -7,7 +7,7 @@ import LeaderboardModal from './ScoreModal';
 
 const LEADERBOARD_SIZE = 5;
 /**
- * List the scores for the player
+ * List the scores for the players
  */
 export default function Leaderboard(): JSX.Element {
   const [leaderboard, setLeaderboard] = useState<ScoreModel[]>([]);

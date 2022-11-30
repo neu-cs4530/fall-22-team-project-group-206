@@ -9,7 +9,7 @@ import {
 import React from 'react';
 import Leaderboard from './Leaderboard';
 /**
- * Detail for scores
+ * Leaderboard Pop up
  */
 export default function LeaderboardModal(props: {
   onClose: () => void;
