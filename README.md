@@ -41,21 +41,20 @@ The backend will automatically restart if you change any of the files in the `to
 
 To manually test the endpoints, simply start up the server and visit PORT/endpoints. Then you will be able to see all the swagger doc and can do the following testing actions. Do these in order to ensure reproducible results. The best way to gaurantee this is if you spin up the service locally, that way a fresh database is gauranteed. If you insert enough uniquely named teams, then send a request along the lines of /towns/scores/5, the results should be a status 200 and list of the 5 highest scores without using a hint (if there are less than 5 that did not use a hint, than some with a hint might be shown). Regardless of time, if a team uses a hint, they are bumped below a team that did not.
 
-| Endpoint                                    | Expected Behaviour                                                                |
-| ------------------------------------------- | --------------------------------------------------------------------------------- |
-| /towns/scores/5                             | returns ScoreFindResponse with status 200 and an empty list                       |
-| /towns/scores/0                             | returns ScoreFindResponse with status 400 and an invalid parameter error          |
-| /towns/scores/11                            | returns ScoreFindResponse with status 400 and an invalid parameter error          |
-| /towns/scores/zero                          | returns ScoreFindResponse with status 400 and an invalid parameter error          |
-| /towns/scores/teams/test                    | returns TeamInUseResponse with status 200 and boolean value of false              |
-| /towns/score (with preset example for body) | returns ScoreModifyResponse with status 201 and scoreModel that matches the input |
-| /towns/scores/teams/test                    | returns TeamInUseResponse with status 200 and boolean value of true               |
-| /towns/scores/teams/test1                   | returns TeamInUseResponse with status 200 and boolean value of false              |
-
-| /towns/scores/5 | returns ScoreFindResponse with status 200 and a list populated solely by the inserted score |
-| /towns/score (with preset example for body) | returns ScoreModifyResponse with status 400 and MongoServerError error with message that reads along the lines of "name already exists"|
-| /towns/score (change name of preset to test1) | returns ScoreModifyResponse with status 201 and scoreModel that matches the input |
-| /towns/scores/5 | returns ScoreFindResponse with status 200 and a list with score models that have the names "test" and "test1" |
+| Endpoint                                      | Expected Behaviour                                                                                                                      |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| /towns/scores/5                               | returns ScoreFindResponse with status 200 and an empty list                                                                             |
+| /towns/scores/0                               | returns ScoreFindResponse with status 400 and an invalid parameter error                                                                |
+| /towns/scores/11                              | returns ScoreFindResponse with status 400 and an invalid parameter error                                                                |
+| /towns/scores/zero                            | returns ScoreFindResponse with status 400 and an invalid parameter error                                                                |
+| /towns/scores/teams/test                      | returns TeamInUseResponse with status 200 and boolean value of false                                                                    |
+| /towns/score (with preset example for body)   | returns ScoreModifyResponse with status 201 and scoreModel that matches the input                                                       |
+| /towns/scores/teams/test                      | returns TeamInUseResponse with status 200 and boolean value of true                                                                     |
+| /towns/scores/teams/test1                     | returns TeamInUseResponse with status 200 and boolean value of false                                                                    |
+| /towns/scores/5                               | returns ScoreFindResponse with status 200 and a list populated solely by the inserted score                                             |
+| /towns/score (with preset example for body)   | returns ScoreModifyResponse with status 400 and MongoServerError error with message that reads along the lines of "name already exists" |
+| /towns/score (change name of preset to test1) | returns ScoreModifyResponse with status 201 and scoreModel that matches the input                                                       |
+| /towns/scores/5                               | returns ScoreFindResponse with status 200 and a list with score models that have the names "test" and "test1"                           |
 
 ### Configuring the frontend
 
