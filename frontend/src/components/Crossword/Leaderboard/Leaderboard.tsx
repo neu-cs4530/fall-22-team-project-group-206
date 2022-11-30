@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { ScoreModel } from '../../../types/CoveyTownSocket';
 import LeaderboardModal from './ScoreModal';
+import { getTimeInHHMMSS } from '../CrosswordUtils';
 
 const LEADERBOARD_SIZE = 5;
 /**
@@ -62,8 +63,7 @@ export default function Leaderboard(): JSX.Element {
           textOverflow='----'>
           {score.teamName}
         </GridItem>
-
-        {score.score}
+        {getTimeInHHMMSS(score.score)}
       </Grid>
     </ListItem>
   ));

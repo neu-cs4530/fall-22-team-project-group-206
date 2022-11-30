@@ -13,7 +13,7 @@ import { useCrosswordAreaPuzzleController, useInteractable } from '../../classes
 import useTownController from '../../hooks/useTownController';
 import CrosswordPuzzleAreaInteractable from '../Town/interactables/CrosswordPuzzleArea';
 import './CrosswordGameModal.css';
-import CrosswordGrid from './CrosswordGrid/CrosswordGrid';
+import CrosswordGrid from './CrosswordGrid/CrosswordPuzzleGame';
 import NewCrosswordPuzzleModal from './NewCrosswordPuzzleModal';
 
 /*
@@ -88,18 +88,6 @@ function CrosswordGameModal({
             <ModalHeader>
               <Flex>
                 <div>{crosswordPuzzleAreaController.puzzle.info.title}</div>
-                <Button
-                  marginLeft='10px'
-                  colorScheme='gray'
-                  variant='solid'
-                  onClick={() =>
-                    window.open(
-                      'https://www.nytimes.com/guides/crosswords/how-to-solve-a-crossword-puzzle',
-                      '_blank',
-                    )
-                  }>
-                  Help
-                </Button>
               </Flex>
             </ModalHeader>
 

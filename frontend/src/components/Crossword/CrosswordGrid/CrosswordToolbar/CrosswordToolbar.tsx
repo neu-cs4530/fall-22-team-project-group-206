@@ -9,13 +9,12 @@ import {
   Spacer,
   useDisclosure,
 } from '@chakra-ui/react';
-
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import CrosswordPuzzleAreaController from '../../../../classes/CrosswordPuzzleAreaController';
-import LeaderboardModal from '../../Leaderboard/LeaderboardModal';
-import OccupantsDisplay from './OccupantsDisplay';
-import Timer from './Timer';
 import PlayerController from '../../../../classes/PlayerController';
+import LeaderboardModal from '../../Leaderboard/LeaderboardModal';
+import OccupantsDisplay from './CrosswordOccupants/OccupantsDisplay';
+import Timer from './Timer';
 
 const CELL_WIDTH = 28;
 
@@ -53,9 +52,7 @@ function CrosswordToolbar({
   return (
     <Flex gap={'2'} paddingBottom={'12px'}>
       <Box p='2' bg='gray.200' width={timerWidth} textAlign='center'>
-        <Timer
-          controller={controller}
-        />
+        <Timer controller={controller} />
       </Box>
       <Menu>
         <MenuButton p='4' as={Button} colorScheme='gray'>
@@ -73,6 +70,17 @@ function CrosswordToolbar({
         colorScheme={handleRebusProps.isRebus ? 'purple' : 'gray'}
         onClick={() => handleRebusProps.handleRebus()}>
         Rebus
+      </Button>
+      <Button
+        colorScheme='gray'
+        variant='solid'
+        onClick={() =>
+          window.open(
+            'https://www.nytimes.com/guides/crosswords/how-to-solve-a-crossword-puzzle',
+            '_blank',
+          )
+        }>
+        Help
       </Button>
       <OccupantsDisplay players={occupants} />
 
