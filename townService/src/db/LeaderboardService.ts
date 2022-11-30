@@ -15,10 +15,10 @@ export async function getLeaders(numResults: number): Promise<ScoreModel[]> {
     );
   }
   const sortedScores = scores.sort((a: ScoreModel, b: ScoreModel): number => {
-    if (a.score - b.score !== 0) {
-      return a.score - b.score;
+    if (Number(a.usedHint) - Number(b.usedHint) !== 0) {
+      return Number(a.usedHint) - Number(b.usedHint);
     }
-    return Number(a.usedHint) - Number(b.usedHint);
+    return a.score - b.score;
   });
   const retScores = sortedScores.slice(0, numResults);
   return retScores;

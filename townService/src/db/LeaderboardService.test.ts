@@ -28,7 +28,7 @@ const testScoreModel2: ScoreModel = {
 };
 const testScoreModelBest: ScoreModel = {
   teamName: 'test',
-  score: 10,
+  score: 70,
   teamMembers: ['player1', 'player2'],
   usedHint: false,
 };
