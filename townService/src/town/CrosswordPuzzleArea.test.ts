@@ -29,17 +29,6 @@ describe('PuzzleArea', () => {
   };
   const id = nanoid();
   let newPlayer: Player;
-
-  const leaderboard = [
-    {
-      teamName: 'team1',
-      date: '1011',
-      score: 10,
-      teamMembers: ['user1', 'user2'],
-      usedHint: true,
-      completed: false,
-    },
-  ];
   const testDate = new Date('Nov 26, 2022 15:37:25').getTime();
   beforeEach(() => {
     mockClear(townEmitter);
@@ -49,7 +38,6 @@ describe('PuzzleArea', () => {
         id,
         occupantsByID: [],
         puzzle,
-        leaderboard,
         isGameOver: false,
         startTime: testDate,
       },
@@ -69,7 +57,6 @@ describe('PuzzleArea', () => {
         id,
         occupantsByID: [newPlayer.id],
         puzzle,
-        leaderboard,
         isGameOver: false,
         startTime: testDate,
       });
@@ -95,7 +82,6 @@ describe('PuzzleArea', () => {
         id,
         occupantsByID: [extraPlayer.id],
         puzzle,
-        leaderboard,
         isGameOver: false,
         startTime: testDate,
       });
@@ -125,19 +111,17 @@ describe('PuzzleArea', () => {
         puzzle: testPuzzle,
         id,
         occupantsByID: [],
-        leaderboard,
         isGameOver: false,
       });
       expect(testArea.groupName).toBeUndefined();
     });
   });
   describe('updateModel', () => {
-    it('sets the groupName, puzzle, leaderboard and isGameOver and sets no other properties', () => {
+    it('sets the groupName, puzzle, and isGameOver and sets no other properties', () => {
       const model: CrosswordPuzzleAreaModel = {
         id: nanoid(),
         groupName: 'some new group name',
         puzzle: testPuzzle,
-        leaderboard: [],
         occupantsByID: [],
         isGameOver: true,
       };
@@ -146,7 +130,6 @@ describe('PuzzleArea', () => {
 
       expect(testArea.groupName).toEqual(model.groupName);
       expect(testArea.puzzle).toEqual(model.puzzle);
-      expect(testArea.leaderboard).toEqual(model.leaderboard);
       expect(testArea.isGameOver).toEqual(model.isGameOver);
     });
     it('gets puzzle from API if new puzzle is undefined', () => {
@@ -165,7 +148,6 @@ describe('PuzzleArea', () => {
         id: testArea.id,
         groupName: testArea.groupName,
         puzzle: undefined,
-        leaderboard: testArea.leaderboard,
         occupantsByID: testArea.occupantsByID,
         isGameOver: testArea.isGameOver,
       };
@@ -176,14 +158,13 @@ describe('PuzzleArea', () => {
     });
   });
   describe('toModel', () => {
-    it('gets the ID, groupName, puzzle and occupantsByID, leaderboard, isGameOver and gets no other properties', () => {
+    it('gets the ID, groupName, puzzle and occupantsByID, isGameOver and gets no other properties', () => {
       const model = testArea.toModel();
       expect(model).toEqual({
         id,
         groupName,
         puzzle,
         occupantsByID: [newPlayer.id],
-        leaderboard,
         isGameOver: false,
         startTime: testDate,
       });
@@ -196,7 +177,6 @@ describe('PuzzleArea', () => {
       groupName,
       puzzle,
       occupantsByID: [newPlayer.id],
-      leaderboard,
       isGameOver: false,
       startTime: testDate,
     });

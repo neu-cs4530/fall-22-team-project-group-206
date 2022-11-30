@@ -192,7 +192,6 @@ export async function mockTownControllerConnection(
         id: nanoid(),
         occupantsByID: [playerID],
         puzzle: undefined,
-        leaderboard: undefined,
         isGameOver: false,
       });
     }

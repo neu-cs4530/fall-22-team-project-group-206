@@ -431,7 +431,6 @@ describe('TownController', () => {
         });
         it('Updates the crossword puzzle area model', () => {
           crosswordPuzzleArea.puzzle = testPuzzle;
-          crosswordPuzzleArea.leaderboard = [];
           crosswordPuzzleArea.isGameOver = !crosswordPuzzleArea.isGameOver;
 
           eventListener(crosswordPuzzleArea);

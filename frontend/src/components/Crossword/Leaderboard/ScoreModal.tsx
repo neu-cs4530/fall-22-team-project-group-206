@@ -17,7 +17,7 @@ import React from 'react';
 
 import { ScoreModel } from '../../../types/CoveyTownSocket';
 /**
- * Detail for scores
+ * Detail for score
  */
 export default function ScoreModal(props: {
   scoreModel: ScoreModel;
